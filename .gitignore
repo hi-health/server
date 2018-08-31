@@ -3,6 +3,8 @@
 /public/storage
 /public/services
 /storage/*.key
+/storage/debugbar
+/storage/framework/cache
 /vendor
 /.idea
 /.vagrant

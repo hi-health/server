@@ -1,0 +1,3 @@
+2018-05-19 19:21:07: select count(*) as aggregate from `users` where `id` = '52'
+2018-05-19 19:21:07: select * from `users` where `id` = '52' and `users`.`deleted_at` is null limit 1
+2018-05-19 19:21:07: select * from `users` where `city_id` = 3 and `login_type` = '2' and `online` = 1 and `users`.`deleted_at` is null order by `online_at` desc

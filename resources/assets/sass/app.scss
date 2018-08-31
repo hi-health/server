@@ -1,0 +1,40 @@
+// Fonts
+@import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);
+@import url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css);
+
+// Variables
+@import "variables";
+
+// Bootstrap
+@import "node_modules/admin-lte/bootstrap/css/bootstrap.min";
+// @import "./bootstrap.min";
+@import "node_modules/admin-lte/dist/css/AdminLTE.min";
+@import "node_modules/admin-lte/dist/css/skins/skin-blue.min";
+@import "node_modules/admin-lte/plugins/datepicker/datepicker3";
+
+hr {
+    border-color: #888888;
+}
+
+dl {
+    dt,
+    dd {
+        padding: 20px 0 0 0;
+    }
+}
+.form-group {
+    .error {
+        color: #FF0000;
+        margin: 5px 0 0;
+    }
+}
+
+.links {
+    a {
+        line-height: 3;
+    }
+}
+
+.clinic_list{
+    font-size: 18px;
+}

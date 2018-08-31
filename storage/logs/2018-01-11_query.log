@@ -1,0 +1,32 @@
+2018-01-11 18:02:39: select count(*) as aggregate from `users` where `id` = '4'
+2018-01-11 18:02:39: select * from `users` where `id` = '4' and `users`.`deleted_at` is null limit 1
+2018-01-11 18:02:39: select * from `users` where `city_id` = 1 and `login_type` = '2' and `online` = 1 and `users`.`deleted_at` is null order by `online_at` desc
+2018-01-11 18:02:39: select * from `messages` where `source` = 'doctor' and `started_at` is not null and `messages`.`doctors_id` in (9, 11, 12, 13, 14, 15, 16, 17, 21, 22, 23, 24, 25, 26) and `members_id` = '4' order by `started_at` desc
+2018-01-11 18:02:39: select * from `doctors` where `users_id` = 21 and `doctors`.`deleted_at` is null limit 1
+2018-01-11 18:02:39: select * from `services` where `members_id` = '4' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2018-01-11 18:02:39: select * from `doctors` where `users_id` = 9 and `doctors`.`deleted_at` is null limit 1
+2018-01-11 18:02:39: select * from `services` where `members_id` = '4' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2018-01-11 18:02:39: select * from `doctors` where `users_id` = 11 and `doctors`.`deleted_at` is null limit 1
+2018-01-11 18:02:39: select * from `services` where `members_id` = '4' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2018-01-11 18:02:39: select * from `doctors` where `users_id` = 12 and `doctors`.`deleted_at` is null limit 1
+2018-01-11 18:02:39: select * from `services` where `members_id` = '4' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2018-01-11 18:02:39: select * from `doctors` where `users_id` = 13 and `doctors`.`deleted_at` is null limit 1
+2018-01-11 18:02:39: select * from `services` where `members_id` = '4' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2018-01-11 18:02:39: select * from `doctors` where `users_id` = 14 and `doctors`.`deleted_at` is null limit 1
+2018-01-11 18:02:39: select * from `services` where `members_id` = '4' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2018-01-11 18:02:39: select * from `doctors` where `users_id` = 15 and `doctors`.`deleted_at` is null limit 1
+2018-01-11 18:02:39: select * from `services` where `members_id` = '4' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2018-01-11 18:02:39: select * from `doctors` where `users_id` = 16 and `doctors`.`deleted_at` is null limit 1
+2018-01-11 18:02:39: select * from `services` where `members_id` = '4' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2018-01-11 18:02:39: select * from `doctors` where `users_id` = 17 and `doctors`.`deleted_at` is null limit 1
+2018-01-11 18:02:39: select * from `services` where `members_id` = '4' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2018-01-11 18:02:39: select * from `doctors` where `users_id` = 22 and `doctors`.`deleted_at` is null limit 1
+2018-01-11 18:02:39: select * from `services` where `members_id` = '4' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2018-01-11 18:02:39: select * from `doctors` where `users_id` = 23 and `doctors`.`deleted_at` is null limit 1
+2018-01-11 18:02:39: select * from `services` where `members_id` = '4' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2018-01-11 18:02:39: select * from `doctors` where `users_id` = 24 and `doctors`.`deleted_at` is null limit 1
+2018-01-11 18:02:39: select * from `services` where `members_id` = '4' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2018-01-11 18:02:39: select * from `doctors` where `users_id` = 25 and `doctors`.`deleted_at` is null limit 1
+2018-01-11 18:02:39: select * from `services` where `members_id` = '4' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2018-01-11 18:02:39: select * from `doctors` where `users_id` = 26 and `doctors`.`deleted_at` is null limit 1
+2018-01-11 18:02:39: select * from `services` where `members_id` = '4' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1

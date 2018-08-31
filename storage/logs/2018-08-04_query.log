@@ -1,0 +1,20 @@
+2018-08-04 17:05:02: select * from `users` where `id` = '14' and `users`.`deleted_at` is null limit 1
+2018-08-04 17:05:02: select * from `doctors` where `doctors`.`users_id` = 14 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2018-08-04 17:05:02: select count(*) as aggregate from `member_requests` where `member_requests`.`deleted_at` is null
+2018-08-04 17:05:02: select count(*) as aggregate from `member_request_doctors` where `doctors_id` = '14'
+2018-08-04 17:05:02: select count(*) as aggregate from `services` where `doctors_id` = '14' and `opened_at` is null and `services`.`deleted_at` is null
+2018-08-04 17:05:02: select * from `messages` where `doctors_id` = '14' and `doctor_readed_at` is null and `visible` = 1 order by `created_at` desc
+2018-08-04 17:05:02: select * from `parameters` where `type` = 'banner'
+2018-08-04 17:05:02: select * from `parameters` where `type` = 'setting' and `key` = 'service_email' limit 1
+2018-08-04 17:05:09: select * from `users` where `id` = '14' and `users`.`deleted_at` is null limit 1
+2018-08-04 17:05:09: select * from `doctors` where `doctors`.`users_id` = 14 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2018-08-04 17:05:17: select * from `users` where `id` = '14' and `users`.`deleted_at` is null limit 1
+2018-08-04 17:05:17: select * from `doctors` where `doctors`.`users_id` = 14 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2018-08-04 17:05:17: select count(*) as aggregate from `member_requests` where `member_requests`.`deleted_at` is null
+2018-08-04 17:05:17: select count(*) as aggregate from `member_request_doctors` where `doctors_id` = '14'
+2018-08-04 17:05:17: select count(*) as aggregate from `services` where `doctors_id` = '14' and `opened_at` is null and `services`.`deleted_at` is null
+2018-08-04 17:05:17: select * from `messages` where `doctors_id` = '14' and `doctor_readed_at` is null and `visible` = 1 order by `created_at` desc
+2018-08-04 17:05:17: select * from `parameters` where `type` = 'banner'
+2018-08-04 17:05:17: select * from `parameters` where `type` = 'setting' and `key` = 'service_email' limit 1
+2018-08-04 17:05:23: select * from `users` where `id` = '14' and `users`.`deleted_at` is null limit 1
+2018-08-04 17:05:23: select * from `doctors` where `doctors`.`users_id` = 14 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1

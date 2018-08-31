@@ -1,0 +1,57 @@
+{
+	"folders":
+	[
+		{
+			"path": "."
+		}
+	],
+	"settings":
+	{
+		"rsync_ssh":
+		{
+			"excludes":
+			[
+				".DS_Store",
+				".git*",
+				"_build",
+				"blib",
+				"Build",
+				"*.sublime-project",
+				"*.sublime-workspace",
+				"MainFile.ini",
+				".htaccess",
+				"uploads/"
+			],
+			"options":
+			[
+				"--delete",
+				"-rvlHpogDtS",
+				"--no-perms",
+				"--no-owner",
+				"--no-group"
+			],
+			"remotes":
+			{
+				"/Users/aleiku/Documents/hi-health/hi-health-new-mgt-php":
+				[
+					{
+						"enabled": 1,
+						"excludes":
+						[
+						],
+						"options":
+						[
+						],
+						"remote_host":"139.162.85.91",
+						"remote_path": "/var/www/hi-health.com",
+						"remote_port": 22,
+						"remote_post_command": "chown -R www-data:www-data /var/www/hi-health.com",
+      			"remote_pre_command": "",
+						"remote_user": "root"
+					}
+				]
+			},
+			"sync_on_save": true
+		}
+	}
+}

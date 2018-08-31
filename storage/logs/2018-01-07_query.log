@@ -1,0 +1,7 @@
+2018-01-07 23:30:15: select * from `users` where `id` = '21' and `users`.`deleted_at` is null limit 1
+2018-01-07 23:30:15: select * from `doctors` where `doctors`.`users_id` in (21) and `doctors`.`deleted_at` is null
+2018-01-07 23:30:15: update `doctors` set `longitude` = '0', `latitude` = '0', `due_at` = '2018-03-14 00:00:00', `updated_at` = '2018-01-07 23:30:15' where `id` = 12
+2018-01-07 23:30:15: update `users` set `avatar` = '/doctors/avatar_21.JPG', `updated_at` = '2018-01-07 23:30:15' where `id` = 21
+2018-01-07 23:32:03: select * from `users` where `id` = '17' and `users`.`deleted_at` is null limit 1
+2018-01-07 23:32:03: select * from `doctors` where `doctors`.`users_id` in (17) and `doctors`.`deleted_at` is null
+2018-01-07 23:32:03: update `doctors` set `longitude` = '0', `latitude` = '0', `due_at` = '2018-03-05 00:00:00', `updated_at` = '2018-01-07 23:32:03' where `id` = 11

@@ -1,0 +1,9 @@
+2018-07-16 04:09:21: select count(*) as aggregate from `users` where `id` = '59'
+2018-07-16 04:09:21: select * from `users` where `id` = '59' and `users`.`deleted_at` is null limit 1
+2018-07-16 04:09:21: select * from `users` where `city_id` = 18 and `login_type` = '2' and `online` = 1 and `users`.`deleted_at` is null order by `online_at` desc
+2018-07-16 04:09:21: select * from `messages` where `source` = 'doctor' and `started_at` is not null and `messages`.`doctors_id` in (5, 6) and `members_id` = '59' order by `started_at` desc
+2018-07-16 04:09:21: select * from `doctors` where `users_id` = 5 and `doctors`.`deleted_at` is null limit 1
+2018-07-16 04:09:21: select * from `services` where `members_id` = '59' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2018-07-16 04:09:21: select * from `doctors` where `users_id` = 6 and `doctors`.`deleted_at` is null limit 1
+2018-07-16 04:09:21: select * from `services` where `members_id` = '59' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2018-07-16 04:09:21: select * from `parameters` where `parameters`.`key` = 18 and `parameters`.`key` is not null and `type` = 'city' limit 1

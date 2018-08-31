@@ -1,0 +1,8 @@
+2017-10-27 23:59:42: select * from `users` where `id` = '36' and `users`.`deleted_at` is null limit 1
+2017-10-27 23:59:42: select * from `doctors` where `doctors`.`users_id` = 36 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2017-10-27 23:59:42: select count(*) as aggregate from `member_requests` where `member_requests`.`deleted_at` is null
+2017-10-27 23:59:42: select count(*) as aggregate from `member_request_doctors` where `doctors_id` = '36'
+2017-10-27 23:59:42: select count(*) as aggregate from `services` where `doctors_id` = '36' and `opened_at` is null and `services`.`deleted_at` is null
+2017-10-27 23:59:42: select * from `messages` where `doctors_id` = '36' and `doctor_readed_at` is null and `visible` = 1 order by `created_at` desc
+2017-10-27 23:59:42: select * from `parameters` where `type` = 'banner'
+2017-10-27 23:59:42: select * from `parameters` where `type` = 'setting' and `key` = 'service_email' limit 1

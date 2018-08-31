@@ -1,0 +1,52 @@
+2017-12-27 15:00:49: select count(*) as aggregate from `users` where `id` = '4'
+2017-12-27 15:00:49: select * from `users` where `id` = '4' and `users`.`deleted_at` is null limit 1
+2017-12-27 15:00:49: select * from `users` where `city_id` = 1 and `login_type` = '2' and `online` = 1 and `users`.`deleted_at` is null order by `online_at` desc
+2017-12-27 15:06:30: select * from `users` where `id` = '2' and `users`.`deleted_at` is null limit 1
+2017-12-27 15:06:30: select * from `doctors` where `doctors`.`users_id` = 2 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2017-12-27 15:06:30: select count(*) as aggregate from `member_requests` where `member_requests`.`deleted_at` is null
+2017-12-27 15:06:30: select count(*) as aggregate from `member_request_doctors` where `doctors_id` = '2'
+2017-12-27 15:06:30: select count(*) as aggregate from `services` where `doctors_id` = '2' and `opened_at` is null and `services`.`deleted_at` is null
+2017-12-27 15:06:30: select * from `messages` where `doctors_id` = '2' and `doctor_readed_at` is null and `visible` = 1 order by `created_at` desc
+2017-12-27 15:06:30: select * from `parameters` where `type` = 'banner'
+2017-12-27 15:06:30: select * from `parameters` where `type` = 'setting' and `key` = 'service_email' limit 1
+2017-12-27 15:06:35: select * from `users` where `id` = '2' and `login_type` = 2 and `status` = 1 and `users`.`deleted_at` is null limit 1
+2017-12-27 15:06:35: select * from `doctors` where `doctors`.`users_id` in (2) and `doctors`.`deleted_at` is null
+2017-12-27 15:06:35: select * from `services` where `doctors_id` = '2' and `members_id` is not null and `services`.`deleted_at` is null
+2017-12-27 15:06:35: select * from `services` where `doctors_id` = '2' and `members_id` in (7) and `payment_status` in (0, 1) and `services`.`deleted_at` is null order by `created_at` desc
+2017-12-27 15:06:35: select * from `users` where `login_type` = 1 and `users`.`id` in (7) and `users`.`deleted_at` is null
+2017-12-27 15:06:35: select * from `parameters` where `type` = 'setting' and `key` = 'message_expire_time' limit 1
+2017-12-27 15:06:35: select * from `messages` where `doctors_id` = 2 and `members_id` = 7 and `source` = 'member' order by `created_at` desc limit 1
+2017-12-27 15:06:35: select * from `messages` where `doctors_id` = 2 and `members_id` = 7 and `source` = 'doctor' order by `created_at` desc limit 1
+2017-12-27 15:06:35: update `services` set `opened_at` = '2017-12-27 15:06:35', `updated_at` = '2017-12-27 15:06:35' where `doctors_id` = '2' and `opened_at` is null and `services`.`deleted_at` is null
+2017-12-27 15:06:35: select * from `parameters` where `type` = 'setting' and `key` = 'treatment_days_1' limit 1
+2017-12-27 15:06:35: select * from `doctors` where `doctors`.`users_id` = 7 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2017-12-27 15:06:56: select * from `users` where `id` = '2' and `users`.`deleted_at` is null limit 1
+2017-12-27 15:06:56: select * from `doctors` where `doctors`.`users_id` = 2 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2017-12-27 15:06:56: select count(*) as aggregate from `member_requests` where `member_requests`.`deleted_at` is null
+2017-12-27 15:06:56: select count(*) as aggregate from `member_request_doctors` where `doctors_id` = '2'
+2017-12-27 15:06:56: select count(*) as aggregate from `services` where `doctors_id` = '2' and `opened_at` is null and `services`.`deleted_at` is null
+2017-12-27 15:06:56: select * from `messages` where `doctors_id` = '2' and `doctor_readed_at` is null and `visible` = 1 order by `created_at` desc
+2017-12-27 15:06:56: select * from `parameters` where `type` = 'banner'
+2017-12-27 15:06:56: select * from `parameters` where `type` = 'setting' and `key` = 'service_email' limit 1
+2017-12-27 15:06:58: select * from `users` where `id` = '2' and `users`.`deleted_at` is null limit 1
+2017-12-27 15:06:58: select * from `doctors` where `doctors`.`users_id` = 2 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2017-12-27 15:07:00: select * from `users` where `id` = '2' and `users`.`deleted_at` is null limit 1
+2017-12-27 15:07:00: select * from `doctors` where `doctors`.`users_id` = 2 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2017-12-27 15:07:00: select count(*) as aggregate from `member_requests` where `member_requests`.`deleted_at` is null
+2017-12-27 15:07:00: select count(*) as aggregate from `member_request_doctors` where `doctors_id` = '2'
+2017-12-27 15:07:00: select count(*) as aggregate from `services` where `doctors_id` = '2' and `opened_at` is null and `services`.`deleted_at` is null
+2017-12-27 15:07:00: select * from `messages` where `doctors_id` = '2' and `doctor_readed_at` is null and `visible` = 1 order by `created_at` desc
+2017-12-27 15:07:00: select * from `parameters` where `type` = 'banner'
+2017-12-27 15:07:00: select * from `parameters` where `type` = 'setting' and `key` = 'service_email' limit 1
+2017-12-27 15:07:20: select count(*) as aggregate from `users` where `id` = '4'
+2017-12-27 15:07:20: select * from `users` where `id` = '4' and `users`.`deleted_at` is null limit 1
+2017-12-27 15:07:20: select * from `users` where `city_id` = 1 and `login_type` = '2' and `online` = 1 and `users`.`deleted_at` is null order by `online_at` desc
+2017-12-27 15:07:20: select * from `messages` where `source` = 'doctor' and `started_at` is not null and `messages`.`doctors_id` in (2) and `members_id` = '4' order by `started_at` desc
+2017-12-27 15:07:20: select * from `doctors` where `users_id` = 2 and `doctors`.`deleted_at` is null limit 1
+2017-12-27 15:07:20: select * from `services` where `members_id` = '4' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-12-27 15:09:35: select count(*) as aggregate from `users` where `id` = '4'
+2017-12-27 15:09:35: select * from `users` where `id` = '4' and `users`.`deleted_at` is null limit 1
+2017-12-27 15:09:35: select * from `users` where `city_id` = 1 and `login_type` = '2' and `online` = 1 and `users`.`deleted_at` is null order by `online_at` desc
+2017-12-27 15:09:35: select count(*) as aggregate from `users` where `id` = '4'
+2017-12-27 15:09:35: select * from `users` where `id` = '4' and `users`.`deleted_at` is null limit 1
+2017-12-27 15:09:35: select * from `users` where `city_id` = 1 and `login_type` = '2' and `online` = 1 and `users`.`deleted_at` is null order by `online_at` desc

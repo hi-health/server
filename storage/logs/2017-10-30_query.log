@@ -1,0 +1,483 @@
+2017-10-30 12:14:47: select count(*) as aggregate from `users` where `id` = '37'
+2017-10-30 12:14:47: select * from `users` where `id` = '37' and `users`.`deleted_at` is null limit 1
+2017-10-30 12:14:47: select * from `users` where `city_id` = 1 and `login_type` = '2' and `online` = 1 and `users`.`deleted_at` is null order by `online_at` desc
+2017-10-30 12:14:47: select * from `messages` where `source` = 'doctor' and `started_at` is not null and `messages`.`doctors_id` in (3, 6, 8, 22, 25, 28, 29, 30, 31, 32, 33, 34, 36, 39, 42) and `members_id` = '37' order by `started_at` desc
+2017-10-30 12:14:47: select * from `doctors` where `users_id` = 36 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 12:14:47: select * from `services` where `members_id` = '37' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 12:14:47: select * from `doctors` where `users_id` = 34 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 12:14:47: select * from `services` where `members_id` = '37' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 12:14:47: select * from `doctors` where `users_id` = 39 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 12:14:47: select * from `services` where `members_id` = '37' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 12:14:47: select * from `parameters` where `type` = 'setting' and `key` = 'treatment_days_2' limit 1
+2017-10-30 12:14:47: select * from `doctors` where `users_id` = 30 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 12:14:47: select * from `services` where `members_id` = '37' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 12:14:47: select * from `doctors` where `users_id` = 3 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 12:14:47: select * from `services` where `members_id` = '37' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 12:14:47: select * from `doctors` where `users_id` = 8 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 12:14:47: select * from `services` where `members_id` = '37' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 12:14:47: select * from `doctors` where `users_id` = 22 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 12:14:47: select * from `services` where `members_id` = '37' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 12:14:47: select * from `doctors` where `users_id` = 42 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 12:14:47: select * from `services` where `members_id` = '37' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 12:14:47: select * from `doctors` where `users_id` = 29 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 12:14:47: select * from `services` where `members_id` = '37' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 12:14:47: select * from `doctors` where `users_id` = 32 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 12:14:47: select * from `services` where `members_id` = '37' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 12:14:47: select * from `doctors` where `users_id` = 33 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 12:14:47: select * from `services` where `members_id` = '37' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 12:14:47: select * from `doctors` where `users_id` = 31 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 12:14:47: select * from `services` where `members_id` = '37' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 12:14:47: select * from `doctors` where `users_id` = 25 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 12:14:47: select * from `services` where `members_id` = '37' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 12:14:47: select * from `doctors` where `users_id` = 28 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 12:14:47: select * from `services` where `members_id` = '37' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 12:14:47: select * from `doctors` where `users_id` = 6 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 12:14:47: select * from `services` where `members_id` = '37' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 12:15:22: select * from `users` where `id` = '34' and `users`.`deleted_at` is null limit 1
+2017-10-30 12:15:22: select * from `doctors` where `doctors`.`users_id` = 34 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2017-10-30 12:15:22: select count(*) as aggregate from `member_requests` where `member_requests`.`deleted_at` is null
+2017-10-30 12:15:22: select count(*) as aggregate from `member_request_doctors` where `doctors_id` = '34'
+2017-10-30 12:15:22: select count(*) as aggregate from `services` where `doctors_id` = '34' and `opened_at` is null and `services`.`deleted_at` is null
+2017-10-30 12:15:22: select * from `messages` where `doctors_id` = '34' and `doctor_readed_at` is null and `visible` = 1 order by `created_at` desc
+2017-10-30 12:15:22: select * from `parameters` where `type` = 'banner'
+2017-10-30 12:15:22: select * from `parameters` where `type` = 'setting' and `key` = 'service_email' limit 1
+2017-10-30 13:27:48: select * from `users` where `id` = '30' and `users`.`deleted_at` is null limit 1
+2017-10-30 13:27:48: select * from `doctors` where `doctors`.`users_id` = 30 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2017-10-30 13:27:48: select count(*) as aggregate from `member_requests` where `member_requests`.`deleted_at` is null
+2017-10-30 13:27:48: select count(*) as aggregate from `member_request_doctors` where `doctors_id` = '30'
+2017-10-30 13:27:48: select count(*) as aggregate from `services` where `doctors_id` = '30' and `opened_at` is null and `services`.`deleted_at` is null
+2017-10-30 13:27:48: select * from `messages` where `doctors_id` = '30' and `doctor_readed_at` is null and `visible` = 1 order by `created_at` desc
+2017-10-30 13:27:48: select * from `parameters` where `type` = 'banner'
+2017-10-30 13:27:48: select * from `parameters` where `type` = 'setting' and `key` = 'service_email' limit 1
+2017-10-30 13:31:56: select * from `users` where `id` = '30' and `users`.`deleted_at` is null limit 1
+2017-10-30 13:31:56: select * from `doctors` where `doctors`.`users_id` = 30 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2017-10-30 13:31:56: select count(*) as aggregate from `member_requests` where `member_requests`.`deleted_at` is null
+2017-10-30 13:31:56: select count(*) as aggregate from `member_request_doctors` where `doctors_id` = '30'
+2017-10-30 13:31:56: select count(*) as aggregate from `services` where `doctors_id` = '30' and `opened_at` is null and `services`.`deleted_at` is null
+2017-10-30 13:31:56: select * from `messages` where `doctors_id` = '30' and `doctor_readed_at` is null and `visible` = 1 order by `created_at` desc
+2017-10-30 13:31:56: select * from `parameters` where `type` = 'banner'
+2017-10-30 13:31:56: select * from `parameters` where `type` = 'setting' and `key` = 'service_email' limit 1
+2017-10-30 13:32:54: select count(*) as aggregate from `users` where `id` = '45'
+2017-10-30 13:32:54: select * from `users` where `id` = '45' and `users`.`deleted_at` is null limit 1
+2017-10-30 13:32:54: select * from `users` where `city_id` = 1 and `login_type` = '2' and `online` = 1 and `users`.`deleted_at` is null order by `online_at` desc
+2017-10-30 13:32:54: select * from `messages` where `source` = 'doctor' and `started_at` is not null and `messages`.`doctors_id` in (3, 6, 8, 22, 25, 28, 29, 30, 31, 32, 33, 34, 36, 39, 42) and `members_id` = '45' order by `started_at` desc
+2017-10-30 13:32:54: select * from `doctors` where `users_id` = 36 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 13:32:54: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 13:32:54: select * from `doctors` where `users_id` = 34 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 13:32:54: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 13:32:54: select * from `doctors` where `users_id` = 39 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 13:32:54: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 13:32:54: select * from `doctors` where `users_id` = 30 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 13:32:54: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 13:32:54: select * from `doctors` where `users_id` = 3 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 13:32:54: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 13:32:54: select * from `doctors` where `users_id` = 8 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 13:32:54: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 13:32:54: select * from `doctors` where `users_id` = 22 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 13:32:54: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 13:32:54: select * from `doctors` where `users_id` = 42 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 13:32:54: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 13:32:54: select * from `doctors` where `users_id` = 29 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 13:32:54: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 13:32:54: select * from `doctors` where `users_id` = 32 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 13:32:54: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 13:32:54: select * from `doctors` where `users_id` = 33 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 13:32:54: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 13:32:54: select * from `doctors` where `users_id` = 31 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 13:32:54: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 13:32:54: select * from `doctors` where `users_id` = 25 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 13:32:54: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 13:32:54: select * from `doctors` where `users_id` = 28 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 13:32:54: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 13:32:54: select * from `doctors` where `users_id` = 6 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 13:32:54: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 13:32:59: select * from `users` where `id` = '30' and `users`.`deleted_at` is null limit 1
+2017-10-30 13:32:59: select * from `doctors` where `doctors`.`users_id` = 30 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:01:01: select * from `users` where `id` = '30' and `users`.`deleted_at` is null limit 1
+2017-10-30 15:01:01: select * from `doctors` where `doctors`.`users_id` = 30 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:01:01: select count(*) as aggregate from `member_requests` where `member_requests`.`deleted_at` is null
+2017-10-30 15:01:01: select count(*) as aggregate from `member_request_doctors` where `doctors_id` = '30'
+2017-10-30 15:01:01: select count(*) as aggregate from `services` where `doctors_id` = '30' and `opened_at` is null and `services`.`deleted_at` is null
+2017-10-30 15:01:01: select * from `messages` where `doctors_id` = '30' and `doctor_readed_at` is null and `visible` = 1 order by `created_at` desc
+2017-10-30 15:01:01: select * from `parameters` where `type` = 'banner'
+2017-10-30 15:01:01: select * from `parameters` where `type` = 'setting' and `key` = 'service_email' limit 1
+2017-10-30 15:01:21: select * from `users` where `id` = '30' and `users`.`deleted_at` is null limit 1
+2017-10-30 15:01:21: select * from `doctors` where `doctors`.`users_id` = 30 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:01:21: select count(*) as aggregate from `member_requests` where `member_requests`.`deleted_at` is null
+2017-10-30 15:01:21: select count(*) as aggregate from `member_request_doctors` where `doctors_id` = '30'
+2017-10-30 15:01:21: select count(*) as aggregate from `services` where `doctors_id` = '30' and `opened_at` is null and `services`.`deleted_at` is null
+2017-10-30 15:01:21: select * from `messages` where `doctors_id` = '30' and `doctor_readed_at` is null and `visible` = 1 order by `created_at` desc
+2017-10-30 15:01:21: select * from `parameters` where `type` = 'banner'
+2017-10-30 15:01:21: select * from `parameters` where `type` = 'setting' and `key` = 'service_email' limit 1
+2017-10-30 15:01:53: select * from `users` where `id` = '30' and `users`.`deleted_at` is null limit 1
+2017-10-30 15:01:53: select * from `doctors` where `doctors`.`users_id` = 30 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:01:53: select count(*) as aggregate from `member_requests` where `member_requests`.`deleted_at` is null
+2017-10-30 15:01:53: select count(*) as aggregate from `member_request_doctors` where `doctors_id` = '30'
+2017-10-30 15:01:53: select count(*) as aggregate from `services` where `doctors_id` = '30' and `opened_at` is null and `services`.`deleted_at` is null
+2017-10-30 15:01:53: select * from `messages` where `doctors_id` = '30' and `doctor_readed_at` is null and `visible` = 1 order by `created_at` desc
+2017-10-30 15:01:53: select * from `parameters` where `type` = 'banner'
+2017-10-30 15:01:53: select * from `parameters` where `type` = 'setting' and `key` = 'service_email' limit 1
+2017-10-30 15:01:56: select * from `users` where `id` = '30' and `users`.`deleted_at` is null limit 1
+2017-10-30 15:01:56: select * from `doctors` where `doctors`.`users_id` = 30 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:02:12: select * from `users` where `id` = '29' and `users`.`deleted_at` is null limit 1
+2017-10-30 15:02:12: select * from `doctors` where `doctors`.`users_id` = 29 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:02:12: select count(*) as aggregate from `member_requests` where `member_requests`.`deleted_at` is null
+2017-10-30 15:02:12: select count(*) as aggregate from `member_request_doctors` where `doctors_id` = '29'
+2017-10-30 15:02:12: select count(*) as aggregate from `services` where `doctors_id` = '29' and `opened_at` is null and `services`.`deleted_at` is null
+2017-10-30 15:02:12: select * from `messages` where `doctors_id` = '29' and `doctor_readed_at` is null and `visible` = 1 order by `created_at` desc
+2017-10-30 15:02:12: select * from `services` where `members_id` = 23 and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:02:12: select * from `parameters` where `type` = 'banner'
+2017-10-30 15:02:12: select * from `parameters` where `type` = 'setting' and `key` = 'service_email' limit 1
+2017-10-30 15:02:15: select * from `users` where `id` = '29' and `users`.`deleted_at` is null limit 1
+2017-10-30 15:02:15: select * from `doctors` where `doctors`.`users_id` = 29 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:02:19: select * from `users` where `id` = '29' and `users`.`deleted_at` is null limit 1
+2017-10-30 15:02:19: select * from `doctors` where `doctors`.`users_id` = 29 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:02:19: select count(*) as aggregate from `member_requests` where `member_requests`.`deleted_at` is null
+2017-10-30 15:02:19: select count(*) as aggregate from `member_request_doctors` where `doctors_id` = '29'
+2017-10-30 15:02:19: select count(*) as aggregate from `services` where `doctors_id` = '29' and `opened_at` is null and `services`.`deleted_at` is null
+2017-10-30 15:02:19: select * from `messages` where `doctors_id` = '29' and `doctor_readed_at` is null and `visible` = 1 order by `created_at` desc
+2017-10-30 15:02:19: select * from `services` where `members_id` = 23 and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:02:19: select * from `parameters` where `type` = 'banner'
+2017-10-30 15:02:19: select * from `parameters` where `type` = 'setting' and `key` = 'service_email' limit 1
+2017-10-30 15:02:51: select count(*) as aggregate from `users` where `id` = '45'
+2017-10-30 15:02:51: select * from `users` where `id` = '45' and `users`.`deleted_at` is null limit 1
+2017-10-30 15:02:51: select * from `users` where `city_id` = 1 and `login_type` = '2' and `online` = 1 and `users`.`deleted_at` is null order by `online_at` desc
+2017-10-30 15:02:51: select * from `messages` where `source` = 'doctor' and `started_at` is not null and `messages`.`doctors_id` in (3, 6, 8, 22, 25, 28, 29, 30, 31, 32, 33, 34, 36, 39, 42) and `members_id` = '45' order by `started_at` desc
+2017-10-30 15:02:51: select * from `doctors` where `users_id` = 29 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:02:51: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:02:51: select * from `doctors` where `users_id` = 36 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:02:51: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:02:51: select * from `doctors` where `users_id` = 34 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:02:51: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:02:51: select * from `doctors` where `users_id` = 39 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:02:51: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:02:51: select * from `doctors` where `users_id` = 30 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:02:51: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:02:51: select * from `doctors` where `users_id` = 3 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:02:51: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:02:51: select * from `doctors` where `users_id` = 8 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:02:51: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:02:51: select * from `doctors` where `users_id` = 22 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:02:51: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:02:51: select * from `doctors` where `users_id` = 42 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:02:51: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:02:51: select * from `doctors` where `users_id` = 32 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:02:51: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:02:51: select * from `doctors` where `users_id` = 33 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:02:51: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:02:51: select * from `doctors` where `users_id` = 31 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:02:51: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:02:51: select * from `doctors` where `users_id` = 25 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:02:51: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:02:51: select * from `doctors` where `users_id` = 28 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:02:51: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:02:51: select * from `doctors` where `users_id` = 6 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:02:51: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:03:32: select count(*) as aggregate from `users` where `id` = '45'
+2017-10-30 15:03:32: select * from `users` where `id` = '45' and `users`.`deleted_at` is null limit 1
+2017-10-30 15:03:32: select * from `users` where `city_id` = 1 and `login_type` = '2' and `online` = 1 and `users`.`deleted_at` is null order by `online_at` desc
+2017-10-30 15:03:32: select * from `messages` where `source` = 'doctor' and `started_at` is not null and `messages`.`doctors_id` in (3, 6, 8, 22, 25, 28, 29, 30, 31, 32, 33, 34, 36, 39, 42) and `members_id` = '45' order by `started_at` desc
+2017-10-30 15:03:32: select * from `doctors` where `users_id` = 29 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:03:32: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:03:32: select * from `doctors` where `users_id` = 36 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:03:32: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:03:32: select * from `doctors` where `users_id` = 34 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:03:32: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:03:32: select * from `doctors` where `users_id` = 39 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:03:32: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:03:32: select * from `doctors` where `users_id` = 30 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:03:32: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:03:32: select * from `doctors` where `users_id` = 3 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:03:32: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:03:32: select * from `doctors` where `users_id` = 8 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:03:32: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:03:32: select * from `doctors` where `users_id` = 22 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:03:32: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:03:32: select * from `doctors` where `users_id` = 42 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:03:32: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:03:32: select * from `doctors` where `users_id` = 32 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:03:32: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:03:32: select * from `doctors` where `users_id` = 33 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:03:32: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:03:32: select * from `doctors` where `users_id` = 31 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:03:32: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:03:32: select * from `doctors` where `users_id` = 25 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:03:32: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:03:32: select * from `doctors` where `users_id` = 28 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:03:32: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:03:32: select * from `doctors` where `users_id` = 6 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:03:32: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:04:30: select * from `users` where `id` = '29' and `login_type` = 2 and `status` = 1 and `users`.`deleted_at` is null limit 1
+2017-10-30 15:04:30: select * from `doctors` where `doctors`.`users_id` in (29) and `doctors`.`deleted_at` is null
+2017-10-30 15:04:30: select * from `services` where `doctors_id` = '29' and `payment_status` = 1 and `paid_at` > '2017-09-30 15:04:30' and `services`.`deleted_at` is null
+2017-10-30 15:04:30: select * from `messages` where `doctors_id` = '29' and 1 = 1 and `visible` = 1
+2017-10-30 15:04:30: select count(*) as aggregate from `users` where `id` in (23, 45) and `login_type` = 1 and `users`.`deleted_at` is null
+2017-10-30 15:04:30: select * from `users` where `id` in (23, 45) and `login_type` = 1 and `users`.`deleted_at` is null limit 10 offset 0
+2017-10-30 15:04:30: select * from `member_requests` where `member_requests`.`members_id` in (23, 45) and `member_requests`.`deleted_at` is null order by `created_at` desc
+2017-10-30 15:04:30: select * from `doctors` where `doctors`.`users_id` = 23 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:04:30: select * from `doctors` where `doctors`.`users_id` = 45 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:05:42: select count(*) as aggregate from `users` where `id` = '45'
+2017-10-30 15:05:42: select * from `users` where `id` = '45' and `users`.`deleted_at` is null limit 1
+2017-10-30 15:05:42: select * from `users` where `city_id` = 1 and `login_type` = '2' and `online` = 1 and `users`.`deleted_at` is null order by `online_at` desc
+2017-10-30 15:05:42: select * from `messages` where `source` = 'doctor' and `started_at` is not null and `messages`.`doctors_id` in (3, 6, 8, 22, 25, 28, 29, 30, 31, 32, 33, 34, 36, 39, 42) and `members_id` = '45' order by `started_at` desc
+2017-10-30 15:05:42: select * from `doctors` where `users_id` = 29 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:05:42: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:05:42: select * from `doctors` where `users_id` = 36 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:05:42: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:05:42: select * from `doctors` where `users_id` = 34 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:05:42: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:05:42: select * from `doctors` where `users_id` = 39 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:05:42: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:05:42: select * from `doctors` where `users_id` = 30 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:05:42: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:05:42: select * from `doctors` where `users_id` = 3 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:05:42: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:05:42: select * from `doctors` where `users_id` = 8 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:05:42: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:05:42: select * from `doctors` where `users_id` = 22 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:05:42: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:05:42: select * from `doctors` where `users_id` = 42 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:05:42: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:05:42: select * from `doctors` where `users_id` = 32 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:05:42: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:05:42: select * from `doctors` where `users_id` = 33 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:05:42: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:05:42: select * from `doctors` where `users_id` = 31 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:05:42: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:05:42: select * from `doctors` where `users_id` = 25 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:05:42: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:05:42: select * from `doctors` where `users_id` = 28 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:05:42: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:05:42: select * from `doctors` where `users_id` = 6 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:05:42: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:06:00: select count(*) as aggregate from `users` where `id` = '45'
+2017-10-30 15:06:00: select * from `users` where `id` = '45' and `users`.`deleted_at` is null limit 1
+2017-10-30 15:06:00: select * from `users` where `city_id` = 1 and `login_type` = '2' and `online` = 1 and `users`.`deleted_at` is null order by `online_at` desc
+2017-10-30 15:06:00: select * from `messages` where `source` = 'doctor' and `started_at` is not null and `messages`.`doctors_id` in (3, 6, 8, 22, 25, 28, 29, 30, 31, 32, 33, 34, 36, 39, 42) and `members_id` = '45' order by `started_at` desc
+2017-10-30 15:06:00: select * from `doctors` where `users_id` = 29 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:06:00: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:06:00: select * from `doctors` where `users_id` = 36 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:06:00: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:06:00: select * from `doctors` where `users_id` = 34 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:06:00: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:06:00: select * from `doctors` where `users_id` = 39 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:06:00: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:06:00: select * from `doctors` where `users_id` = 30 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:06:00: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:06:00: select * from `doctors` where `users_id` = 3 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:06:00: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:06:00: select * from `doctors` where `users_id` = 8 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:06:00: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:06:00: select * from `doctors` where `users_id` = 22 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:06:00: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:06:00: select * from `doctors` where `users_id` = 42 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:06:00: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:06:00: select * from `doctors` where `users_id` = 32 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:06:00: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:06:00: select * from `doctors` where `users_id` = 33 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:06:00: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:06:00: select * from `doctors` where `users_id` = 31 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:06:00: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:06:00: select * from `doctors` where `users_id` = 25 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:06:00: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:06:00: select * from `doctors` where `users_id` = 28 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:06:00: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:06:00: select * from `doctors` where `users_id` = 6 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:06:00: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:06:49: select count(*) as aggregate from `users` where `id` = '45'
+2017-10-30 15:06:49: select * from `users` where `id` = '45' and `users`.`deleted_at` is null limit 1
+2017-10-30 15:06:49: select * from `users` where `city_id` = 1 and `login_type` = '2' and `online` = 1 and `users`.`deleted_at` is null order by `online_at` desc
+2017-10-30 15:06:49: select * from `messages` where `source` = 'doctor' and `started_at` is not null and `messages`.`doctors_id` in (3, 6, 8, 22, 25, 28, 29, 30, 31, 32, 33, 34, 36, 39, 42) and `members_id` = '45' order by `started_at` desc
+2017-10-30 15:06:49: select * from `doctors` where `users_id` = 29 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:06:49: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:06:49: select * from `doctors` where `users_id` = 36 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:06:49: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:06:49: select * from `doctors` where `users_id` = 34 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:06:49: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:06:49: select * from `doctors` where `users_id` = 39 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:06:49: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:06:49: select * from `doctors` where `users_id` = 30 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:06:49: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:06:49: select * from `doctors` where `users_id` = 3 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:06:49: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:06:49: select * from `doctors` where `users_id` = 8 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:06:49: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:06:49: select * from `doctors` where `users_id` = 22 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:06:50: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:06:50: select * from `doctors` where `users_id` = 42 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:06:50: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:06:50: select * from `doctors` where `users_id` = 32 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:06:50: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:06:50: select * from `doctors` where `users_id` = 33 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:06:50: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:06:50: select * from `doctors` where `users_id` = 31 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:06:50: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:06:50: select * from `doctors` where `users_id` = 25 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:06:50: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:06:50: select * from `doctors` where `users_id` = 28 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:06:50: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:06:50: select * from `doctors` where `users_id` = 6 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:06:50: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:13:00: select * from `users` where `id` = '29' and `login_type` = 2 and `status` = 1 and `users`.`deleted_at` is null limit 1
+2017-10-30 15:13:00: select * from `doctors` where `doctors`.`users_id` in (29) and `doctors`.`deleted_at` is null
+2017-10-30 15:13:00: select * from `services` where `doctors_id` = '29' and `payment_status` = 1 and `paid_at` > '2017-09-30 15:13:00' and `services`.`deleted_at` is null
+2017-10-30 15:13:00: select * from `messages` where `doctors_id` = '29' and 1 = 1 and `visible` = 1
+2017-10-30 15:13:00: select count(*) as aggregate from `users` where `id` in (23, 45) and `login_type` = 1 and `users`.`deleted_at` is null
+2017-10-30 15:13:00: select * from `users` where `id` in (23, 45) and `login_type` = 1 and `users`.`deleted_at` is null limit 10 offset 0
+2017-10-30 15:13:00: select * from `member_requests` where `member_requests`.`members_id` in (23, 45) and `member_requests`.`deleted_at` is null order by `created_at` desc
+2017-10-30 15:13:00: select * from `doctors` where `doctors`.`users_id` = 23 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:13:00: select * from `doctors` where `doctors`.`users_id` = 45 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:13:02: select * from `users` where `id` = '29' and `users`.`deleted_at` is null limit 1
+2017-10-30 15:13:02: select * from `doctors` where `doctors`.`users_id` = 29 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:13:02: select count(*) as aggregate from `member_requests` where `member_requests`.`deleted_at` is null
+2017-10-30 15:13:02: select count(*) as aggregate from `member_request_doctors` where `doctors_id` = '29'
+2017-10-30 15:13:02: select count(*) as aggregate from `services` where `doctors_id` = '29' and `opened_at` is null and `services`.`deleted_at` is null
+2017-10-30 15:13:02: select * from `messages` where `doctors_id` = '29' and `doctor_readed_at` is null and `visible` = 1 order by `created_at` desc
+2017-10-30 15:13:02: select * from `services` where `members_id` = 23 and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:13:02: select * from `parameters` where `type` = 'banner'
+2017-10-30 15:13:02: select * from `parameters` where `type` = 'setting' and `key` = 'service_email' limit 1
+2017-10-30 15:13:03: select * from `users` where `id` = '29' and `users`.`deleted_at` is null limit 1
+2017-10-30 15:13:03: select * from `doctors` where `doctors`.`users_id` = 29 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:13:03: select count(*) as aggregate from `member_requests` where `member_requests`.`deleted_at` is null
+2017-10-30 15:13:03: select count(*) as aggregate from `member_request_doctors` where `doctors_id` = '29'
+2017-10-30 15:13:03: select count(*) as aggregate from `services` where `doctors_id` = '29' and `opened_at` is null and `services`.`deleted_at` is null
+2017-10-30 15:13:03: select * from `messages` where `doctors_id` = '29' and `doctor_readed_at` is null and `visible` = 1 order by `created_at` desc
+2017-10-30 15:13:03: select * from `services` where `members_id` = 23 and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:13:03: select * from `parameters` where `type` = 'banner'
+2017-10-30 15:13:03: select * from `parameters` where `type` = 'setting' and `key` = 'service_email' limit 1
+2017-10-30 15:14:23: select count(*) as aggregate from `users` where `id` = '45'
+2017-10-30 15:14:23: select * from `users` where `id` = '45' and `users`.`deleted_at` is null limit 1
+2017-10-30 15:14:23: select * from `users` where `city_id` = 1 and `login_type` = '2' and `online` = 1 and `users`.`deleted_at` is null order by `online_at` desc
+2017-10-30 15:14:23: select * from `messages` where `source` = 'doctor' and `started_at` is not null and `messages`.`doctors_id` in (3, 6, 8, 22, 25, 28, 29, 30, 31, 32, 33, 34, 36, 39, 42) and `members_id` = '45' order by `started_at` desc
+2017-10-30 15:14:23: select * from `doctors` where `users_id` = 29 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:14:23: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:14:24: select * from `doctors` where `users_id` = 36 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:14:24: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:14:24: select * from `doctors` where `users_id` = 34 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:14:24: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:14:24: select * from `doctors` where `users_id` = 39 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:14:24: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:14:24: select * from `doctors` where `users_id` = 30 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:14:24: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:14:24: select * from `doctors` where `users_id` = 3 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:14:24: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:14:24: select * from `doctors` where `users_id` = 8 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:14:24: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:14:24: select * from `doctors` where `users_id` = 22 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:14:24: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:14:24: select * from `doctors` where `users_id` = 42 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:14:24: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:14:24: select * from `doctors` where `users_id` = 32 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:14:24: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:14:24: select * from `doctors` where `users_id` = 33 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:14:24: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:14:24: select * from `doctors` where `users_id` = 31 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:14:24: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:14:24: select * from `doctors` where `users_id` = 25 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:14:24: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:14:24: select * from `doctors` where `users_id` = 28 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:14:24: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:14:24: select * from `doctors` where `users_id` = 6 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:14:24: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:15:37: select count(*) as aggregate from `users` where `id` = '45'
+2017-10-30 15:15:37: select * from `users` where `id` = '45' and `users`.`deleted_at` is null limit 1
+2017-10-30 15:15:37: select * from `users` where `city_id` = 1 and `login_type` = '2' and `online` = 1 and `users`.`deleted_at` is null order by `online_at` desc
+2017-10-30 15:15:37: select * from `messages` where `source` = 'doctor' and `started_at` is not null and `messages`.`doctors_id` in (3, 6, 8, 22, 25, 28, 29, 30, 31, 32, 33, 34, 36, 39, 42) and `members_id` = '45' order by `started_at` desc
+2017-10-30 15:15:37: select * from `doctors` where `users_id` = 29 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:15:37: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:15:37: select * from `doctors` where `users_id` = 36 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:15:37: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:15:37: select * from `doctors` where `users_id` = 34 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:15:37: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:15:37: select * from `doctors` where `users_id` = 39 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:15:37: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:15:37: select * from `doctors` where `users_id` = 30 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:15:37: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:15:37: select * from `doctors` where `users_id` = 3 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:15:37: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:15:37: select * from `doctors` where `users_id` = 8 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:15:37: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:15:37: select * from `doctors` where `users_id` = 22 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:15:37: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:15:37: select * from `doctors` where `users_id` = 42 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:15:37: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:15:37: select * from `doctors` where `users_id` = 32 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:15:37: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:15:37: select * from `doctors` where `users_id` = 33 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:15:37: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:15:37: select * from `doctors` where `users_id` = 31 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:15:37: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:15:37: select * from `doctors` where `users_id` = 25 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:15:37: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:15:37: select * from `doctors` where `users_id` = 28 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:15:37: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 15:15:37: select * from `doctors` where `users_id` = 6 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 15:15:37: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 23:54:12: select count(*) as aggregate from `users` where `id` = '45'
+2017-10-30 23:54:12: select * from `users` where `id` = '45' and `users`.`deleted_at` is null limit 1
+2017-10-30 23:54:12: select * from `users` where `city_id` = 1 and `login_type` = '2' and `online` = 1 and `users`.`deleted_at` is null order by `online_at` desc
+2017-10-30 23:54:12: select * from `messages` where `source` = 'doctor' and `started_at` is not null and `messages`.`doctors_id` in (3, 6, 8, 22, 25, 28, 29, 30, 31, 32, 33, 34, 36, 39, 42) and `members_id` = '45' order by `started_at` desc
+2017-10-30 23:54:12: select * from `doctors` where `users_id` = 29 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 23:54:12: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 23:54:12: select * from `doctors` where `users_id` = 36 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 23:54:12: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 23:54:12: select * from `doctors` where `users_id` = 34 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 23:54:12: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 23:54:12: select * from `doctors` where `users_id` = 39 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 23:54:12: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 23:54:12: select * from `doctors` where `users_id` = 30 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 23:54:12: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 23:54:12: select * from `doctors` where `users_id` = 3 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 23:54:12: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 23:54:12: select * from `doctors` where `users_id` = 8 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 23:54:12: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 23:54:12: select * from `doctors` where `users_id` = 22 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 23:54:12: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 23:54:12: select * from `doctors` where `users_id` = 42 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 23:54:12: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 23:54:12: select * from `doctors` where `users_id` = 32 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 23:54:12: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 23:54:12: select * from `doctors` where `users_id` = 33 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 23:54:12: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 23:54:12: select * from `doctors` where `users_id` = 31 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 23:54:12: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 23:54:12: select * from `doctors` where `users_id` = 25 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 23:54:12: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 23:54:12: select * from `doctors` where `users_id` = 28 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 23:54:12: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 23:54:12: select * from `doctors` where `users_id` = 6 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 23:54:12: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 23:55:01: select count(*) as aggregate from `users` where `id` = '45'
+2017-10-30 23:55:01: select * from `users` where `id` = '45' and `users`.`deleted_at` is null limit 1
+2017-10-30 23:55:01: select * from `users` where `city_id` = 1 and `login_type` = '2' and `online` = 1 and `users`.`deleted_at` is null order by `online_at` desc
+2017-10-30 23:55:01: select * from `messages` where `source` = 'doctor' and `started_at` is not null and `messages`.`doctors_id` in (3, 6, 8, 22, 25, 28, 29, 30, 31, 32, 33, 34, 36, 39, 42) and `members_id` = '45' order by `started_at` desc
+2017-10-30 23:55:01: select * from `doctors` where `users_id` = 29 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 23:55:01: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 23:55:01: select * from `doctors` where `users_id` = 36 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 23:55:01: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 23:55:01: select * from `doctors` where `users_id` = 34 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 23:55:01: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 23:55:01: select * from `doctors` where `users_id` = 39 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 23:55:01: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 23:55:01: select * from `doctors` where `users_id` = 30 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 23:55:01: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 23:55:01: select * from `doctors` where `users_id` = 3 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 23:55:01: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 23:55:01: select * from `doctors` where `users_id` = 8 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 23:55:01: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 23:55:01: select * from `doctors` where `users_id` = 22 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 23:55:01: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 23:55:01: select * from `doctors` where `users_id` = 42 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 23:55:01: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 23:55:01: select * from `doctors` where `users_id` = 32 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 23:55:01: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 23:55:01: select * from `doctors` where `users_id` = 33 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 23:55:01: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 23:55:01: select * from `doctors` where `users_id` = 31 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 23:55:01: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 23:55:01: select * from `doctors` where `users_id` = 25 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 23:55:01: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 23:55:01: select * from `doctors` where `users_id` = 28 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 23:55:01: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2017-10-30 23:55:01: select * from `doctors` where `users_id` = 6 and `doctors`.`deleted_at` is null limit 1
+2017-10-30 23:55:01: select * from `services` where `members_id` = '45' and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1

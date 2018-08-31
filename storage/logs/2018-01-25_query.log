@@ -1,0 +1,173 @@
+2018-01-25 15:22:26: select * from `users` where `id` = '13' and `users`.`deleted_at` is null limit 1
+2018-01-25 15:22:26: select * from `doctors` where `doctors`.`users_id` = 13 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2018-01-25 15:22:26: select count(*) as aggregate from `member_requests` where `member_requests`.`deleted_at` is null
+2018-01-25 15:22:26: select count(*) as aggregate from `member_request_doctors` where `doctors_id` = '13'
+2018-01-25 15:22:26: select count(*) as aggregate from `services` where `doctors_id` = '13' and `opened_at` is null and `services`.`deleted_at` is null
+2018-01-25 15:22:26: select * from `messages` where `doctors_id` = '13' and `doctor_readed_at` is null and `visible` = 1 order by `created_at` desc
+2018-01-25 15:22:26: select * from `parameters` where `type` = 'banner'
+2018-01-25 15:22:26: select * from `parameters` where `type` = 'setting' and `key` = 'service_email' limit 1
+2018-01-25 15:22:40: select * from `users` where `id` = '13' and `users`.`deleted_at` is null limit 1
+2018-01-25 15:22:40: select * from `doctors` where `doctors`.`users_id` = 13 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2018-01-25 15:22:40: select count(*) as aggregate from `member_requests` where `member_requests`.`deleted_at` is null
+2018-01-25 15:22:40: select count(*) as aggregate from `member_request_doctors` where `doctors_id` = '13'
+2018-01-25 15:22:40: select count(*) as aggregate from `services` where `doctors_id` = '13' and `opened_at` is null and `services`.`deleted_at` is null
+2018-01-25 15:22:40: select * from `messages` where `doctors_id` = '13' and `doctor_readed_at` is null and `visible` = 1 order by `created_at` desc
+2018-01-25 15:22:40: select * from `parameters` where `type` = 'banner'
+2018-01-25 15:22:40: select * from `parameters` where `type` = 'setting' and `key` = 'service_email' limit 1
+2018-01-25 15:22:42: select * from `users` where `id` = '13' and `login_type` = 2 and `status` = 1 and `users`.`deleted_at` is null limit 1
+2018-01-25 15:22:42: select * from `doctors` where `doctors`.`users_id` in (13) and `doctors`.`deleted_at` is null
+2018-01-25 15:22:42: select * from `services` where `doctors_id` = '13' and `members_id` is not null and `services`.`deleted_at` is null
+2018-01-25 15:22:42: select * from `services` where `doctors_id` = '13' and 0 = 1 and `payment_status` = 1 and `services`.`deleted_at` is null order by `created_at` desc
+2018-01-25 15:22:42: select * from `parameters` where `type` = 'setting' and `key` = 'message_expire_time' limit 1
+2018-01-25 15:22:42: update `services` set `opened_at` = '2018-01-25 15:22:42', `updated_at` = '2018-01-25 15:22:42' where `doctors_id` = '13' and `opened_at` is null and `services`.`deleted_at` is null
+2018-01-25 15:22:44: select * from `users` where `id` = '13' and `users`.`deleted_at` is null limit 1
+2018-01-25 15:22:44: select * from `doctors` where `doctors`.`users_id` = 13 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2018-01-25 15:22:44: select count(*) as aggregate from `member_requests` where `member_requests`.`deleted_at` is null
+2018-01-25 15:22:44: select count(*) as aggregate from `member_request_doctors` where `doctors_id` = '13'
+2018-01-25 15:22:44: select count(*) as aggregate from `services` where `doctors_id` = '13' and `opened_at` is null and `services`.`deleted_at` is null
+2018-01-25 15:22:44: select * from `messages` where `doctors_id` = '13' and `doctor_readed_at` is null and `visible` = 1 order by `created_at` desc
+2018-01-25 15:22:44: select * from `parameters` where `type` = 'banner'
+2018-01-25 15:22:44: select * from `parameters` where `type` = 'setting' and `key` = 'service_email' limit 1
+2018-01-25 17:43:15: select * from `users` where `id` = '13' and `users`.`deleted_at` is null limit 1
+2018-01-25 17:43:15: select * from `doctors` where `doctors`.`users_id` = 13 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2018-01-25 17:43:15: select count(*) as aggregate from `member_requests` where `member_requests`.`deleted_at` is null
+2018-01-25 17:43:15: select count(*) as aggregate from `member_request_doctors` where `doctors_id` = '13'
+2018-01-25 17:43:15: select count(*) as aggregate from `services` where `doctors_id` = '13' and `opened_at` is null and `services`.`deleted_at` is null
+2018-01-25 17:43:15: select * from `messages` where `doctors_id` = '13' and `doctor_readed_at` is null and `visible` = 1 order by `created_at` desc
+2018-01-25 17:43:15: select * from `parameters` where `type` = 'banner'
+2018-01-25 17:43:15: select * from `parameters` where `type` = 'setting' and `key` = 'service_email' limit 1
+2018-01-25 19:34:01: select * from `users` where `id` = '21' and `users`.`deleted_at` is null limit 1
+2018-01-25 19:34:01: select * from `doctors` where `doctors`.`users_id` = 21 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2018-01-25 19:34:01: select count(*) as aggregate from `member_requests` where `member_requests`.`deleted_at` is null
+2018-01-25 19:34:01: select count(*) as aggregate from `member_request_doctors` where `doctors_id` = '21'
+2018-01-25 19:34:01: select count(*) as aggregate from `services` where `doctors_id` = '21' and `opened_at` is null and `services`.`deleted_at` is null
+2018-01-25 19:34:01: select * from `messages` where `doctors_id` = '21' and `doctor_readed_at` is null and `visible` = 1 order by `created_at` desc
+2018-01-25 19:34:01: select * from `parameters` where `type` = 'banner'
+2018-01-25 19:34:01: select * from `parameters` where `type` = 'setting' and `key` = 'service_email' limit 1
+2018-01-25 22:00:13: select * from `users` where `id` = '9' and `users`.`deleted_at` is null limit 1
+2018-01-25 22:00:13: select * from `doctors` where `doctors`.`users_id` = 9 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2018-01-25 22:00:13: select count(*) as aggregate from `member_requests` where `member_requests`.`deleted_at` is null
+2018-01-25 22:00:13: select count(*) as aggregate from `member_request_doctors` where `doctors_id` = '9'
+2018-01-25 22:00:13: select count(*) as aggregate from `services` where `doctors_id` = '9' and `opened_at` is null and `services`.`deleted_at` is null
+2018-01-25 22:00:13: select * from `messages` where `doctors_id` = '9' and `doctor_readed_at` is null and `visible` = 1 order by `created_at` desc
+2018-01-25 22:00:13: select * from `services` where `members_id` = 31 and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2018-01-25 22:00:13: select * from `parameters` where `type` = 'banner'
+2018-01-25 22:00:13: select * from `parameters` where `type` = 'setting' and `key` = 'service_email' limit 1
+2018-01-25 22:02:05: select * from `users` where `id` = '9' and `users`.`deleted_at` is null limit 1
+2018-01-25 22:02:05: select * from `doctors` where `doctors`.`users_id` = 9 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2018-01-25 22:02:05: select count(*) as aggregate from `member_requests` where `member_requests`.`deleted_at` is null
+2018-01-25 22:02:05: select count(*) as aggregate from `member_request_doctors` where `doctors_id` = '9'
+2018-01-25 22:02:05: select count(*) as aggregate from `services` where `doctors_id` = '9' and `opened_at` is null and `services`.`deleted_at` is null
+2018-01-25 22:02:05: select * from `messages` where `doctors_id` = '9' and `doctor_readed_at` is null and `visible` = 1 order by `created_at` desc
+2018-01-25 22:02:05: select * from `services` where `members_id` = 31 and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2018-01-25 22:02:05: select * from `parameters` where `type` = 'banner'
+2018-01-25 22:02:05: select * from `parameters` where `type` = 'setting' and `key` = 'service_email' limit 1
+2018-01-25 22:02:18: select * from `users` where `id` = '9' and `login_type` = 2 and `status` = 1 and `users`.`deleted_at` is null limit 1
+2018-01-25 22:02:18: select * from `doctors` where `doctors`.`users_id` in (9) and `doctors`.`deleted_at` is null
+2018-01-25 22:02:18: select * from `services` where `doctors_id` = '9' and `members_id` is not null and `services`.`deleted_at` is null
+2018-01-25 22:02:18: select * from `services` where `doctors_id` = '9' and `members_id` in (10, 32, 35) and `payment_status` in (0, 1) and `services`.`deleted_at` is null order by `created_at` desc
+2018-01-25 22:02:18: select * from `users` where `login_type` = 1 and `users`.`id` in (10, 32, 35) and `users`.`deleted_at` is null
+2018-01-25 22:02:18: select * from `parameters` where `type` = 'setting' and `key` = 'message_expire_time' limit 1
+2018-01-25 22:02:18: select * from `messages` where `doctors_id` = 9 and `members_id` = 35 and `source` = 'member' order by `created_at` desc limit 1
+2018-01-25 22:02:18: select * from `messages` where `doctors_id` = 9 and `members_id` = 35 and `source` = 'doctor' order by `created_at` desc limit 1
+2018-01-25 22:02:18: select * from `messages` where `doctors_id` = 9 and `members_id` = 32 and `source` = 'member' order by `created_at` desc limit 1
+2018-01-25 22:02:18: select * from `messages` where `doctors_id` = 9 and `members_id` = 32 and `source` = 'doctor' order by `created_at` desc limit 1
+2018-01-25 22:02:18: select * from `messages` where `doctors_id` = 9 and `members_id` = 10 and `source` = 'member' order by `created_at` desc limit 1
+2018-01-25 22:02:18: select * from `messages` where `doctors_id` = 9 and `members_id` = 10 and `source` = 'doctor' order by `created_at` desc limit 1
+2018-01-25 22:02:18: update `services` set `opened_at` = '2018-01-25 22:02:18', `updated_at` = '2018-01-25 22:02:18' where `doctors_id` = '9' and `opened_at` is null and `services`.`deleted_at` is null
+2018-01-25 22:02:18: select * from `parameters` where `type` = 'setting' and `key` = 'treatment_days_1' limit 1
+2018-01-25 22:02:18: select * from `doctors` where `doctors`.`users_id` = 35 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2018-01-25 22:02:18: select * from `parameters` where `type` = 'setting' and `key` = 'treatment_days_1' limit 1
+2018-01-25 22:02:18: select * from `doctors` where `doctors`.`users_id` = 32 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2018-01-25 22:02:18: select * from `parameters` where `type` = 'setting' and `key` = 'treatment_days_1' limit 1
+2018-01-25 22:02:18: select * from `doctors` where `doctors`.`users_id` = 10 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2018-01-25 22:32:53: select * from `users` where `id` = '9' and `users`.`deleted_at` is null limit 1
+2018-01-25 22:32:53: select * from `doctors` where `doctors`.`users_id` = 9 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2018-01-25 22:32:53: select count(*) as aggregate from `member_requests` where `member_requests`.`deleted_at` is null
+2018-01-25 22:32:53: select count(*) as aggregate from `member_request_doctors` where `doctors_id` = '9'
+2018-01-25 22:32:53: select count(*) as aggregate from `services` where `doctors_id` = '9' and `opened_at` is null and `services`.`deleted_at` is null
+2018-01-25 22:32:53: select * from `messages` where `doctors_id` = '9' and `doctor_readed_at` is null and `visible` = 1 order by `created_at` desc
+2018-01-25 22:32:53: select * from `services` where `members_id` = 31 and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2018-01-25 22:32:53: select * from `parameters` where `type` = 'banner'
+2018-01-25 22:32:53: select * from `parameters` where `type` = 'setting' and `key` = 'service_email' limit 1
+2018-01-25 22:33:03: select * from `users` where `id` = '9' and `login_type` = 2 and `status` = 1 and `users`.`deleted_at` is null limit 1
+2018-01-25 22:33:03: select * from `doctors` where `doctors`.`users_id` in (9) and `doctors`.`deleted_at` is null
+2018-01-25 22:33:03: select * from `services` where `doctors_id` = '9' and `members_id` is not null and `services`.`deleted_at` is null
+2018-01-25 22:33:03: select * from `services` where `doctors_id` = '9' and `members_id` in (10, 32, 35) and `payment_status` in (0, 1) and `services`.`deleted_at` is null order by `created_at` desc
+2018-01-25 22:33:03: select * from `users` where `login_type` = 1 and `users`.`id` in (10, 32, 35) and `users`.`deleted_at` is null
+2018-01-25 22:33:03: select * from `parameters` where `type` = 'setting' and `key` = 'message_expire_time' limit 1
+2018-01-25 22:33:03: select * from `messages` where `doctors_id` = 9 and `members_id` = 35 and `source` = 'member' order by `created_at` desc limit 1
+2018-01-25 22:33:03: select * from `messages` where `doctors_id` = 9 and `members_id` = 35 and `source` = 'doctor' order by `created_at` desc limit 1
+2018-01-25 22:33:03: select * from `messages` where `doctors_id` = 9 and `members_id` = 32 and `source` = 'member' order by `created_at` desc limit 1
+2018-01-25 22:33:03: select * from `messages` where `doctors_id` = 9 and `members_id` = 32 and `source` = 'doctor' order by `created_at` desc limit 1
+2018-01-25 22:33:03: select * from `messages` where `doctors_id` = 9 and `members_id` = 10 and `source` = 'member' order by `created_at` desc limit 1
+2018-01-25 22:33:03: select * from `messages` where `doctors_id` = 9 and `members_id` = 10 and `source` = 'doctor' order by `created_at` desc limit 1
+2018-01-25 22:33:03: update `services` set `opened_at` = '2018-01-25 22:33:03', `updated_at` = '2018-01-25 22:33:03' where `doctors_id` = '9' and `opened_at` is null and `services`.`deleted_at` is null
+2018-01-25 22:33:03: select * from `parameters` where `type` = 'setting' and `key` = 'treatment_days_1' limit 1
+2018-01-25 22:33:03: select * from `doctors` where `doctors`.`users_id` = 35 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2018-01-25 22:33:03: select * from `parameters` where `type` = 'setting' and `key` = 'treatment_days_1' limit 1
+2018-01-25 22:33:03: select * from `doctors` where `doctors`.`users_id` = 32 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2018-01-25 22:33:03: select * from `parameters` where `type` = 'setting' and `key` = 'treatment_days_1' limit 1
+2018-01-25 22:33:03: select * from `doctors` where `doctors`.`users_id` = 10 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2018-01-25 22:52:11: select * from `users` where `id` = '9' and `users`.`deleted_at` is null limit 1
+2018-01-25 22:52:11: select * from `doctors` where `doctors`.`users_id` = 9 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2018-01-25 22:52:11: select count(*) as aggregate from `member_requests` where `member_requests`.`deleted_at` is null
+2018-01-25 22:52:11: select count(*) as aggregate from `member_request_doctors` where `doctors_id` = '9'
+2018-01-25 22:52:11: select count(*) as aggregate from `services` where `doctors_id` = '9' and `opened_at` is null and `services`.`deleted_at` is null
+2018-01-25 22:52:11: select * from `messages` where `doctors_id` = '9' and `doctor_readed_at` is null and `visible` = 1 order by `created_at` desc
+2018-01-25 22:52:11: select * from `services` where `members_id` = 31 and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2018-01-25 22:52:11: select * from `parameters` where `type` = 'banner'
+2018-01-25 22:52:11: select * from `parameters` where `type` = 'setting' and `key` = 'service_email' limit 1
+2018-01-25 22:52:14: select * from `users` where `id` = '9' and `login_type` = 2 and `status` = 1 and `users`.`deleted_at` is null limit 1
+2018-01-25 22:52:14: select * from `doctors` where `doctors`.`users_id` in (9) and `doctors`.`deleted_at` is null
+2018-01-25 22:52:14: select * from `services` where `doctors_id` = '9' and `payment_status` = 1 and `paid_at` > '2017-12-25 22:52:14' and `services`.`deleted_at` is null
+2018-01-25 22:52:14: select * from `messages` where `doctors_id` = '9' and `members_id` not in (32, 35) and `visible` = 1
+2018-01-25 22:52:14: select count(*) as aggregate from `users` where `id` in (31) and `login_type` = 1 and `users`.`deleted_at` is null
+2018-01-25 22:52:14: select * from `users` where `id` in (31) and `login_type` = 1 and `users`.`deleted_at` is null limit 10 offset 0
+2018-01-25 22:52:14: select * from `member_requests` where `member_requests`.`members_id` in (31) and `member_requests`.`deleted_at` is null order by `created_at` desc
+2018-01-25 22:52:14: select * from `doctors` where `doctors`.`users_id` = 31 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2018-01-25 22:52:25: select * from `users` where `id` = '9' and `users`.`deleted_at` is null limit 1
+2018-01-25 22:52:25: select * from `doctors` where `doctors`.`users_id` = 9 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2018-01-25 22:52:25: select count(*) as aggregate from `member_requests` where `member_requests`.`deleted_at` is null
+2018-01-25 22:52:25: select count(*) as aggregate from `member_request_doctors` where `doctors_id` = '9'
+2018-01-25 22:52:25: select count(*) as aggregate from `services` where `doctors_id` = '9' and `opened_at` is null and `services`.`deleted_at` is null
+2018-01-25 22:52:25: select * from `messages` where `doctors_id` = '9' and `doctor_readed_at` is null and `visible` = 1 order by `created_at` desc
+2018-01-25 22:52:25: select * from `services` where `members_id` = 31 and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2018-01-25 22:52:25: select * from `parameters` where `type` = 'banner'
+2018-01-25 22:52:25: select * from `parameters` where `type` = 'setting' and `key` = 'service_email' limit 1
+2018-01-25 22:52:31: select * from `users` where `id` = '9' and `login_type` = 2 and `status` = 1 and `users`.`deleted_at` is null limit 1
+2018-01-25 22:52:31: select * from `doctors` where `doctors`.`users_id` in (9) and `doctors`.`deleted_at` is null
+2018-01-25 22:52:31: select * from `services` where `doctors_id` = '9' and `payment_status` = 1 and `paid_at` > '2017-12-25 22:52:31' and `services`.`deleted_at` is null
+2018-01-25 22:52:31: select * from `messages` where `doctors_id` = '9' and `members_id` not in (32, 35) and `visible` = 1
+2018-01-25 22:52:31: select count(*) as aggregate from `users` where `id` in (31) and `login_type` = 1 and `users`.`deleted_at` is null
+2018-01-25 22:52:31: select * from `users` where `id` in (31) and `login_type` = 1 and `users`.`deleted_at` is null limit 10 offset 0
+2018-01-25 22:52:31: select * from `member_requests` where `member_requests`.`members_id` in (31) and `member_requests`.`deleted_at` is null order by `created_at` desc
+2018-01-25 22:52:31: select * from `doctors` where `doctors`.`users_id` = 31 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2018-01-25 22:52:34: select * from `users` where `id` = '9' and `users`.`deleted_at` is null limit 1
+2018-01-25 22:52:34: select * from `doctors` where `doctors`.`users_id` = 9 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2018-01-25 22:52:34: select count(*) as aggregate from `member_requests` where `member_requests`.`deleted_at` is null
+2018-01-25 22:52:34: select count(*) as aggregate from `member_request_doctors` where `doctors_id` = '9'
+2018-01-25 22:52:34: select count(*) as aggregate from `services` where `doctors_id` = '9' and `opened_at` is null and `services`.`deleted_at` is null
+2018-01-25 22:52:34: select * from `messages` where `doctors_id` = '9' and `doctor_readed_at` is null and `visible` = 1 order by `created_at` desc
+2018-01-25 22:52:34: select * from `services` where `members_id` = 31 and `payment_status` = 1 and `services`.`deleted_at` is null order by `id` desc limit 1
+2018-01-25 22:52:34: select * from `parameters` where `type` = 'banner'
+2018-01-25 22:52:34: select * from `parameters` where `type` = 'setting' and `key` = 'service_email' limit 1
+2018-01-25 22:54:31: select * from `users` where `id` = '9' and `login_type` = 2 and `status` = 1 and `users`.`deleted_at` is null limit 1
+2018-01-25 22:54:31: select * from `doctors` where `doctors`.`users_id` in (9) and `doctors`.`deleted_at` is null
+2018-01-25 22:54:31: select * from `services` where `doctors_id` = '9' and `members_id` is not null and `services`.`deleted_at` is null
+2018-01-25 22:54:31: select * from `services` where `doctors_id` = '9' and `members_id` in (10, 32, 35) and `payment_status` in (0, 1) and `services`.`deleted_at` is null order by `created_at` desc
+2018-01-25 22:54:31: select * from `users` where `login_type` = 1 and `users`.`id` in (10, 32, 35) and `users`.`deleted_at` is null
+2018-01-25 22:54:31: select * from `parameters` where `type` = 'setting' and `key` = 'message_expire_time' limit 1
+2018-01-25 22:54:31: select * from `messages` where `doctors_id` = 9 and `members_id` = 35 and `source` = 'member' order by `created_at` desc limit 1
+2018-01-25 22:54:31: select * from `messages` where `doctors_id` = 9 and `members_id` = 35 and `source` = 'doctor' order by `created_at` desc limit 1
+2018-01-25 22:54:31: select * from `messages` where `doctors_id` = 9 and `members_id` = 32 and `source` = 'member' order by `created_at` desc limit 1
+2018-01-25 22:54:31: select * from `messages` where `doctors_id` = 9 and `members_id` = 32 and `source` = 'doctor' order by `created_at` desc limit 1
+2018-01-25 22:54:31: select * from `messages` where `doctors_id` = 9 and `members_id` = 10 and `source` = 'member' order by `created_at` desc limit 1
+2018-01-25 22:54:31: select * from `messages` where `doctors_id` = 9 and `members_id` = 10 and `source` = 'doctor' order by `created_at` desc limit 1
+2018-01-25 22:54:31: update `services` set `opened_at` = '2018-01-25 22:54:31', `updated_at` = '2018-01-25 22:54:31' where `doctors_id` = '9' and `opened_at` is null and `services`.`deleted_at` is null
+2018-01-25 22:54:31: select * from `parameters` where `type` = 'setting' and `key` = 'treatment_days_1' limit 1
+2018-01-25 22:54:31: select * from `doctors` where `doctors`.`users_id` = 35 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2018-01-25 22:54:31: select * from `parameters` where `type` = 'setting' and `key` = 'treatment_days_1' limit 1
+2018-01-25 22:54:31: select * from `doctors` where `doctors`.`users_id` = 32 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2018-01-25 22:54:31: select * from `parameters` where `type` = 'setting' and `key` = 'treatment_days_1' limit 1
+2018-01-25 22:54:31: select * from `doctors` where `doctors`.`users_id` = 10 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1

@@ -1,0 +1,61 @@
+@import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);
+
+// Variables
+@import "mixins";
+// @import "./bootstrap.min";
+
+.clinic_list{
+    .title{
+        @include font(19px, 26px, 400, #666);
+        text-align: center;
+        margin-top: 17px;
+        margin-bottom: 10px;
+    }
+    .list_group{
+        border-bottom: 1px solid #D3D3D3;
+        .title_container{
+            background: rgba(#D3D3D3, .5);
+            border-top: 1px solid #D3D3D3;
+            //border-bottom: 1px solid #D3D3D3;
+            a{
+                color: #132A3C;
+                @include hover(#000) {
+                    text-decoration: none;
+                }
+                display: block;
+                padding: 8px;
+            }
+            .list_title{
+                @include font(16px, 1.5, 500, #666);
+                margin: 0;
+            }
+        }
+        .clinic_content{
+            padding: 10px;
+            border-bottom: 1px solid #CCC;
+            background: #FFF;
+            .name{
+                @include font(18px, 26px, 400, #132A3C);
+                margin-bottom: 5px;
+                a{
+                    color: #132A3C;
+                }
+            }
+            .time{
+                @include font(15px, 1.4, 300, #999);
+            }
+            .tel, .mail{
+                @include font(16px, 1.6, 400, #132A3C);
+            }
+            .tel{
+                padding-top: 8px;
+            }
+            .mail{
+                padding-bottom: 8px;
+            }
+            &:last-child{
+                border-bottom-color: #999;
+            }
+        }
+    }
+}

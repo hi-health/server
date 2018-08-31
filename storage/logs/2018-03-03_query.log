@@ -1,0 +1,44 @@
+2018-03-03 21:57:26: select * from `users` where `id` = '12' and `users`.`deleted_at` is null limit 1
+2018-03-03 21:57:26: select * from `doctors` where `doctors`.`users_id` = 12 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2018-03-03 21:57:26: select count(*) as aggregate from `member_requests` where `member_requests`.`deleted_at` is null
+2018-03-03 21:57:26: select count(*) as aggregate from `member_request_doctors` where `doctors_id` = '12'
+2018-03-03 21:57:26: select count(*) as aggregate from `services` where `doctors_id` = '12' and `opened_at` is null and `services`.`deleted_at` is null
+2018-03-03 21:57:26: select * from `messages` where `doctors_id` = '12' and `doctor_readed_at` is null and `visible` = 1 order by `created_at` desc
+2018-03-03 21:57:26: select * from `parameters` where `type` = 'banner'
+2018-03-03 21:57:26: select * from `parameters` where `type` = 'setting' and `key` = 'service_email' limit 1
+2018-03-03 21:57:38: select * from `users` where `id` = '12' and `users`.`deleted_at` is null limit 1
+2018-03-03 21:57:38: select * from `doctors` where `doctors`.`users_id` = 12 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2018-03-03 21:57:38: select count(*) as aggregate from `member_requests` where `member_requests`.`deleted_at` is null
+2018-03-03 21:57:38: select count(*) as aggregate from `member_request_doctors` where `doctors_id` = '12'
+2018-03-03 21:57:38: select count(*) as aggregate from `services` where `doctors_id` = '12' and `opened_at` is null and `services`.`deleted_at` is null
+2018-03-03 21:57:38: select * from `messages` where `doctors_id` = '12' and `doctor_readed_at` is null and `visible` = 1 order by `created_at` desc
+2018-03-03 21:57:38: select * from `parameters` where `type` = 'banner'
+2018-03-03 21:57:38: select * from `parameters` where `type` = 'setting' and `key` = 'service_email' limit 1
+2018-03-03 21:57:41: select * from `users` where `id` = '12' and `login_type` = 2 and `status` = 1 and `users`.`deleted_at` is null limit 1
+2018-03-03 21:57:41: select * from `doctors` where `doctors`.`users_id` in (12) and `doctors`.`deleted_at` is null
+2018-03-03 21:57:41: select * from `services` where `doctors_id` = '12' and `members_id` is not null and `services`.`deleted_at` is null
+2018-03-03 21:57:41: select * from `services` where `doctors_id` = '12' and 0 = 1 and `payment_status` in (0, 1) and `services`.`deleted_at` is null order by `created_at` desc
+2018-03-03 21:57:41: select * from `parameters` where `type` = 'setting' and `key` = 'message_expire_time' limit 1
+2018-03-03 21:57:41: update `services` set `opened_at` = '2018-03-03 21:57:41', `updated_at` = '2018-03-03 21:57:41' where `doctors_id` = '12' and `opened_at` is null and `services`.`deleted_at` is null
+2018-03-03 21:57:43: select * from `users` where `id` = '12' and `users`.`deleted_at` is null limit 1
+2018-03-03 21:57:43: select * from `doctors` where `doctors`.`users_id` = 12 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2018-03-03 21:57:43: select count(*) as aggregate from `member_requests` where `member_requests`.`deleted_at` is null
+2018-03-03 21:57:43: select count(*) as aggregate from `member_request_doctors` where `doctors_id` = '12'
+2018-03-03 21:57:43: select count(*) as aggregate from `services` where `doctors_id` = '12' and `opened_at` is null and `services`.`deleted_at` is null
+2018-03-03 21:57:43: select * from `messages` where `doctors_id` = '12' and `doctor_readed_at` is null and `visible` = 1 order by `created_at` desc
+2018-03-03 21:57:43: select * from `parameters` where `type` = 'banner'
+2018-03-03 21:57:43: select * from `parameters` where `type` = 'setting' and `key` = 'service_email' limit 1
+2018-03-03 21:57:45: select * from `users` where `id` = '12' and `login_type` = 2 and `status` = 1 and `users`.`deleted_at` is null limit 1
+2018-03-03 21:57:45: select * from `doctors` where `doctors`.`users_id` in (12) and `doctors`.`deleted_at` is null
+2018-03-03 21:57:45: select * from `services` where `doctors_id` = '12' and `members_id` is not null and `services`.`deleted_at` is null
+2018-03-03 21:57:45: select * from `services` where `doctors_id` = '12' and 0 = 1 and `payment_status` = 1 and `services`.`deleted_at` is null order by `created_at` desc
+2018-03-03 21:57:45: select * from `parameters` where `type` = 'setting' and `key` = 'message_expire_time' limit 1
+2018-03-03 21:57:45: update `services` set `opened_at` = '2018-03-03 21:57:45', `updated_at` = '2018-03-03 21:57:45' where `doctors_id` = '12' and `opened_at` is null and `services`.`deleted_at` is null
+2018-03-03 21:57:48: select * from `users` where `id` = '12' and `users`.`deleted_at` is null limit 1
+2018-03-03 21:57:48: select * from `doctors` where `doctors`.`users_id` = 12 and `doctors`.`users_id` is not null and `doctors`.`deleted_at` is null limit 1
+2018-03-03 21:57:48: select count(*) as aggregate from `member_requests` where `member_requests`.`deleted_at` is null
+2018-03-03 21:57:48: select count(*) as aggregate from `member_request_doctors` where `doctors_id` = '12'
+2018-03-03 21:57:48: select count(*) as aggregate from `services` where `doctors_id` = '12' and `opened_at` is null and `services`.`deleted_at` is null
+2018-03-03 21:57:48: select * from `messages` where `doctors_id` = '12' and `doctor_readed_at` is null and `visible` = 1 order by `created_at` desc
+2018-03-03 21:57:48: select * from `parameters` where `type` = 'banner'
+2018-03-03 21:57:48: select * from `parameters` where `type` = 'setting' and `key` = 'service_email' limit 1

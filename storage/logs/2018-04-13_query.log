@@ -1,0 +1,29 @@
+2018-04-13 16:55:26: select * from `users` where `id` = '45' and `users`.`deleted_at` is null limit 1
+2018-04-13 16:55:26: select * from `doctors` where `doctors`.`users_id` in (45) and `doctors`.`deleted_at` is null
+2018-04-13 16:55:26: update `users` set `treatment_type` = '0', `updated_at` = '2018-04-13 16:55:26' where `id` = 45
+2018-04-13 16:55:26: update `doctors` set `longitude` = '0', `latitude` = '0', `due_at` = '2018-09-30 00:00:00', `updated_at` = '2018-04-13 16:55:26' where `id` = 19
+2018-04-13 17:04:38: select * from `users` where `id` = '45' and `users`.`deleted_at` is null limit 1
+2018-04-13 17:04:38: select * from `doctors` where `doctors`.`users_id` in (45) and `doctors`.`deleted_at` is null
+2018-04-13 17:04:38: update `doctors` set `longitude` = '0', `latitude` = '0', `due_at` = '2018-09-30 00:00:00', `updated_at` = '2018-04-13 17:04:38' where `id` = 19
+2018-04-13 17:06:49: select * from `users` where `id` = '45' and `users`.`deleted_at` is null limit 1
+2018-04-13 17:06:49: select * from `doctors` where `doctors`.`users_id` in (45) and `doctors`.`deleted_at` is null
+2018-04-13 17:08:22: select * from `users` where `id` = '45' and `users`.`deleted_at` is null limit 1
+2018-04-13 17:08:22: select * from `doctors` where `doctors`.`users_id` in (45) and `doctors`.`deleted_at` is null
+2018-04-13 17:08:22: update `doctors` set `longitude` = '0', `latitude` = '0', `due_at` = '2018-09-30 00:00:00', `updated_at` = '2018-04-13 17:08:22' where `id` = 19
+2018-04-13 17:11:25: select * from `users` where `id` = '45' and `users`.`deleted_at` is null limit 1
+2018-04-13 17:11:25: select * from `doctors` where `doctors`.`users_id` in (45) and `doctors`.`deleted_at` is null
+2018-04-13 17:11:25: update `users` set `status` = '0', `updated_at` = '2018-04-13 17:11:25' where `id` = 45
+2018-04-13 17:11:25: update `doctors` set `longitude` = '0', `latitude` = '0', `due_at` = '2018-09-30 00:00:00', `updated_at` = '2018-04-13 17:11:25' where `id` = 19
+2018-04-13 17:16:03: select * from `users` where `id` = '45' and `users`.`deleted_at` is null limit 1
+2018-04-13 17:16:03: select * from `doctors` where `doctors`.`users_id` in (45) and `doctors`.`deleted_at` is null
+2018-04-13 17:16:03: update `doctors` set `longitude` = '0', `latitude` = '0', `due_at` = '2018-09-30 00:00:00', `updated_at` = '2018-04-13 17:16:03' where `id` = 19
+2018-04-13 17:18:02: select * from `users` where `id` = '45' and `users`.`deleted_at` is null limit 1
+2018-04-13 17:18:02: select * from `doctors` where `doctors`.`users_id` in (45) and `doctors`.`deleted_at` is null
+2018-04-13 17:18:02: update `doctors` set `longitude` = '0', `latitude` = '0', `due_at` = '2018-09-30 00:00:00', `updated_at` = '2018-04-13 17:18:02' where `id` = 19
+2018-04-13 17:18:37: select * from `users` where `id` = '45' and `users`.`deleted_at` is null limit 1
+2018-04-13 17:18:37: select * from `doctors` where `doctors`.`users_id` in (45) and `doctors`.`deleted_at` is null
+2018-04-13 17:18:37: update `users` set `email` = 'dec@abc.com', `updated_at` = '2018-04-13 17:18:37' where `id` = 45
+2018-04-13 17:18:37: update `doctors` set `longitude` = '0', `latitude` = '0', `due_at` = '2018-09-30 00:00:00', `updated_at` = '2018-04-13 17:18:37' where `id` = 19
+2018-04-13 17:19:32: select * from `users` where `id` = '45' and `users`.`deleted_at` is null limit 1
+2018-04-13 17:19:32: select * from `doctors` where `doctors`.`users_id` in (45) and `doctors`.`deleted_at` is null
+2018-04-13 17:19:32: update `doctors` set `longitude` = '0', `latitude` = '0', `due_at` = '2018-09-30 00:00:00', `updated_at` = '2018-04-13 17:19:32' where `id` = 19

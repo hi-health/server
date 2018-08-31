@@ -1,0 +1,196 @@
+$break-ss: 480px;
+$break-xs: 576px;
+$break-sm: 768px;
+$break-md: 992px;
+$break-lg: 1200px;
+
+@mixin respond-to($media) {
+	@if $media == ss {
+		@media only screen and (min-width: $break-ss) { @content; }
+	}
+	@else if $media == xs {
+		@media only screen and (min-width: $break-xs) { @content; }
+	}
+	@else if $media == sm {
+		@media only screen and (min-width: $break-sm) { @content; }
+	}
+	@else if $media == md {
+		@media only screen and (min-width: $break-md) { @content; }
+	}
+	@else if $media == lg {
+		@media only screen and (min-width: $break-lg) { @content; }
+	}
+}
+
+@mixin respond($media) {
+	@if $media == ss {
+		@media only screen and (max-width: $break-ss) { @content; }
+	}
+	@else if $media == xs {
+		@media only screen and (max-width: $break-xs) { @content; }
+	}
+	@else if $media == sm {
+		@media only screen and (max-width: $break-sm) { @content; }
+	}
+	@else if $media == md {
+		@media only screen and (max-width: $break-md) { @content; }
+	}
+	@else if $media == lg {
+		@media only screen and (max-width: $break-lg) { @content; }
+	}
+}
+
+@mixin clearfix() {
+	&:after{
+		content: ".";
+		display: block;
+		height: 0;
+		clear: both;
+		visibility: hidden;
+	}
+}
+
+@mixin hover($textColor: null, $bgColor: null) {
+	&:hover, &:focus, &:active, &.active{
+		@if ($textColor) { color:      $textColor }
+		@if ($bgColor)   { background: $bgColor }
+		text-decoration: none;
+		outline: none;
+		@content;
+	}
+}
+
+@mixin font($size: null, $height: null, $weight: null, $color: null) {
+	@if ($size)   { font-size:   $size }
+	@if ($height) { line-height: $height }
+	@if ($weight) { font-weight: $weight}
+	@if ($color)  { color:       $color }
+	@content;
+}
+
+@mixin border-box() {
+	box-sizing: border-box;
+}
+
+@mixin aspect-fill(){
+	background-size: cover !important;
+	background-position: center center !important; 
+}
+
+@mixin aspect-fit(){
+	background-repeat: no-repeat !important; 
+	background-size: 100% auto !important; 
+	background-position: center center !important; 
+}
+
+@mixin gradient-blue() {
+	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#10b0ff+0,0284ef+100 */
+	background: rgb(16,176,255); /* Old browsers */
+	background: -moz-linear-gradient(-45deg, rgba(16,176,255,1) 0%, rgba(2,132,239,1) 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(-45deg, rgba(16,176,255,1) 0%,rgba(2,132,239,1) 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(135deg, rgba(16,176,255,1) 0%,rgba(2,132,239,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#10b0ff', endColorstr='#0284ef',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
+@mixin gradient-red() {
+	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ff8092+0,fb3b54+50,d91032+100 */
+	background: rgb(255,128,146); /* Old browsers */
+	background: -moz-linear-gradient(-45deg, rgba(255,128,146,1) 0%, rgba(251,59,84,1) 50%, rgba(217,16,50,1) 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(-45deg, rgba(255,128,146,1) 0%,rgba(251,59,84,1) 50%,rgba(217,16,50,1) 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(135deg, rgba(255,128,146,1) 0%,rgba(251,59,84,1) 50%,rgba(217,16,50,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff8092', endColorstr='#d91032',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
+@mixin gradient-yellow() {
+	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#fad961+0,f76b1c+100 */
+	background: rgb(250,217,97); /* Old browsers */
+	background: -moz-linear-gradient(-45deg, rgba(250,217,97,1) 0%, rgba(247,107,28,1) 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(-45deg, rgba(250,217,97,1) 0%,rgba(247,107,28,1) 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(135deg, rgba(250,217,97,1) 0%,rgba(247,107,28,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fad961', endColorstr='#f76b1c',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
+
+@mixin small-container() {
+	@include respond-to($respond-size) {
+		padding-left: 55px;
+		padding-right: 55px;
+	}
+	[class^=col-]{
+		padding-left: 10px;
+		padding-right: 10px;
+		@include respond-to($respond-size) {
+			padding-left: 20px;
+			padding-right: 20px;
+		}
+	}
+}
+
+@mixin modal-lg-row() {
+	@include respond-to($respond-size) {
+		margin-right: -10px;
+		margin-left: -10px;
+		[class^=col-]{
+			padding-left: 10px;
+			padding-right: 10px;
+		}
+	}
+}
+
+@mixin trade-container() {
+	.row{
+		margin-left: -10px;
+		margin-right: -10px;
+	}
+	[class^=col-]{
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+}
+
+@mixin custom-container($gap, $mgap: null, $lgap: null) {
+	padding-left: $gap;
+	padding-right: $gap;
+	.row{
+		margin-left: -$gap;
+		margin-right: -$gap;
+	}
+	[class^=col-]{
+		padding-left: $gap;
+		padding-right: $gap;
+	}
+
+	@if ($mgap) {
+		@include respond-to($respond-size) {
+			padding-left: $mgap;
+			padding-right: $mgap;
+			.row{
+				margin-left: -$mgap;
+				margin-right: -$mgap;
+			}
+			[class^=col-]{
+				padding-left: $mgap;
+				padding-right: $mgap;
+			}
+		}
+	}
+	@if ($lgap) {
+		@include respond-to($respond-size-m) {
+			padding-left: $lgap;
+			padding-right: $lgap;
+			.row{
+				margin-left: -$lgap;
+				margin-right: -$lgap;
+			}
+			[class^=col-]{
+				padding-left: $lgap;
+				padding-right: $lgap;
+			}
+		}
+	}
+	
+}
+
+.bold{
+	font-weight: 500;
+	label{
+		font-weight: 500;
+	}
+}

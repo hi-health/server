@@ -50,6 +50,11 @@ class PointController extends Controller
             $PointProduce->pointconsume_id = $PointConsume->id;
             $PointProduce->save();
 
+            if($this->getRemainedPoint($request->users_id_from)<0)
+            {
+                throw new Exception("Error Processing Request", 1);
+            }
+
             DB::commit();
 
         } catch (QueryException $exception) {

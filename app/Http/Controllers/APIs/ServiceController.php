@@ -102,7 +102,7 @@ class ServiceController extends Controller
         */
 
 
-        $pay2go_invoice_response = (new Pay2GoInvoice)->sendInvoiceRequest();
+        $pay2go_invoice_response = (new Pay2GoInvoice)->sendInvoiceRequest($service_id);
         return response()->json($pay2go_invoice_response);
     }
 

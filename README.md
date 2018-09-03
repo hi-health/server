@@ -502,7 +502,7 @@
 
 ---
 
-### 更新指定日期評分 ###
+### 更新test與指定日期評分 ###
 
 *** PUT *** /api/services/{service_id}/plans/{plan_id}/daily
 

@@ -3,6 +3,7 @@ namespace App\Services;
 
 use Exception;
 use Illuminate\Http\Request;
+use App\Service;
 
 class Pay2GoInvoice  extends Pay2Go{
     protected $action;
@@ -56,37 +57,45 @@ class Pay2GoInvoice  extends Pay2Go{
 	}
 	//====以上為副程式====
 
-	public function sendInvoiceRequest(){
+	public function sendInvoiceRequest($service_id){
+        $service = Service
+            ::with('member')
+            ->where('id', $service_id)
+            ->first();
+        if (!$service) {
+            return response()->json(null, 404);
+        }
 		$post_data_array = array(
 		 //post_data 欄位資料
 			'RespondType' => 'JSON',
 			'Version' => $this->version,
 			'TimeStamp' => time(), //請以 time() 格式
 			'TransNum' => '',
-			'MerchantOrderNo' => '201409170000003',
-			'BuyerName' => '王大品',
-			'BuyerUBN' => '54352706',
-			'BuyerAddress' => '台北市南港區南港路二段 97 號 8 樓',
-			'BuyerEmail' => '54352706@pay2go.com',
-			'Category' => 'B2B',
+			'MerchantOrderNo' => (string)($service->order_number),
+			'BuyerName' => $service->member->name,//'王大品',
+			'BuyerUBN' => '',//'54352706',
+			'BuyerAddress' => '',//'台北市南港區南港路二段 97 號 8 樓',
+			'BuyerEmail' => $service->member->email,//'54352706@pay2go.com',
+			'Category' => 'B2C',
 			'TaxType' => '1',
 			'TaxRate' => '5',
-			'Amt' => '490',
-			'TaxAmt' => '10',
-			'TotalAmt' => '500',
+			'Amt' => (string)round(($service->charge_amount)/1.05),//'490',
+			'TaxAmt' => (string)round(($service->charge_amount)*0.05/1.05),//'10',
+			'TotalAmt' => (string)($service->charge_amount),//'500',
 			'CarrierType' => '',
 			'CarrierNum' => rawurlencode(''),
 			'LoveCode' => '',
 			'PrintFlag' => 'Y',
-			'ItemName' => '商品一|商品二', //多項商品時，以「|」分開
-			'ItemCount' => '1|2', //多項商品時，以「|」分開
-			'ItemUnit' => '個|個', //多項商品時，以「|」分開
-			'ItemPrice' => '300|100', //多項商品時，以「|」分開
-			'ItemAmt' => '300|200', //多項商品時，以「|」分開
-			'Comment' => '備註',
+			'ItemName' => '30日會員',//'商品一|商品二', //多項商品時，以「|」分開
+			'ItemCount' => '1', //多項商品時，以「|」分開
+			'ItemUnit' => '個', //多項商品時，以「|」分開
+			'ItemPrice' => (string)($service->charge_amount),//'300|100', //多項商品時，以「|」分開
+			'ItemAmt' => (string)($service->charge_amount),//'300|200', //多項商品時，以「|」分開
+			'Comment' => '',
 			'CreateStatusTime' => '',
 			'Status' => '1' //1=立即開立，0=待開立，3=延遲開立
 		);
+		error_log(json_encode($post_data_array));
 		$post_data_str = http_build_query($post_data_array); //轉成字串排列
 		$key = $this->hash_key; //商店專屬串接金鑰 HashKey 值
 		$iv = $this->hash_iv; //商店專屬串接金鑰 HashIV 值

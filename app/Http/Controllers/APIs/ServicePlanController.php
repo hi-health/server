@@ -27,15 +27,63 @@ class ServicePlanController extends Controller
         return response()->json($service->plans);
     }
 
-    public function updateOrCreateTemplate(Request $request, $service_id, $plan_id)
+    public function getActivationFlag(Request $request, $service_id, $plan_id, $video_id)
+    {
+        $service = Service::where('id', $service_id)->first();
+        if (!$service) {
+            error_log('NOOOOO service');
+            return response()->json(null, 404);
+        }
+        $service_plan = ServicePlan::where('id', $plan_id)->where('services_id', $service_id)->first();
+        if (!$service_plan) {
+            error_log('NOOOOO service plan');
+            return response()->json(null, 404);
+        }
+        $service_plan_video = ServicePlanVideo::where('id', $video_id)->where('service_plans_id', $plan_id)->first();
+        if (!$service_plan_video) {
+            error_log('NOOOOO service plan video');
+            return response()->json(null, 404);
+        }
+
+        return response($service_plan_video->activation_flag, 200);
+    }
+
+    public function updateActivationFlag(Request $request, $service_id, $plan_id, $video_id)
     {
         $this->validate($request, [
-            'video_id' => ['required', 'integer'],
+            'activation_flag' => ['required', 'integer', 'between:-1,1'],
+        ]);
+
+        $new_flag = json_encode($request->activation_flag);
+
+        $service = Service::where('id', $service_id)->first();
+        if (!$service) {
+            error_log('NOOOOO service');
+            return response()->json(null, 404);
+        }
+        $service_plan = ServicePlan::where('id', $plan_id)->where('services_id', $service_id)->first();
+        if (!$service_plan) {
+            error_log('NOOOOO service plan');
+            return response()->json(null, 404);
+        }
+        $service_plan_video = ServicePlanVideo::where('id', $video_id)->where('service_plans_id', $plan_id)->first();
+        if (!$service_plan_video) {
+            error_log('NOOOOO service plan video');
+            return response()->json(null, 404);
+        }
+        $service_plan_video->activation_flag = $new_flag;
+        $service_plan_video->save();
+
+        return response($service_plan_video->activation_flag, 200);
+    }
+
+    public function updateOrCreateTemplate(Request $request, $service_id, $plan_id, $video_id)
+    {
+        $this->validate($request, [
             'movement_template_data' => ['required', 'array'],
         ]);
 
         $movement_template_data = json_encode($request->movement_template_data);
-        $video_id = $request->video_id;
 
         $service = Service::where('id', $service_id)->first();
         if (!$service) {

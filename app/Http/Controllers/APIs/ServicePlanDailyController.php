@@ -8,6 +8,7 @@ use App\Service;
 use App\ServicePlan;
 use App\ServicePlanVideo;
 use App\ServicePlanDaily;
+use App\PointProduce;
 use App\Traits\SlackNotify;
 use Exception;
 use Illuminate\Http\Request;
@@ -158,6 +159,16 @@ class ServicePlanDailyController extends Controller
                                                     'score' => $score,
                                                     'movement_test_data' => json_encode($video['test_data'])
                                                 ]);
+        // $point = $this->claculatePoint($score);
+        // $PointProduce = PointProduce::updateOrCreate(
+        //     [
+        //         'service_plan_daily_id' => $service_plan_daily_id,
+        //         'point' => $point,
+        //         'users_id' => $
+        //     ]
+        // )
+
+
         return response($score,200);
     }
     /*
@@ -230,7 +241,13 @@ class ServicePlanDailyController extends Controller
         return response()->json($result);
     }
 
-    public function claculateScore($servicePlan_id, $test_data){
+    public function claculateScore($servicePlan_id, $test_data)
+    {
         return 94;
+    }
+
+    public function claculatePoint($score)
+    {
+        return round($score/20);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App;
 
+
 use Illuminate\Database\Eloquent\Model;
 
 class PointConsume extends Model
@@ -18,4 +19,9 @@ class PointConsume extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function transaction()
+    {
+        return $this->hasOne(PointProduce::class, 'pointconsume_id', 'id');
+    }
 }

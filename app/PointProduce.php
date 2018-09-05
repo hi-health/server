@@ -19,4 +19,9 @@ class PointProduce extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function transaction()
+    {
+        return $this->hasOne(PointConsume::class, 'pointconsume_id', 'users_id');
+    }
 }

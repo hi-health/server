@@ -90,6 +90,20 @@ Route::group([
 });
 
 Route::group([
+    'prefix' => 'point',
+    'namespace' => 'APIs',
+], function ($router) {
+    $router->get('{users_id}', 'PointController@index')
+            ->name('point-index');
+        $router->get('{users_id}/get', 'PointController@showListProduce')
+            ->name('point-list-produce');
+        $router->get('{users_id}/use', 'PointController@showListConsume')
+            ->name('point-list-consume');
+        $router->get('{users_id}/all', 'PointController@showListAllTransaction')
+            ->name('point-list-all-transaction');   
+});
+
+Route::group([
     'prefix' => 'services',
 ], function ($router) {
     $router->get('{service_id}/purchase', 'ServiceController@showPurchaseForm')

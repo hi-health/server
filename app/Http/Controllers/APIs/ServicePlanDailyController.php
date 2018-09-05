@@ -159,15 +159,15 @@ class ServicePlanDailyController extends Controller
                                                     'score' => $score,
                                                     'movement_test_data' => json_encode($video['test_data'])
                                                 ]);
+
         // $point = $this->claculatePoint($score);
+        // $users_id = Service::where('id', $service_id)->member()->where('users_id')->first();
         // $PointProduce = PointProduce::updateOrCreate(
         //     [
         //         'service_plan_daily_id' => $service_plan_daily_id,
         //         'point' => $point,
-        //         'users_id' => $
-        //     ]
-        // )
-
+        //         'users_id' => $users_id,
+        //     ]);
 
         return response($score,200);
     }
@@ -246,8 +246,14 @@ class ServicePlanDailyController extends Controller
         return 94;
     }
 
-    public function claculatePoint($score)
-    {
-        return round($score/20);
-    }
+    // public function claculatePoint($service_id, $plan_id, $daily_id)
+    // {
+    //     $plan_video_count = ServicePlanVideo
+    //         ::where('service_plans_id',$plan_id)
+    //         ->count();
+
+    //     $point = 
+
+    //     return ;
+    // }
 }

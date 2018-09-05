@@ -421,16 +421,34 @@
 
 ---
 
-### 新增或更新影片對應的template ###
+### 醫生端啟動/關閉影片template的錄製 ###
 
-***POST*** /api/services/{service_id}/plans/{plan_id}/add_template_to_video
+**POST** /api/services/{service_id}/plans/{plan_id}/videos/{video_id}/activate_record
 
 ```
 #!json
 // *代表陣列
 {
-        'video_id' => ['required','integer'],
-        'movement_template_data' => ['required','array'],  // 5 * 取樣次數 * 9軸
+    "activation_flag": ["between:-1,1"],
+}
+```
+---
+
+### 查詢template的錄製狀態 ###
+
+**GET** /api/services/{service_id}/plans/{plan_id}/videos/{video_id}/activation_flag
+
+---
+
+### 新增或更新影片對應的template ###
+
+***POST*** /api/services/{service_id}/plans/{plan_id}/videos/{video_id}/template
+
+```
+#!json
+// *代表陣列
+{
+    "movement_template_data": ["required","array"],  // 5 * 取樣次數 * 9軸
 }
 ```
 
@@ -490,19 +508,19 @@
 #!json
 // *代表陣列
 {
-        'date' => ['required', 'date_format:Y-m-d'],
-        'video' => ['required'],
-        'video.id' => ['required','integer'],
-        'video.test_data.start_at' => ['required','date_format:Y-m-d H:i:s'],
-        'video.test_data.stop_at' => ['required','date_format:Y-m-d H:i:s'],
-        'video.test_data.repeat_time' => ['required','integer'],
-        'video.test_data.data' => ['required','array'],  // $repeat_time * 取樣次數 * 9軸
+        "date" => ["required", "date_format:Y-m-d"],
+        "video" => ["required"],
+        "video.id" => ["required","integer"],
+        "video.test_data.start_at" => ["required","date_format:Y-m-d H:i:s"],
+        "video.test_data.stop_at" => ["required","date_format:Y-m-d H:i:s"],
+        "video.test_data.repeat_time" => ["required","integer"],
+        "video.test_data.data" => ["required","array"],  // $repeat_time * 取樣次數 * 9軸
 }
 ```
 
 ---
 
-### 更新指定日期評分 ###
+### 更新test與指定日期評分 ###
 
 *** PUT *** /api/services/{service_id}/plans/{plan_id}/daily
 
@@ -512,13 +530,13 @@
 #!json
 // *代表陣列
 {
-        'date' => ['required', 'date_format:Y-m-d'],
-        'video' => ['required'],
-        'video.id' => ['required','integer'],
-        'video.test_data.start_at' => ['required','date_format:Y-m-d H:i:s'],
-        'video.test_data.stop_at' => ['required','date_format:Y-m-d H:i:s'],
-        'video.test_data.repeat_time' => ['required','integer'],
-        'video.test_data.data' => ['required','array'],  // $repeat_time * 取樣次數 * 9軸
+        "date" => ["required", "date_format:Y-m-d"],
+        "video" => ["required"],
+        "video.id" => ["required","integer"],
+        "video.test_data.start_at" => ["required","date_format:Y-m-d H:i:s"],
+        "video.test_data.stop_at" => ["required","date_format:Y-m-d H:i:s"],
+        "video.test_data.repeat_time" => ["required","integer"],
+        "video.test_data.data" => ["required","array"],  // $repeat_time * 取樣次數 * 9軸
 }
 ```
 

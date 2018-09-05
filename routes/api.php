@@ -97,8 +97,11 @@ Route::group([
         $router->post('{plan_id}/videos/delete', 'ServicePlanController@deleteVideos');
         $router->put('', 'ServicePlanController@updateOrCreate');
         $router->delete('', 'ServicePlanController@delete');
-        $router->post('{plan_id}/add_template_to_video', 'ServicePlanController@updateOrCreateTemplate');
+        
         $router->delete('{plan_id}/videos', 'ServicePlanController@deleteVideos');
+        $router->get('{plan_id}/videos/{video_id}/activation_flag', 'ServicePlanController@getActivationFlag');
+        $router->post('{plan_id}/videos/{video_id}/activate_record', 'ServicePlanController@updateActivationFlag');
+        $router->post('{plan_id}/videos/{video_id}/template', 'ServicePlanController@updateOrCreateTemplate');
 
         // Service Plan Daily
         $router->get('daily', 'ServicePlanDailyController@getAllDate');

@@ -127,6 +127,8 @@ class ServicePlanController extends Controller
             'plans.*.videos.*.file' => [],
             'plans.*.videos.*.weight' => ['nullable', 'integer'],
             'plans.*.videos.*.description' => ['nullable', 'string'],
+            'plans.*.videos.*.repeat_time': ['required', 'integer'],
+            'plans.*.videos.*.session': ['required', 'integer'],
         ]);
         $service = Service
             ::where('id', $service_id)

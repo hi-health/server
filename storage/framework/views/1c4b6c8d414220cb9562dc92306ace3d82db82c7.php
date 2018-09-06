@@ -24,7 +24,7 @@ h1 {letter-spacing: 6px}
   <div class="w3-padding-32">
     <div class="w3-bar w3-border">
       <a href="<?php echo e(route('point-list-all-transaction', ['users_id' => $users_id])); ?>" class="w3-bar-item w3-button">All Transaction</a>
-      <a href="<?php echo e(route('point-list-consume', ['users_id' => $users_id])); ?>" class="w3-bar-item w3-button w3-light-grey">Use History</a>
+      <a href="<?php echo e(route('point-list-consume', ['users_id' => $users_id])); ?>" class="w3-bar-item w3-button">Use History</a>
       <a href="<?php echo e(route('point-list-produce', ['users_id' => $users_id])); ?>" class="w3-bar-item w3-button">Earn History</a>
     </div><br>
 

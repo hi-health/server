@@ -248,9 +248,9 @@ class ServicePlanDailyController extends Controller
 
     // public function claculatePoint($service_id, $plan_id, $daily_id)
     // {
-    //     $plan_video_count = ServicePlanVideo
-    //         ::where('service_plans_id',$plan_id)
-    //         ->count();
+    //     $plan_count = ServicePlan::where('services_id',$service_id)->count();
+
+    //     $plan_video_count = ServicePlanVideo::where('service_plans_id',$plan_id)->count();
 
     //     $point = 
 

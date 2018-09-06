@@ -125,7 +125,6 @@ class ServicePlanDailyController extends Controller
             'video.id' => ['required','integer'],
             'video.test_data.start_at' => ['required','date_format:Y-m-d H:i:s'],
             'video.test_data.stop_at' => ['required','date_format:Y-m-d H:i:s'],
-            'video.test_data.repeat_time' => ['required','integer'],
             'video.test_data.data' => ['required','array'],
         ]);
         $date = $request->input('date');
@@ -156,7 +155,7 @@ class ServicePlanDailyController extends Controller
                                                     'scored_at' => $date,
                                                 ], 
                                                 [
-                                                    'score' => $score,
+                                                    'score' => json_encode($score),
                                                     'movement_test_data' => json_encode($video['test_data'])
                                                 ]);
         // $point = $this->claculatePoint($score);
@@ -242,8 +241,12 @@ class ServicePlanDailyController extends Controller
     }
 
     public function claculateScore($servicePlan_id, $test_data)
-    {
-        return 94;
+    {   
+        $array = [];
+        for ($x = 0; $x < $test_data['session']; $x++) {
+            array_push($array, 99-$x);
+        } 
+        return $array;
     }
 
     public function claculatePoint($score)

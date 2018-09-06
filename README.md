@@ -391,6 +391,9 @@
     "plans.*.videos.*.file": ["mimetypes:video/avi,video/mpeg,video/mp4", "max: ".(30 * 1024)], // 限制影片單檔容量為30MB
     "plans.*.videos.*.weight": ["nullable", "integer"],
     "plans.*.videos.*.description": ["nullable", "string"],
+    [new]
+    "plans.*.videos.*.repeat_time": ["required", "integer"],
+    "plans.*.videos.*.session": ["required", "integer"],
 }
 ```
 
@@ -416,6 +419,9 @@
     "plans.*.videos.*.file": ["mimetypes:video/avi,video/mpeg,video/mp4", "max: ".(30 * 1024)], // 限制影片單檔容量為30MB
     "plans.*.videos.*.weight": ["nullable", "integer"],
     "plans.*.videos.*.description": ["requried", "string"],
+    [new]
+    "plans.*.videos.*.repeat_time": ["required", "integer"],
+    "plans.*.videos.*.session": ["required", "integer"],
 }
 ```
 

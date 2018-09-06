@@ -159,15 +159,15 @@ class ServicePlanDailyController extends Controller
                                                     'score' => $score,
                                                     'movement_test_data' => json_encode($video['test_data'])
                                                 ]);
-        // $point = $this->claculatePoint($score);
-        // $PointProduce = PointProduce::updateOrCreate(
-        //     [
-        //         'service_plan_daily_id' => $service_plan_daily_id,
-        //         'point' => $point,
-        //         'users_id' => $
-        //     ]
-        // )
 
+        $point = $this->claculatePoint($service_id, $plan_id, $service_plan_daily->id , $score);
+        $users_id = Service::where('id', $service_id)->member->where('users_id')->first();
+        $PointProduce = PointProduce::updateOrCreate(
+            [
+                'service_plan_daily_id' => $service_plan_daily_id,
+                'point' => $point,
+                'users_id' => $users_id,
+            ]);
 
         return response($score,200);
     }
@@ -246,8 +246,25 @@ class ServicePlanDailyController extends Controller
         return 94;
     }
 
-    public function claculatePoint($score)
+    public function claculatePoint($service_id, $plan_id, $daily_id, $score)
     {
-        return round($score/20);
+        $Service_charge = ServicePlan::where('services_id',$service_id)->where('charge_amount');
+        $Service_day = 30;
+        $perday_point_given = $Service_charge/$Service_day *0.15;
+
+        $Service_Plan = ServicePlan::where('services_id',$service_id)->get();
+        foreach ($Service_Plan as $Service_Plans) {
+            $Service_Plan_Video = ServicePlanVideo::where('service_plans_id', $Service_Plan->id)->count();
+            $total_daily_count = 0;
+            $total_daily_count += $Service_Plan_Video;
+        }
+        $Service_Plan_Daily = ServicePlanDaily::where('id', $daily_id)->first();
+        $session = $Service_Plan_Daily->video->session;
+        $per_daily_point_most = $perday_point_given/$total_daily_count;
+        $per_daily_session_finished = count($score);
+        $session = ServicePlanVideo::where('')
+        $per_daily_point_get = $per_daily_session_finished/$session * $per_daily_point_most;
+
+        return $per_daily_point_get;
     }
 }

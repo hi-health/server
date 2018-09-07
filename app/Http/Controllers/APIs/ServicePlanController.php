@@ -127,8 +127,8 @@ class ServicePlanController extends Controller
             'plans.*.videos.*.file' => [],
             'plans.*.videos.*.weight' => ['nullable', 'integer'],
             'plans.*.videos.*.description' => ['nullable', 'string'],
-            'plans.*.videos.*.repeat_time': ['required', 'integer'],
-            'plans.*.videos.*.session': ['required', 'integer'],
+            'plans.*.videos.*.repeat_time'=> ['required', 'integer'],
+            'plans.*.videos.*.session'=> ['required', 'integer']
         ]);
         $service = Service
             ::where('id', $service_id)
@@ -170,10 +170,14 @@ class ServicePlanController extends Controller
                 } else {
                     $video_file = null;
                 }
+                error_log($video['session']);
                 $data = [
                     'service_plans_id' => $service_plan->id,
                     'description' => $video['description'],
                     'weight' => array_get($video, 'weight', 0),
+                    'session' => $video['session'],
+                    'repeat_time' => $video['repeat_time'],
+                    
                 ];
                 if ($video_file) {
                     try {

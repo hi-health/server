@@ -146,7 +146,7 @@ class ServicePlanDailyController extends Controller
             return response()->json(null, 404);
         }
 
-        $score = $this->claculateScore($plan_id,$video['test_data']);
+        $score = $this->claculateScore($plan_id,$video['id'],$video['test_data']);
         $service_plan_daily = ServicePlanDaily::updateOrCreate(
                                                 [
                                                     'services_id' => $service->id,
@@ -160,10 +160,10 @@ class ServicePlanDailyController extends Controller
                                                 ]);
 
         $point = $this->claculatePoint($service_id, $plan_id, $service_plan_daily->id , $score);
-        $users_id = Service::where('id', $service_id)->member->where('users_id')->first();
+        $users_id = Service::where('id', $service_id)->first()->member->id;
         $PointProduce = PointProduce::updateOrCreate(
             [
-                'service_plan_daily_id' => $service_plan_daily_id,
+                'service_plan_daily_id' => $service_plan_daily->id,
                 'point' => $point,
                 'users_id' => $users_id,
             ]);
@@ -240,10 +240,11 @@ class ServicePlanDailyController extends Controller
         return response()->json($result);
     }
 
-    public function claculateScore($servicePlan_id, $test_data)
+    public function claculateScore($servicePlan_id,$servicePlanVideo_id, $test_data)
     {   
         $array = [];
-        for ($x = 0; $x < $test_data['session']; $x++) {
+        $service_plan_video = ServicePlanVideo::where('id', $servicePlanVideo_id)->where('service_plans_id', $servicePlan_id)->first();
+        for ($x = 0; $x < $service_plan_video->session; $x++) {
             array_push($array, 99-$x);
         } 
         return $array;
@@ -251,13 +252,13 @@ class ServicePlanDailyController extends Controller
 
     public function claculatePoint($service_id, $plan_id, $daily_id, $score)
     {
-        $Service_charge = ServicePlan::where('services_id',$service_id)->where('charge_amount');
+        $Service_charge = Service::where('id',$service_id)->first()->charge_amount;
         $Service_day = 30;
         $perday_point_given = $Service_charge/$Service_day *0.15;
 
-        $Service_Plan = ServicePlan::where('services_id',$service_id)->get();
-        foreach ($Service_Plan as $Service_Plans) {
-            $Service_Plan_Video = ServicePlanVideo::where('service_plans_id', $Service_Plan->id)->count();
+        $Pervice_Plan = ServicePlan::where('services_id',$service_id)->get();
+        foreach ($Pervice_Plan as $service_plan) {
+            $Service_Plan_Video = ServicePlanVideo::where('service_plans_id', $service_plan->id)->count();
             $total_daily_count = 0;
             $total_daily_count += $Service_Plan_Video;
         }
@@ -265,7 +266,7 @@ class ServicePlanDailyController extends Controller
         $session = $Service_Plan_Daily->video->session;
         $per_daily_point_most = $perday_point_given/$total_daily_count;
         $per_daily_session_finished = count($score);
-        $session = ServicePlanDaily::where('id',$daily_id)->video->where('session')->first();
+
         $per_daily_point_get = $per_daily_session_finished/$session * $per_daily_point_most;
 
         return $per_daily_point_get;

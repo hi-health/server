@@ -44,7 +44,7 @@ class ServiceController extends Controller
         return response()->json($service);
     }
 
-    public function getUploadedVideoNames(Request $request, $service_id)
+    public function getUploadedVideo(Request $request, $service_id)
     {
         $service = Service
             ::where('id', $service_id)
@@ -52,14 +52,14 @@ class ServiceController extends Controller
         if (!$service) {
             return response()->json(null, 404);
         }
-        $arr_videoName = array();
+        $arr_video = array();
         foreach($service->plans as $plan){
             foreach($plan['videos'] as $videos){ 
-                $arr_videoName[] = $videos['video'];
+                $arr_video[] = $videos;
             }
         }
 
-        return response()->json(array_unique($arr_videoName));
+        return response()->json(array_unique($arr_video));
     }
 
     public function getInvoice($service_id)

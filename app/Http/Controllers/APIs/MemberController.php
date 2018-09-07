@@ -57,7 +57,7 @@ class MemberController extends Controller
             'need_rating'=> false,
             'need_rating_message' => '您目前有0份服務尚未評分',
             'rating_url'=>'',
-            'points_url'=>url('/point/{$memberid}'),
+            'points_url'=>url("/point/{$member_id}"),
             'banners' => $banners->map(function($banner) {
                 return [
                     'image_url' => $banner->getValue('image'),

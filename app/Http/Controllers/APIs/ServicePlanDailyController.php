@@ -265,7 +265,7 @@ class ServicePlanDailyController extends Controller
         $session = $Service_Plan_Daily->video->session;
         $per_daily_point_most = $perday_point_given/$total_daily_count;
         $per_daily_session_finished = count($score);
-        $session = ServicePlanVideo::where('')
+        $session = ServicePlanDaily::where('id',$daily_id)->video->where('session')->first();
         $per_daily_point_get = $per_daily_session_finished/$session * $per_daily_point_most;
 
         return $per_daily_point_get;

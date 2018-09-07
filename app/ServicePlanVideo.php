@@ -20,6 +20,8 @@ class ServicePlanVideo extends Model
         'description',
         'weight',
         'movement_template_data',
+        'session',
+        'repeat_time'
     ];
 
     protected $appends = [

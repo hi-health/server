@@ -81,6 +81,7 @@ Route::group([
     $router->get('status/members/{member_id}', 'ServiceController@getStatusByMember');
     $router->post('', 'ServiceController@create');
     $router->post('{service_id}/payment', 'ServiceController@setPayment');
+    $router->post('{service_id}/payment/confirm', 'ServiceController@invoiceOrCancelPayment');
     $router->post('{service_id}/treatment', 'ServiceController@setTreatment');
     $router->post('{service_id}/start', 'ServiceController@setStartedAt');
     $router->post('{service_id}/stop', 'ServiceController@setStoppedAt');

@@ -72,7 +72,7 @@ Route::group([
     'prefix' => 'services',
 ], function ($router) {
     $router->get('{service_id}', 'ServiceController@getById');
-    $router->get('{service_id}/videos', 'ServiceController@getUploadedVideoNames');
+    $router->get('{service_id}/videos', 'ServiceController@getUploadedVideo');
     $router->get('{service_id}/invoice', 'ServiceController@getInvoice');
     $router->post('{service_id}/invoice', 'ServiceController@updateOrCreateInvoice');
     $router->get('histories/doctors/{doctor_id}', 'ServiceController@getHistoryByDoctor');

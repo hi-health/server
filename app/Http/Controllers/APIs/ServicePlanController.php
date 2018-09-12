@@ -101,14 +101,20 @@ class ServicePlanController extends Controller
             return response()->json(null, 404);
         }
 
-        if (isset($service_plan_video->movement_template_data)){
-            ServicePlanVideo::where('id', $video_id)->update([
-            'movement_template_data' => $movement_template_data,
-            ]);
+        if($service_plan_video->activation_flag != -1){
+            if (isset($service_plan_video->movement_template_data)){
+                ServicePlanVideo::where('id', $video_id)->update([
+                'movement_template_data' => $movement_template_data,
+                'activation_flag' => 1
+                ]);
+            } else {
+                $service_plan_video->movement_template_data = $movement_template_data;
+                $service_plan_video->save();
+            }
         } else {
-            $service_plan_video->movement_template_data = $movement_template_data;
-            $service_plan_video->save();
+            return response()->json(null, 404);
         }
+
 
         return response('uploaded successfully', 200)->header('Content-Type', 'text/plain');
     }

@@ -89,12 +89,24 @@ class ServiceController extends Controller
             ::with('member', 'doctor')
             ->where('id', $service_id)
             ->first();
+        if (!$service) {
+            return response()->json(null, 404);
+        }    
         if(json_decode($pay2go_invoice_response['web_info'])->Status === 'SUCCESS'){
             $service->invoice = $pay2go_invoice_response['web_info'];
             $service->save();
         }
 
         //send email
+        $new_service = Service::with('member', 'doctor')->where('id', $service_id)->where('payment_status',1)->first();
+        if (!$new_service) {
+            return response()->json(null, 404);
+        }
+        $email = $service->member->email;
+        Mail::to($email)->send(
+            new InvoiceExportedByPayment(json_decode((json_decode($new_service->invoice)->Result)))
+        );
+        $this->slackNotify('發票資訊輸出信件已寄出給:'.$email);
 
         return response()->json($pay2go_invoice_response);
     }
@@ -106,13 +118,19 @@ class ServiceController extends Controller
             ::with('member', 'doctor')
             ->where('id', $service_id)
             ->first();
+        if (!$service) {
+            return response()->json(null, 404);
+        }    
         if(json_decode($pay2go_invoice_response['web_info'])->Status === 'SUCCESS'){
             $service->invoice = $pay2go_invoice_response['web_info'];
             $service->save();
         }
 
         //send email
-        $new_service = Service::with('member', 'doctor')->where('id', $service_id)->first();
+        $new_service = Service::with('member', 'doctor')->where('id', $service_id)->where('payment_status',1)->first();
+        if (!$new_service) {
+            return response()->json(null, 404);
+        }
         $email = $service->member->email;
         try {
             Mail::to($email)->send(

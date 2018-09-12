@@ -12,9 +12,9 @@ class Pay2GoInvoice  extends Pay2Go{
 
     public function __construct()
     {
-        $this->merchant_id = config('services.pay2go.merchant_id');
-        $this->hash_key = config('services.pay2go.hash_key');
-        $this->hash_iv = config('services.pay2go.hash_iv');
+        $this->merchant_id = config('services.pay2go.invoice.merchant_id');
+        $this->hash_key = config('services.pay2go.invoice.hash_key');
+        $this->hash_iv = config('services.pay2go.invoice.hash_iv');
         $this->action = config('services.pay2go.invoice.action');
         $this->version = config('services.pay2go.invoice.version');
     }

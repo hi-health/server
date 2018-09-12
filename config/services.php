@@ -53,6 +53,9 @@ return [
             'version' => env('PAY2GO_CANCEL_VERSION')
         ],
         'invoice' => [
+            'merchant_id' => env('PAY2GO_INVOICE_MERCHANT_ID'),
+            'hash_key' => env('PAY2GO_INVOICE_HASH_KEY'),
+            'hash_iv' => env('PAY2GO_INVOICE_HASH_IV'),
             'action' => env('PAY2GO_INVOICE_ACTION'),
             'version' => env('PAY2GO_INVOICE_VERSION')
         ]

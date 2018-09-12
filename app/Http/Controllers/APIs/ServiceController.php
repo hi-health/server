@@ -5,6 +5,7 @@ namespace App\Http\Controllers\APIs;
 use App\Events\MemberServiceCompletedEvent;
 use App\Http\Controllers\Controller;
 use App\Mail\ServiceExportedByDoctor;
+use App\Mail\InvoiceExportedByPayment;
 use App\Mail\ServicePlanExportedById;
 use App\MemberRequest;
 use App\PaymentHistory;
@@ -98,13 +99,39 @@ class ServiceController extends Controller
         return response()->json($pay2go_invoice_response);
     }
 
+    private function updateOrCreateInvoice_private($service_id)
+    {
+        $pay2go_invoice_response = (new Pay2GoInvoice)->sendInvoiceRequest($service_id);
+        $service = Service
+            ::with('member', 'doctor')
+            ->where('id', $service_id)
+            ->first();
+        if(json_decode($pay2go_invoice_response['web_info'])->Status === 'SUCCESS'){
+            $service->invoice = $pay2go_invoice_response['web_info'];
+            $service->save();
+        }
+
+        //send email
+        $new_service = Service::with('member', 'doctor')->where('id', $service_id)->first();
+        $email = $service->member->email;
+        try {
+            Mail::to($email)->send(
+                new InvoiceExportedByPayment(json_decode((json_decode($new_service->invoice)->Result)))
+            );
+            $this->slackNotify('發票資訊輸出信件已寄出給:'.$email);
+            return true;
+        } catch (Exception $exception) {
+            return $exception;
+        }
+        
+    }
+
     public function invoiceOrCancelPayment(Request $request, $service_id){
         $this->validate($request, [
             'accept' => ['required', 'in:1,2'],
         ]);
         $service = Service
-            ::where('id', $service_id)
-            ->first();
+            ::where('id', $service_id)->where('payment_status', 1)->first();
         if (!$service) {
             return response()->json(null, 404);
         }
@@ -115,11 +142,9 @@ class ServiceController extends Controller
             $this->slackNotify('服務編號：{order_number}{br}治療時間只有{current_treatment_time}分鐘，開始進行取消信用卡授權...', [
                 '{order_number}' => $service->order_number,
                 '{current_treatment_time}' => $service->current_treatment_time,
-            ]);
+                ]);
             $result = Pay2GoCancel
-                ::setOrderNumber($service->order_number)
-                ->setAmount($service->charge_amount)
-                ->send();
+                ::setOrderNumber($service->order_number)->setAmount($service->charge_amount)->send();
             if ($result and $result->success) {
                 $service->payment_status = '2';
                 $service->save();
@@ -129,6 +154,7 @@ class ServiceController extends Controller
                     ])
                 );
             }
+            return response()->json(["service"=>$service, "email"=>null]);
         } else {
             event(
                 new MemberServiceCompletedEvent($service)
@@ -138,9 +164,12 @@ class ServiceController extends Controller
             $member_requests = $member_request_model->get();
             $member_request_model->forceDelete();
             $this->slackNotify('服務完成，清除會員('.$service->members_id.')的需求接單，共'.$member_requests->count().'筆');
+
+            $isEmailSuccess = $this->updateOrCreateInvoice_private($service_id);
+            return response()->json(["service"=>$service, "email"=>$isEmailSuccess]);
         }
 
-        return response()->json($service);
+        
     }
 
     public function getHistoryByDoctor(Request $request, $doctor_id)

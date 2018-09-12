@@ -82,24 +82,6 @@ class ServiceController extends Controller
         $this->validate($request, [
             //'invoice' => ['image', 'max:1024'],
         ]);
-        /*
-        $invoice_file = $request->file('invoice');
-        $service = Service
-            ::with('member', 'doctor')
-            ->where('id', $service_id)
-            ->first();
-        if (!$service) {
-            return response()->json(null, 404);
-        }
-        if ($invoice_file) {
-            $folder_name = 'invoice';
-            $path = public_path($folder_name);
-            $name = 'invoice_'.$service->id.'.'.$invoice_file->getClientOriginalExtension();
-            $invoice_file->move($path, $name);
-            $service->invoice = '/'.$folder_name.'/'.$name;
-            $service->save();
-        }
-        */
 
         $pay2go_invoice_response = (new Pay2GoInvoice)->sendInvoiceRequest($service_id);
         $service = Service
@@ -111,7 +93,54 @@ class ServiceController extends Controller
             $service->save();
         }
 
+        //send email
+
         return response()->json($pay2go_invoice_response);
+    }
+
+    public function invoiceOrCancelPayment(Request $request, $service_id){
+        $this->validate($request, [
+            'accept' => ['required', 'in:1,2'],
+        ]);
+        $service = Service
+            ::where('id', $service_id)
+            ->first();
+        if (!$service) {
+            return response()->json(null, 404);
+        }
+
+        $accept = $request->input('accept');
+
+        if ($accept == 2) {
+            $this->slackNotify('服務編號：{order_number}{br}治療時間只有{current_treatment_time}分鐘，開始進行取消信用卡授權...', [
+                '{order_number}' => $service->order_number,
+                '{current_treatment_time}' => $service->current_treatment_time,
+            ]);
+            $result = Pay2GoCancel
+                ::setOrderNumber($service->order_number)
+                ->setAmount($service->charge_amount)
+                ->send();
+            if ($result and $result->success) {
+                $service->payment_status = '2';
+                $service->save();
+                $service->paymentHistory()->save(
+                    new PaymentHistory([
+                        'data' => $result->rawdata,
+                    ])
+                );
+            }
+        } else {
+            event(
+                new MemberServiceCompletedEvent($service)
+            );
+            $member_request_model = MemberRequest
+                ::where('members_id', $service->members_id);
+            $member_requests = $member_request_model->get();
+            $member_request_model->forceDelete();
+            $this->slackNotify('服務完成，清除會員('.$service->members_id.')的需求接單，共'.$member_requests->count().'筆');
+        }
+
+        return response()->json($service);
     }
 
     public function getHistoryByDoctor(Request $request, $doctor_id)
@@ -274,51 +303,6 @@ class ServiceController extends Controller
             return response()->json($service);
         }if(false){
         //if ($service->current_treatment_time < $service->treatment_time) {
-            $this->slackNotify('服務編號：{order_number}{br}治療時間只有{current_treatment_time}分鐘，開始進行取消信用卡授權...', [
-                '{order_number}' => $service->order_number,
-                '{current_treatment_time}' => $service->current_treatment_time,
-            ]);
-            $result = Pay2GoCancel
-                ::setOrderNumber($service->order_number)
-                ->setAmount($service->charge_amount)
-                ->send();
-            if ($result and $result->success) {
-                $service->payment_status = '2';
-                $service->save();
-                $service->paymentHistory()->save(
-                    new PaymentHistory([
-                        'data' => $result->rawdata,
-                    ])
-                );
-            }
-        } else {
-            event(
-                new MemberServiceCompletedEvent($service)
-            );
-            $member_request_model = MemberRequest
-                ::where('members_id', $service->members_id);
-            $member_requests = $member_request_model->get();
-            $member_request_model->forceDelete();
-            $this->slackNotify('服務完成，清除會員('.$service->members_id.')的需求接單，共'.$member_requests->count().'筆');
-        }
-
-        return response()->json($service);
-    }
-
-    public function invoiceOrCancelPayment(Request $request, $service_id){
-        $this->validate($request, [
-            'accept' => ['required', 'in:1,2'],
-        ]);
-        $service = Service
-            ::where('id', $service_id)
-            ->first();
-        if (!$service) {
-            return response()->json(null, 404);
-        }
-
-        $accept = $request->input('accept');
-
-        if ($accept == 2) {
             $this->slackNotify('服務編號：{order_number}{br}治療時間只有{current_treatment_time}分鐘，開始進行取消信用卡授權...', [
                 '{order_number}' => $service->order_number,
                 '{current_treatment_time}' => $service->current_treatment_time,

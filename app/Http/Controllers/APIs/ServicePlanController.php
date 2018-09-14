@@ -103,12 +103,12 @@ class ServicePlanController extends Controller
 
         if($service_plan_video->activation_flag != -1){
             if (isset($service_plan_video->movement_template_data)){
-                ServicePlanVideo::where('id', $video_id)->update([
-                'movement_template_data' => $movement_template_data,
-                'activation_flag' => 1
-                ]);
+                $service_plan_video->movement_template_data = $movement_template_data;
+                $service_plan_video->activation_flag = 1;
+                $service_plan_video->save();
             } else {
                 $service_plan_video->movement_template_data = $movement_template_data;
+                $service_plan_video->activation_flag = 1;
                 $service_plan_video->save();
             }
         } else {
@@ -130,11 +130,11 @@ class ServicePlanController extends Controller
             'plans.*.videos' => ['required', 'array', 'min:1', 'max:5'],
             'plans.*.videos.*.id' => ['nullable', 'integer'],
             'plans.*.videos.*.file' => ['nullable', 'mimetypes:video/avi,video/mpeg,video/mp4,video/quicktime', 'max: '.(30 * 1024)],
-            'plans.*.videos.*.file' => [],
             'plans.*.videos.*.weight' => ['nullable', 'integer'],
             'plans.*.videos.*.description' => ['nullable', 'string'],
             'plans.*.videos.*.repeat_time'=> ['required', 'integer'],
-            'plans.*.videos.*.session'=> ['required', 'integer']
+            'plans.*.videos.*.session'=> ['required', 'integer'],
+            'plans.*.videos.*.video_path'=> ['nullable', 'string']
         ]);
         $service = Service
             ::where('id', $service_id)
@@ -222,6 +222,10 @@ class ServicePlanController extends Controller
                        var_dump($exception->getMessage());
                        die();
                     }
+                } elseif ($video['video_path']){
+                    $data['video'] = $video['video_path'];
+                    $data['thumbnail'] = explode('.', $video['video_path'], -1)[0].'.jpg';
+
                 }
                 if (isset($video['id'])) {
                     $service_plan_video = ServicePlanVideo

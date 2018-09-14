@@ -150,9 +150,11 @@ class Service extends Model
 
     public function getLeaveDaysAttribute()
     {
+        /*
         if (!$this->stopped_at) {
             return 0;
         }
+        */
         $sub_days = $this->treatment_type === '1' ? $this->getSetting('treatment_days_1') : $this->getSetting('treatment_days_2');
         $now = new Carbon();
         $leave_time = $now->subDays($sub_days);

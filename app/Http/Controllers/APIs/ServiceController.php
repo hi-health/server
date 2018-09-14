@@ -172,7 +172,7 @@ class ServiceController extends Controller
                     ])
                 );
             }
-            return response()->json(["service"=>$service, "email"=>null]);
+            return response()->json(["service"=>$service, "email"=>null, "confirm_status"=>$service->payment_status]);
         } else {
             event(
                 new MemberServiceCompletedEvent($service)
@@ -184,7 +184,7 @@ class ServiceController extends Controller
             $this->slackNotify('服務完成，清除會員('.$service->members_id.')的需求接單，共'.$member_requests->count().'筆');
 
             $isEmailSuccess = $this->updateOrCreateInvoice_private($service_id);
-            return response()->json(["service"=>$service, "email"=>$isEmailSuccess]);
+            return response()->json(["service"=>$service, "email"=>$isEmailSuccess, "confirm_status"=>$service->payment_status]);
         }
 
         

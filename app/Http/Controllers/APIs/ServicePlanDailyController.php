@@ -168,7 +168,8 @@ class ServicePlanDailyController extends Controller
                 'users_id' => $users_id,
             ]);
 
-        return response($score,200);
+        //return response($score,200);
+        return response()->json(["ai_score"=>$score]);
     }
     /*
     public function updateOrCreate(Request $request, $service_id)

@@ -10,6 +10,7 @@ use App\Traits\SlackNotify;
 use Exception;
 use FFMpeg;
 use Illuminate\Http\Request;
+use Log;
 
 class ServicePlanController extends Controller
 {
@@ -118,7 +119,7 @@ class ServicePlanController extends Controller
 
         return response('uploaded successfully', 200)->header('Content-Type', 'text/plain');
     }
-
+    
     public function updateOrCreate(Request $request, $service_id)
     {
         $this->validate($request, [
@@ -133,7 +134,7 @@ class ServicePlanController extends Controller
             'plans.*.videos.*.weight' => ['nullable', 'integer'],
             'plans.*.videos.*.description' => ['nullable', 'string'],
             'plans.*.videos.*.repeat_time'=> ['required', 'integer'],
-            'plans.*.videos.*.session'=> ['required', 'integer'],
+            'plans.*.videos.*.session'    => ['required', 'integer'],
             'plans.*.videos.*.video_path'=> ['nullable', 'string']
         ]);
         $service = Service
@@ -176,15 +177,18 @@ class ServicePlanController extends Controller
                 } else {
                     $video_file = null;
                 }
-                error_log($video['session']);
+                
                 $data = [
                     'service_plans_id' => $service_plan->id,
                     'description' => $video['description'],
                     'weight' => array_get($video, 'weight', 0),
                     'session' => $video['session'],
                     'repeat_time' => $video['repeat_time'],
-                    
                 ];
+                
+                if ( array_key_exists('activation_flag', $video) )
+                    $data['activation_flag'] =  $video['activation_flag'];
+                Log::error($data);
                 if ($video_file) {
                     try {
                         $folder_name = strtr('services/{service_id}', [
@@ -222,7 +226,7 @@ class ServicePlanController extends Controller
                        var_dump($exception->getMessage());
                        die();
                     }
-                } elseif ($video['video_path']){
+                } elseif (array_key_exists('video_path', $video)){
                     $data['video'] = $video['video_path'];
                     $data['thumbnail'] = explode('.', $video['video_path'], -1)[0].'.jpg';
 

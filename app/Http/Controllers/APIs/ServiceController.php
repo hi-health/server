@@ -21,6 +21,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Log;
 
 class ServiceController extends Controller
 {
@@ -145,6 +146,7 @@ class ServiceController extends Controller
     }
 
     public function invoiceOrCancelPayment(Request $request, $service_id){
+        Log::info('invoiceOrCancelPayment:' . $service_id , $request -> input());
         $this->validate($request, [
             'accept' => ['required', 'in:1,2'],
         ]);
@@ -157,14 +159,17 @@ class ServiceController extends Controller
         $accept = $request->input('accept');
 
         if ($accept == 2) {
+            
             $this->slackNotify('服務編號：{order_number}{br}治療時間只有{current_treatment_time}分鐘，開始進行取消信用卡授權...', [
                 '{order_number}' => $service->order_number,
                 '{current_treatment_time}' => $service->current_treatment_time,
                 ]);
             $result = Pay2GoCancel
                 ::setOrderNumber($service->order_number)->setAmount($service->charge_amount)->send();
+            
             if ($result and $result->success) {
                 $service->payment_status = '2';
+                $service->payment_confirm = '2';
                 $service->save();
                 $service->paymentHistory()->save(
                     new PaymentHistory([
@@ -172,8 +177,14 @@ class ServiceController extends Controller
                     ])
                 );
             }
+
             return response()->json(["service"=>$service, "email"=>null, "confirm_status"=>$service->payment_status]);
         } else {
+            // $accept == 1
+            //這邊把stopped_at填進去，維持第一版的服務完成邏輯
+            $service->stopped_at = Carbon::now();
+            $service->payment_confirm = '1';
+            $service->save();
             event(
                 new MemberServiceCompletedEvent($service)
             );

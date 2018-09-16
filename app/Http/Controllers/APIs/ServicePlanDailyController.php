@@ -13,6 +13,7 @@ use App\Traits\SlackNotify;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Log;
 
 class ServicePlanDailyController extends Controller
 {
@@ -43,6 +44,13 @@ class ServicePlanDailyController extends Controller
                                 'videos' => $plan->videos
                                     ->sortBy('weight')
                                     ->map(function ($video) use ($daily) {
+
+                                        $ai_score = json_decode($daily->where('service_plan_videos_id', $video->id)
+                                                ->pluck('score')
+                                                ->first(), true);
+
+                                        $ai_score = is_array($ai_score) ? $ai_score : []; 
+
                                         return [
                                             'id' => $video->id,
                                             'video_url' => $video->video_url,
@@ -52,6 +60,8 @@ class ServicePlanDailyController extends Controller
                                                 ->pluck('score')
                                                 ->first()
                                             ),
+                                            'ai_score'     =>  $ai_score,
+                                            'ai_score_avg' =>  count($ai_score) > 0 ? array_sum($ai_score)/count($ai_score) : 0,
                                         ];
                                     })->values(),
                             ];
@@ -104,11 +114,17 @@ class ServicePlanDailyController extends Controller
                         'videos' => $plan->videos
                             ->sortBy('weight')
                             ->map(function ($video) use ($daily) {
+                                $ai_score = json_decode($daily->where('service_plan_videos_id', $video->id) ->pluck('score')->first(), true);
+
+                                $ai_score = is_array($ai_score) ? $ai_score : []; 
+
                                 return [
                                     'id' => $video->id,
                                     'video_url' => $video->video_url,
                                     'thumbnail_url' => $video->thumbnail_url,
                                     'score' => $daily->where('service_plan_videos_id', $video->id)->pluck('score')->first(),
+                                    'ai_score'     =>  $ai_score,
+                                    'ai_score_avg' =>  count($ai_score) > 0 ? array_sum($ai_score)/count($ai_score) : 0,
                                 ];
                             })->values(),
                     ];

@@ -22,7 +22,7 @@ class MemberController extends Controller
         $service = Service
             ::with('doctor')
             ->where('members_id', $member_id)
-            ->where('payment_status', 1)
+            ->where('payment_status', 3)
             ->orderBy('paid_at', 'DESC')
             ->first();
         if ($service) {
@@ -43,7 +43,7 @@ class MemberController extends Controller
         $services = Service
             ::with('doctor')
             ->where('members_id', $member_id)
-            ->where('payment_status', 1)
+            ->where('payment_status', 3)
             ->orderBy('paid_at', 'DESC')
             ->get();
         $member_doctors = $services->unique('doctors_id')

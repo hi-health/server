@@ -36,7 +36,7 @@ class ServiceController extends Controller
             ->whereNotNull('doctors_id')
             ->where('paid_at', '>=', Carbon::now()->startOfMonth())
             ->where('paid_at', '<=', Carbon::now()->endOfMonth())
-            ->where('payment_status',1)
+            ->where('payment_status',3)
             ->orderBy('paid_at', 'DESC')
             ->paginate($per_page);
 

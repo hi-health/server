@@ -99,7 +99,7 @@ class ServiceController extends Controller
         }
 
         //send email
-        $new_service = Service::with('member', 'doctor')->where('id', $service_id)->where('payment_status',1)->first();
+        $new_service = Service::with('member', 'doctor')->where('id', $service_id)->where('payment_status',3)->first();
         if (!$new_service) {
             return response()->json(null, 404);
         }
@@ -128,7 +128,7 @@ class ServiceController extends Controller
         }
 
         //send email
-        $new_service = Service::with('member', 'doctor')->where('id', $service_id)->where('payment_status',1)->first();
+        $new_service = Service::with('member', 'doctor')->where('id', $service_id)->where('payment_status',3)->first();
         if (!$new_service) {
             return response()->json(null, 404);
         }
@@ -169,7 +169,6 @@ class ServiceController extends Controller
             
             if ($result and $result->success) {
                 $service->payment_status = '2';
-                $service->payment_confirm = '2';
                 $service->save();
                 $service->paymentHistory()->save(
                     new PaymentHistory([
@@ -183,7 +182,7 @@ class ServiceController extends Controller
             // $accept == 1
             //這邊把stopped_at填進去，維持第一版的服務完成邏輯
             $service->stopped_at = Carbon::now();
-            $service->payment_confirm = '1';
+            $service->payment_status = '3';
             $service->save();
             event(
                 new MemberServiceCompletedEvent($service)
@@ -212,7 +211,7 @@ class ServiceController extends Controller
         $per_page = $request->get('per_page', 20);
         $pagination = Service
             ::where('doctors_id', $doctor_id)
-            ->where('payment_status', '1')
+            ->where('payment_status', 3)
             ->whereNotNull('paid_at')
             ->whereNotNull('started_at')
             ->whereNotNull('stopped_at')
@@ -221,7 +220,7 @@ class ServiceController extends Controller
             ->toArray();
         $total_amount = Service
             ::where('doctors_id', $doctor_id)
-            ->where('payment_status', '1')
+            ->where('payment_status', 3)
             ->whereNotNull('paid_at')
             ->whereNotNull('started_at')
             ->whereNotNull('stopped_at')
@@ -370,7 +369,7 @@ class ServiceController extends Controller
                 ->setAmount($service->charge_amount)
                 ->send();
             if ($result and $result->success) {
-                $service->payment_status = '2';
+                $service->payment_status = 2;
                 $service->save();
                 $service->paymentHistory()->save(
                     new PaymentHistory([
@@ -431,7 +430,7 @@ class ServiceController extends Controller
         }
         $services = Service
             ::where('doctors_id', $doctor_id)
-            ->where('payment_status', '1')
+            ->where('payment_status', 3)
             ->whereNotNull('paid_at')
             ->whereNotNull('started_at')
             ->whereNotNull('stopped_at')

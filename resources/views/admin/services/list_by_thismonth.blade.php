@@ -29,7 +29,7 @@
         </tfoot>
         <tbody>
             @forelse ($services as $service)
-                <tr @if( $service->payment_status==1 && strlen($service->invoice)==0)style="color:#F00"@endif>
+                <tr @if( $service->payment_status==3 && strlen($service->invoice)==0)style="color:#F00"@endif>
                     <td>{{ $service->order_number }}</td>
                     <td>
                         <a href="{{ route('admin-services-list-by-member', ['member_id' => $service->member->id]) }}">{{ $service->member->name }}</a>

@@ -101,7 +101,7 @@ class Service extends Model
 
     public function isPaid()
     {
-        return $this->payment_status === '1';
+        return $this->payment_status === '3';
     }
 
     public function getTreatmentTypeTextAttribute()
@@ -120,7 +120,7 @@ class Service extends Model
 
     public function getInvoiceStatusTextAttribute()
     {
-        if ($this->payment_status != 1)
+        if ($this->payment_status != 3)
             return '---';
 
         if (strlen($this->invoice) == 0)

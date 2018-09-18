@@ -21,7 +21,7 @@ class DashboardController extends Controller
         $member_requests = MemberRequest
             ::get();
         $services = Service
-            ::where('payment_status', '1')
+            ::where('payment_status', 3)
             ->orderBy('paid_at', 'DESC')
             ->get();
         $service_plans = ServicePlan

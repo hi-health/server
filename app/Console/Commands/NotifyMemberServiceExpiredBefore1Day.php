@@ -29,7 +29,7 @@ class NotifyMemberServiceExpiredBefore1Day extends Command
             ->get();
         $members_id = Service
             ::whereIn('members_id', $members->pluck('id'))
-            ->where('payment_status', 1)
+            ->where('payment_status', 3)
             ->get()
             ->groupBy('members_id')
             ->filter(function ($services) {

@@ -122,11 +122,11 @@ class DoctorController extends Controller
             ->where('doctors_id', $doctor_id)
             ->whereIn('members_id', $members_id);
         if ($is_paid === '1') { // 只取得已付款
-            $service_model->where('payment_status', 1);
+            $service_model->where('payment_status', 3);
         } elseif ($is_paid === '0') { // 只取得未付款
             $service_model->where('payment_status', 0);
         } else { // 取得已付款及未付款的
-            $service_model->whereIn('payment_status', [0, 1]);
+            $service_model->whereIn('payment_status', [0, 1, 2, 3]);
         }
         $services = $service_model
             ->orderBy('created_at', 'DESC')
@@ -168,7 +168,7 @@ class DoctorController extends Controller
             $paid_members_id = Service
                 ::where('doctors_id', $doctor_id)
                 ->whereIn('members_id', $members_id)
-                ->where('payment_status', 1)
+                ->where('payment_status', 3)
                 ->get()
                 ->unique('members_id')
                 ->pluck('members_id');
@@ -197,7 +197,7 @@ class DoctorController extends Controller
         }
         $services = Service
             ::where('doctors_id', $doctor_id)
-            ->where('payment_status', 1)
+            ->where('payment_status', 3)
             ->where('paid_at', '>', Carbon::now()->subMonth())
             ->get();
         $messages = Message

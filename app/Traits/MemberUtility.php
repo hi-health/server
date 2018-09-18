@@ -11,7 +11,7 @@ trait MemberUtility
         // 2017-10-03 aleiku 多加一個判斷，必須要是最後一筆成立的服務
         $service = Service
             ::where('members_id', $member_id)
-            ->where('payment_status', 1)
+            ->where('payment_status', 3)
             ->orderBy('id','DESC')
             ->first();
 
@@ -26,7 +26,7 @@ trait MemberUtility
         // return !Service
         //     ::where('members_id', $member_id)
         //     ->where('doctors_id', $doctor_id)
-        //     ->where('payment_status', 1)
+        //     ->where('payment_status', 3)
         //     ->get()
         //     ->filter(function ($service) {
         //         return $service->leave_days > 0;

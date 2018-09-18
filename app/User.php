@@ -55,7 +55,7 @@ class User extends Authenticatable
     public function service()
     {
         return $this->hasOne(Service::class, 'members_id', 'id')
-            ->where('payment_status', 1)
+            ->where('payment_status', 3)
             ->orderBy('id','DESC');
     }
     public function doctor()

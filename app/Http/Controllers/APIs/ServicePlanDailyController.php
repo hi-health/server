@@ -262,7 +262,16 @@ class ServicePlanDailyController extends Controller
         $array = [];
         $service_plan_video = ServicePlanVideo::where('id', $servicePlanVideo_id)->where('service_plans_id', $servicePlan_id)->first();
         for ($x = 0; $x < $service_plan_video->session; $x++) {
-            array_push($array, 99-$x);
+            if($x%3 == 0){
+              array_push($array, rand(80,95));  
+            }
+            elseif($x%3 == 1){
+              array_push($array, 0);  
+            }
+            elseif($x%3 == 2){
+              array_push($array, rand(45,65));  
+            }
+            
         } 
         return $array;
     }

@@ -139,7 +139,7 @@ class DoctorController extends Controller
             });
         }
         $expire_seconds = intval($this->getSetting('message_expire_time', 720)) * 60;
-        $services = $services->unique('members_id');
+        //$services = $services->unique('members_id');
         $services = $services->each(function ($service) use ($expire_seconds) {
             // 計算回應剩餘時間
             $member_message = Message::where('doctors_id', $service->doctors_id)

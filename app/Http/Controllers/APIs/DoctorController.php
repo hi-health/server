@@ -122,21 +122,21 @@ class DoctorController extends Controller
             ->where('doctors_id', $doctor_id)
             ->whereIn('members_id', $members_id);
         if ($is_paid === '1') { // 只取得已付款
-            $service_model->where('payment_status', 3);
+            $service_model->where('payment_status', 3)->orderBy('paid_at', 'DESC');
         } elseif ($is_paid === '0') { // 只取得未付款
-            $service_model->where('payment_status', 0);
+            $service_model->where('payment_status', 0)->orderBy('created_at', 'DESC');
         } else { // 取得已付款及未付款的
-            $service_model->whereIn('payment_status', [0, 1, 2, 3]);
+            $service_model->whereIn('payment_status', [0, 1, 3])->orderBy('created_at', 'DESC');
         }
-        $services = $service_model
-            ->orderBy('created_at', 'DESC')
-            ->get();
+        $services = $service_model->get();
+
         Log::info($services->pluck('id'));
         if ($is_paid === '1') {
             $services = $services->filter(function ($service) {
                 // 過濾超過時間的服務，依據治療方式決定30天或45天
                 return $service->leave_days > 0;
             });
+            $services = $services->unique('members_id');
         }
         $expire_seconds = intval($this->getSetting('message_expire_time', 720)) * 60;
         //$services = $services->unique('members_id');
@@ -198,7 +198,8 @@ class DoctorController extends Controller
         $services = Service
             ::where('doctors_id', $doctor_id)
             ->where('payment_status', 3)
-            ->where('paid_at', '>', Carbon::now()->subMonth())
+            ->where('leave_days', '>', 0)
+            //->where('paid_at', '>', Carbon::now()->subMonth())
             ->get();
         $messages = Message
             ::where('doctors_id', $doctor_id)

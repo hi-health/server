@@ -12,7 +12,7 @@ trait MemberUtility
         $service = Service
             ::where('members_id', $member_id)
             ->where('payment_status', 3)
-            ->orderBy('id','DESC')
+            ->orderBy('paid_at','DESC')
             ->first();
 
         if ($service  

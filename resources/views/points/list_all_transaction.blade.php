@@ -19,7 +19,7 @@ h1 {letter-spacing: 6px}
 <!-- Header -->
 <header class="w3-panel w3-center w3-opacity" style="padding:128px 16px">
   <h1 class="w3-xlarge">Welcome to Points System</h1>
-  <h1>BoCheng    剩餘點數 : {{ $RemainedPoint }} </h1>
+  <h1>Your Remain Points : {{ $RemainedPoint }} </h1>
   
   <div class="w3-padding-32">
     <div class="w3-bar w3-border">

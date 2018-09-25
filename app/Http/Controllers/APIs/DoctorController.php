@@ -161,6 +161,21 @@ class DoctorController extends Controller
             } else {
                 $service->reply_expire = null;
             }
+
+            if($service->payment_status == 0 && $service->payment_method == 1){
+                $service->service_status = 1;
+                $service->service_name = '等待付款';
+            } else if($service->payment_status == 3 && $service->leave_days > 0){
+                $service->service_status = 2;
+                $service->service_name = '';
+            } else if($service->payment_status == 3 && $service->leave_days <= 0){
+                $service->service_status = 3;
+                $service->service_name = '已過期';
+            } else{
+                $service->service_status = 0;
+                $service->service_name = '';
+            }
+            
             unset($service->message);
         })->values();
         if ($is_paid === '0') {
@@ -176,6 +191,9 @@ class DoctorController extends Controller
                 return !in_array($service->members_id, $paid_members_id->toArray(), true);
             })->values();
         }
+        
+        $services->sortBy('service_status');
+
         $updated = Service
             ::where('doctors_id', $doctor_id)
             ->whereNull('opened_at')

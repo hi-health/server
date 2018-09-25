@@ -53,6 +53,10 @@ class MemberController extends Controller
             ::where('type', 'banner')
             ->get();
 
+        $PointProduce = PointProduce::where('users_id', $member_id)->sum('point');
+        $PointConsume = PointConsume::where('users_id', $member_id)->sum('point');
+        $RemainedPoint = $PointConsume + $PointProduce;
+
         return response()->json([
             'need_rating'=> false,
             'need_rating_message' => '您目前有0份服務尚未評分',
@@ -67,6 +71,7 @@ class MemberController extends Controller
             'doctors' => $member_doctors,
             'last_service_id' => $last_service_id,
             'online_status' => $user->online,
+            'points' => $RemainedPoint
         ]);
     }
 

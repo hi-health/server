@@ -9,6 +9,7 @@ use App\Traits\SlackNotify;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Log;
 
 class NotifyMemberServicePlanBefore15Minutes extends Command
 {
@@ -25,6 +26,7 @@ class NotifyMemberServicePlanBefore15Minutes extends Command
 
     public function handle()
     {
+        Log::alert('into 15 min event');
         $before_minutes = $this->argument('before_minutes');
 
         $before_time = Carbon::now()->addMinutes($before_minutes)->format('H:i');

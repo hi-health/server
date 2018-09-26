@@ -7,6 +7,7 @@ use App\Traits\AWSSNS;
 use App\Traits\SlackNotify;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
+use Log;
 
 class SendMemberServicePlanBefore15MinutesNotification implements ShouldQueue
 {
@@ -18,11 +19,14 @@ class SendMemberServicePlanBefore15MinutesNotification implements ShouldQueue
 
     public function handle(MemberServicePlanBefore15MinutesEvent $event)
     {
+        Log::alert('into Listeners');
         $message = '您的課程即將於'.$event->before_minutes.'分鐘後開始';
         $event->members->each(function ($member) use ($message) {
             if (empty($member->deviceToken)) {
+                Log::alert('no device token');
                 return;
             }
+            Log::alert('yes device token');
             $data = [
                 'event_type' => 'service_plan_before_at_15_minutes',
                 'data' => $member,

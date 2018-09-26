@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\MemberRequest;
 use App\Setting;
 use App\Service;
+use App\PointProduce;
+use App\PointConsume;
 use App\User;
 use Illuminate\Http\Request;
 use Log;

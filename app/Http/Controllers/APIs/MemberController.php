@@ -11,8 +11,10 @@ use App\PointConsume;
 use App\User;
 use Illuminate\Http\Request;
 use Log;
+use App\Traits\AWSSNS;
 class MemberController extends Controller
 {
+    use AWSSNS;
     public function getById(Request $request, $member_id)
     {
         $member = User
@@ -22,11 +24,11 @@ class MemberController extends Controller
             return response()->json(null, 404);
         }
         $service = Service
-            ::with('doctor')
-            ->where('members_id', $member_id)
-            ->where('payment_status', 3)
-            ->orderBy('paid_at', 'DESC')
-            ->first();
+            :: with('doctor')
+            -> where('members_id', $member_id)
+            -> where('payment_status', 3)
+            -> orderBy('paid_at', 'DESC')
+            -> first();
         if ($service) {
             $member->last_service_id = $service->id;
         }
@@ -42,12 +44,13 @@ class MemberController extends Controller
         if (!$user) {
             return response()->json(null, 404);
         }
+        
         $services = Service
-            ::with('doctor')
-            ->where('members_id', $member_id)
-            ->where('payment_status', 3)
-            ->orderBy('paid_at', 'DESC')
-            ->get();
+            :: with('doctor')
+            -> where('members_id', $member_id)
+            -> where('payment_status', 3)
+            -> orderBy('paid_at', 'DESC')
+            -> get();
         $member_doctors = $services->unique('doctors_id')
             ->pluck('doctor');
         $last_service_id = !$services->isEmpty() ? $services->first()->id : null;

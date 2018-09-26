@@ -25,9 +25,16 @@ return [
         'L5MOD/'.AwsServiceProvider::VERSION,
     ],
     'arns' => [
+        // 正式
+        // 'member-gcm' => 'arn:aws:sns:us-west-2:912431903284:app/GCM/hi-health-client-android',
+        // 'member-apn' => 'arn:aws:sns:us-west-2:912431903284:app/APNS/hi-health-client-ios',
+        // 'doctor-gcm' => 'arn:aws:sns:us-west-2:912431903284:app/GCM/hi-health-doctor-android',
+        // 'doctor-apn' => 'arn:aws:sns:us-west-2:912431903284:app/APNS/hi-health-doctor-ios',
+
+        // 測試
         'member-gcm' => 'arn:aws:sns:us-west-2:912431903284:app/GCM/hi-health-client-android',
-        'member-apn' => 'arn:aws:sns:us-west-2:912431903284:app/APNS/hi-health-client-ios',
+        'member-apn' => 'arn:aws:sns:us-west-2:912431903284:app/APNS/hi-health-client-ios-dev',
         'doctor-gcm' => 'arn:aws:sns:us-west-2:912431903284:app/GCM/hi-health-doctor-android',
-        'doctor-apn' => 'arn:aws:sns:us-west-2:912431903284:app/APNS/hi-health-doctor-ios',
+        'doctor-apn' => 'arn:aws:sns:us-west-2:912431903284:app/APNS/hi-health-doctor-ios-dev',
     ],
 ];

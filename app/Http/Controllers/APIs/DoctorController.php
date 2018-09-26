@@ -167,7 +167,7 @@ class DoctorController extends Controller
                 $service->service_name = '等待付款';
             } else if($service->payment_status == 3 && $service->leave_days > 0){
                 $service->service_status = 2;
-                $service->service_name = '';
+                $service->service_name = '服務中';
             } else if($service->payment_status == 3 && $service->leave_days <= 0){
                 $service->service_status = 3;
                 $service->service_name = '已過期';

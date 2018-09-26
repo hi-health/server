@@ -91,6 +91,11 @@ class ServicePlanController extends Controller
             error_log('NOOOOO service');
             return response()->json(null, 404);
         }
+        $service = Service::where('id', $service_id)->where('payment_status',3)->where('leave_days','>',0)->first();
+        if (!$service) {
+            error_log('NOOOOO VIP service');
+            return response()->json(null, 404);
+        }
         $service_plan = ServicePlan::where('id', $plan_id)->where('services_id', $service_id)->first();
         if (!$service_plan) {
             error_log('NOOOOO service plan');
@@ -188,7 +193,7 @@ class ServicePlanController extends Controller
                 
                 if ( array_key_exists('activation_flag', $video) )
                     $data['activation_flag'] =  $video['activation_flag'];
-                Log::error($data);
+                Log::alert($data);
                 if ($video_file) {
                     try {
                         $folder_name = strtr('services/{service_id}', [

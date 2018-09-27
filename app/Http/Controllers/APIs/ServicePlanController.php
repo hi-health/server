@@ -88,22 +88,17 @@ class ServicePlanController extends Controller
 
         $service = Service::where('id', $service_id)->first();
         if (!$service) {
-            error_log('NOOOOO service');
-            return response()->json(null, 404);
-        }
-        $service = Service::where('id', $service_id)->where('payment_status',3)->where('leave_days','>',0)->first();
-        if (!$service) {
-            error_log('NOOOOO VIP service');
+            Log::alert('1');
             return response()->json(null, 404);
         }
         $service_plan = ServicePlan::where('id', $plan_id)->where('services_id', $service_id)->first();
         if (!$service_plan) {
-            error_log('NOOOOO service plan');
+            Log::alert('3');
             return response()->json(null, 404);
         }
         $service_plan_video = ServicePlanVideo::where('id', $video_id)->where('service_plans_id', $plan_id)->first();
         if (!$service_plan_video) {
-            error_log('NOOOOO service plan video');
+            Log::alert('4');
             return response()->json(null, 404);
         }
 
@@ -120,9 +115,9 @@ class ServicePlanController extends Controller
         } else {
             return response()->json(null, 404);
         }
-
-
-        return response('uploaded successfully', 200)->header('Content-Type', 'text/plain');
+        Log::alert('5');
+        return response()->json(null, 404);
+        //return response('uploaded successfully', 200)->header('Content-Type', 'text/plain');
     }
     
     public function updateOrCreate(Request $request, $service_id)

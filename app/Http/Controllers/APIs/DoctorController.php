@@ -191,6 +191,10 @@ class DoctorController extends Controller
                 return !in_array($service->members_id, $paid_members_id->toArray(), true);
             })->values();
         }
+
+        $services = $services->filter(function ($service) {
+            return $service->service_status != 0;
+        })->values();
         
         $services->sortBy('service_status');
 

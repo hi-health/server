@@ -151,5 +151,5 @@ Route::group([
 ], function ($router) {
     $router->get('{users_id}/history', 'PointController@getHistoryByUsersId');
     $router->get('{users_id}/total', 'PointController@getRemainedPoint');
-    $router->post('transaction', 'PointController@CreateTransactionPoint');
+    $router->post('{users_id}/transfer', 'PointController@PointTransfer');
 });

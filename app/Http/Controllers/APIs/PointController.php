@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\APIs;
 
+use App\User;
 use App\PointProduce;
 use App\PointConsume;
+use Exception;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -13,9 +15,11 @@ class PointController extends Controller
 {
     public function index($users_id)
     {
-        $PointProduce = PointProduce::where('users_id', $users_id)->sum('point');
+        $PointProduce = PointProduce::where('users_id', $users_id)
+                            ->sum('point');
 
-        $PointConsume = PointConsume::where('users_id', $users_id)->sum('point');
+        $PointConsume = PointConsume::where('users_id', $users_id)
+                            ->sum('point');
 
         $RemainedPoint = $PointConsume + $PointProduce;
 
@@ -25,28 +29,35 @@ class PointController extends Controller
 
     public function showListProduce($users_id)
     {
-        $PointProduce = PointProduce::where('users_id', $users_id)->sum('point');
+        $PointProduce = PointProduce::where('users_id', $users_id)
+                            ->sum('point');
 
-        $PointConsume = PointConsume::where('users_id', $users_id)->sum('point');
+        $PointConsume = PointConsume::where('users_id', $users_id)
+                            ->sum('point');
 
         $RemainedPoint = $PointConsume + $PointProduce;
 
-        $PointProduce_FromDaily = PointProduce::where('users_id', $users_id)->whereNull('pointconsume_id')->orderByDESC('created_at')->get();
+        $PointProduce_FromDaily = PointProduce::where('users_id', $users_id)
+                                    ->whereNull('pointconsume_id')->orderByDESC('created_at')->get();
 
-        $PointProduce_FromUser = PointProduce::where('users_id', $users_id)->whereNull('service_plan_daily_id')->orderByDESC('created_at')->get();
+        $PointProduce_FromUser = PointProduce::where('users_id', $users_id)
+                                    ->whereNull('service_plan_daily_id')->orderByDESC('created_at')->get();
 
         return view('points.list_point_produce', compact('users_id', 'RemainedPoint', 'PointProduce_FromDaily','PointProduce_FromUser'));
     }
 
     public function showListConsume($users_id)
     {
-        $PointProduce = PointProduce::where('users_id', $users_id)->sum('point');
+        $PointProduce = PointProduce::where('users_id', $users_id)
+                        ->sum('point');
 
-        $PointConsume = PointConsume::where('users_id', $users_id)->sum('point');
+        $PointConsume = PointConsume::where('users_id', $users_id)
+                        ->sum('point');
 
         $RemainedPoint = $PointConsume + $PointProduce;
 
-        $PointConsume = PointConsume::where('users_id', $users_id)->orderByDESC('created_at')->get();
+        $PointConsume = PointConsume::where('users_id', $users_id)
+                        ->orderByDESC('created_at')->get();
 
         // $PointProduce = PointConsume::where('users_id', $users_id)->transaction()
 
@@ -55,27 +66,89 @@ class PointController extends Controller
 
     public function showListAllTransaction($users_id)
     {
-        $PointProduce = PointProduce::where('users_id', $users_id)->sum('point');
+        $PointProduce = PointProduce::where('users_id', $users_id)
+                        ->sum('point');
 
-        $PointConsume = PointConsume::where('users_id', $users_id)->sum('point');
+        $PointConsume = PointConsume::where('users_id', $users_id)
+                        ->sum('point');
 
         $RemainedPoint = $PointConsume + $PointProduce;
 
-        $PointProduce = PointProduce::where('users_id', $users_id)->get();
+        $PointProduce = PointProduce::where('users_id', $users_id)
+                        ->get();
 
-        $PointConsume = PointConsume::where('users_id', $users_id)->get();
+        $PointConsume = PointConsume::where('users_id', $users_id)
+                        ->get();
 
         $collection = collect([$PointProduce,$PointConsume]);
 
         $Transaction = $collection
-            ->collapse()
-            ->sortByDESC('created_at')
-            ->values()
-            ->all();
+                        ->collapse()
+                        ->sortByDESC('created_at')
+                        ->values()
+                        ->all();
 
         // $PointConsume_id = PointConsume::where('users_id')->transaction()->where('pointconsume_id')->get();
 
         return view('points.list_all_transaction', compact('users_id', 'Transaction', 'RemainedPoint'));
+    }
+
+    public function showTransfer($users_id)
+    {
+        $PointProduce = PointProduce::where('users_id', $users_id)
+                            ->sum('point');
+
+        $PointConsume = PointConsume::where('users_id', $users_id)
+                            ->sum('point');
+
+        $RemainedPoint = $PointConsume + $PointProduce;
+
+        return view('points.point_transfer', compact('users_id','RemainedPoint'));
+    }
+
+    public function PointTransfer(Request $request, $users_id)
+    {
+        Log::INFO("sucess");
+        $this->validate($request, [
+            'receiver_account' => 'required', 
+            'transferred_point' => 'required|integer',
+        ]);
+
+        $receiver = User::where('account',$request->receiver_account)
+                        ->first();
+        $receiver_id = $receiver->id;
+
+        try {
+            DB::beginTransaction();
+
+            $PointConsume = new PointConsume();
+            $PointConsume->users_id = $users_id;
+            $PointConsume->point = -$request->transferred_point;
+            $PointConsume->save();
+
+            $PointProduce = new PointProduce();
+            $PointProduce->users_id = $receiver_id;
+            $PointProduce->point = $request->transferred_point;
+            $PointProduce->pointconsume_id = $PointConsume->id;
+            $PointProduce->save();
+
+            $PointProduce = PointProduce::where('users_id', $users_id)->sum('point');
+            $PointConsume = PointConsume::where('users_id', $users_id)->sum('point');
+            $RemainedPoint = $PointConsume + $PointProduce;
+            if($RemainedPoint<0)
+            {
+                throw new Exception("Error Processing Request", 1);
+            }
+
+            DB::commit();
+
+        } catch (QueryException $exception) {
+            DB::rollback();
+
+            return response()->json(null, 500);
+        }
+
+        return view('points.point_transfer', compact('RemainedPoint','users_id'));
     }
 
 	public function CreateDailyPoint($daily_result)
@@ -94,43 +167,6 @@ class PointController extends Controller
             return $exception;
         }
         return 'sucess';
-    }
-
-	public function CreateTransactionPoint(Request $request)
-    {
-        $this->validate($request, [
-    		'users_id_from' => ['required', 'integer'],
-            'users_id_to' => ['required', 'integer'],
-    		'point' => ['required', 'integer'],
-        ]);
-		try {
-            DB::beginTransaction();
-
-            $PointConsume = new PointConsume();
-            $PointConsume->users_id = $request->users_id_from;
-            $PointConsume->point = -$request->point;
-            $PointConsume->save();
-
-            $PointProduce = new PointProduce();
-            $PointProduce->users_id = $request->users_id_to;
-            $PointProduce->point = $request->point;
-            $PointProduce->pointconsume_id = $PointConsume->id;
-            $PointProduce->save();
-
-            if($this->getRemainedPoint($request->users_id_from)<0)
-            {
-                throw new Exception("Error Processing Request", 1);
-            }
-
-            DB::commit();
-
-        } catch (QueryException $exception) {
-            DB::rollback();
-
-            return response()->json(null, 500);
-        }
-
-        return response()->json([$PointProduce, $PointConsume]);    		
     }
 
     public function getRemainedPoint($users_id)

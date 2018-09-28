@@ -193,6 +193,9 @@ class ServiceController extends Controller
             $member_request_model->forceDelete();
             $this->slackNotify('服務完成，清除會員('.$service->members_id.')的需求接單，共'.$member_requests->count().'筆');
 
+            //0927應該補上繼承之前課表的功能
+
+
             //0920應該補上刪除之前該member的所有service (無論doctor或是payment_status)
             $member_services = Service::where('members_id',$service->members_id)->whereNotIn('id',[$service_id])->delete();
 

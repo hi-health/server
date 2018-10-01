@@ -26,6 +26,7 @@ h1 {letter-spacing: 6px}
       <a href="{{ route('point-list-all-transaction', ['users_id' => $users_id]) }}" class="w3-bar-item w3-button">All Transaction</a>
       <a href="{{ route('point-list-consume', ['users_id' => $users_id]) }}" class="w3-bar-item w3-button">Use History</a>
       <a href="{{ route('point-list-produce', ['users_id' => $users_id]) }}" class="w3-bar-item w3-button">Earn History</a>
+      <a href="{{ route('point-transfer', ['users_id' => $users_id]) }}" class="w3-bar-item w3-button">Point Transfer</a>
     </div>
     <table align="center" style="width:30%">
       <thead>

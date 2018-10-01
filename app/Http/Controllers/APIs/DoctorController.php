@@ -220,7 +220,6 @@ class DoctorController extends Controller
         $services = Service
             ::where('doctors_id', $doctor_id)
             ->where('payment_status', 3)
-            ->where('leave_days', '>', 0)
             //->where('paid_at', '>', Carbon::now()->subMonth())
             ->get();
         $messages = Message

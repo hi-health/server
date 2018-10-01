@@ -108,7 +108,6 @@ class PointController extends Controller
 
     public function PointTransfer(Request $request, $users_id)
     {
-        Log::INFO("sucess");
         $this->validate($request, [
             'receiver_account' => 'required', 
             'transferred_point' => 'required|integer',
@@ -116,7 +115,12 @@ class PointController extends Controller
 
         $receiver = User::where('account',$request->receiver_account)
                         ->first();
-        $receiver_id = $receiver->id;
+        if($receiver)
+        {
+            $receiver_id = $receiver->id;
+        }else{
+            throw new Exception("Error Processing Request", 1);
+        }
 
         try {
             DB::beginTransaction();

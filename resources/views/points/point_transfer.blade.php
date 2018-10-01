@@ -32,7 +32,6 @@
     <table align="left" style="width:40%">
       <form action="{{ url('api/point/'.$users_id.'transfer') }}" method="post">
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
-        <input type="hidden" name="_method" value="PUT">
         <font face="monospace" size="4">Transfer to : </font>
         <input type="text" name="receiver_account" class="form-control" placeholder="請輸入轉入者之手機號碼" style="ime-mode:disabled" onkeyup="return ValidateNumber(this,value)"><br><br>
         <font face="monospace" size="4">Transferred Points : </font>

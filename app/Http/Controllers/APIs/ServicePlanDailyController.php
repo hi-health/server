@@ -14,6 +14,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Log;
+use App\AI\RepeatMultiDirectionAI;
 
 class ServicePlanDailyController extends Controller
 {
@@ -259,6 +260,7 @@ class ServicePlanDailyController extends Controller
 
     public function claculateScore($servicePlan_id,$servicePlanVideo_id, $test_data)
     {   
+        /*
         $array = [];
         $service_plan_video = ServicePlanVideo::where('id', $servicePlanVideo_id)->where('service_plans_id', $servicePlan_id)->first();
         for ($x = 0; $x < $service_plan_video->session; $x++) {
@@ -273,7 +275,21 @@ class ServicePlanDailyController extends Controller
             }
             
         } 
-        return $array;
+        */
+        $service_plan_video = ServicePlanVideo::where('id', $servicePlanVideo_id)->where('service_plans_id', $servicePlan_id)->first();
+        $template = json_decode($service_plan_video->movement_template_data);
+        $test = $test_data['data'];
+        $param = [
+            'session' => $service_plan_video->session,
+            'repeat_time' => $service_plan_video->repeat_time,
+            'major_threshold' => 1.5,
+            'error_threshold' => 0.4,
+            'point_threshold' => 5
+        ];
+
+        $ai = new RepeatMultiDirectionAI($template, $test, $param);
+        $score = $ai->calScore();
+        return $score;
     }
 
     public function claculatePoint($service_id, $plan_id, $daily_id, $score)

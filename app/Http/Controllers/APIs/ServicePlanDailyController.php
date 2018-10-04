@@ -276,6 +276,7 @@ class ServicePlanDailyController extends Controller
             
         } 
         */
+        
         $service_plan_video = ServicePlanVideo::where('id', $servicePlanVideo_id)->where('service_plans_id', $servicePlan_id)->first();
         $template = json_decode($service_plan_video->movement_template_data);
         $test = $test_data['data'];
@@ -287,6 +288,7 @@ class ServicePlanDailyController extends Controller
             'point_threshold' => 5
         ];
 
+        Log::debug('AI optimization: '.strval($servicePlanVideo_id));
         $ai = new RepeatMultiDirectionAI($template, $test, $param);
         $score = $ai->calScore();
         return $score;

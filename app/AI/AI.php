@@ -58,15 +58,15 @@ abstract class AI
             foreach ($session as $key2 => $repeat) {
                 foreach ($repeat as $key3 => $sample) {
 
-                    $testData[$key1]['acc_x'][$key2][$key3] = round(floatval($sample[0]),3);
-                    $testData[$key1]['acc_y'][$key2][$key3] = round(floatval($sample[1]),3);
-                    $testData[$key1]['acc_z'][$key2][$key3] = round(floatval($sample[2]),3);
-                    $testData[$key1]['roll'][$key2][$key3] = round(floatval($sample[3]),3);
-                    $testData[$key1]['yaw'][$key2][$key3] = round(floatval($sample[4]),3);
-                    $testData[$key1]['pitch'][$key2][$key3] = round(floatval($sample[5]),3);
-                    $testData[$key1]['rot_x'][$key2][$key3] = round(floatval($sample[6]),3);
-                    $testData[$key1]['rot_y'][$key2][$key3] = round(floatval($sample[7]),3);
-                    $testData[$key1]['rot_z'][$key2][$key3] = round(floatval($sample[8]),3);
+                    $testData[$key1]['acc_x'][$key2][$key3] = round(floatval($sample[0]),5);
+                    $testData[$key1]['acc_y'][$key2][$key3] = round(floatval($sample[1]),5);
+                    $testData[$key1]['acc_z'][$key2][$key3] = round(floatval($sample[2]),5);
+                    $testData[$key1]['roll'][$key2][$key3] = round(floatval($sample[3]),5);
+                    $testData[$key1]['yaw'][$key2][$key3] = round(floatval($sample[4]),5);
+                    $testData[$key1]['pitch'][$key2][$key3] = round(floatval($sample[5]),5);
+                    $testData[$key1]['rot_x'][$key2][$key3] = round(floatval($sample[6]),5);
+                    $testData[$key1]['rot_y'][$key2][$key3] = round(floatval($sample[7]),5);
+                    $testData[$key1]['rot_z'][$key2][$key3] = round(floatval($sample[8]),5);
                 }
             }
         }
@@ -79,15 +79,15 @@ abstract class AI
         foreach ($template as $key1 => $repeat) {
             foreach ($repeat as $key2 => $sample) {
 
-                $templateData['acc_x'][$key1][$key2] = round(floatval($sample[0]),3);
-                $templateData['acc_y'][$key1][$key2] = round(floatval($sample[1]),3);
-                $templateData['acc_z'][$key1][$key2] = round(floatval($sample[2]),3);
-                $templateData['roll'][$key1][$key2] = round(floatval($sample[3]),3);
-                $templateData['yaw'][$key1][$key2] = round(floatval($sample[4]),3);
-                $templateData['pitch'][$key1][$key2] = round(floatval($sample[5]),3);
-                $templateData['rot_x'][$key1][$key2] = round(floatval($sample[6]),3);
-                $templateData['rot_y'][$key1][$key2] = round(floatval($sample[7]),3);
-                $templateData['rot_z'][$key1][$key2] = round(floatval($sample[8]),3);
+                $templateData['acc_x'][$key1][$key2] = round(floatval($sample[0]),5);
+                $templateData['acc_y'][$key1][$key2] = round(floatval($sample[1]),5);
+                $templateData['acc_z'][$key1][$key2] = round(floatval($sample[2]),5);
+                $templateData['roll'][$key1][$key2] = round(floatval($sample[3]),5);
+                $templateData['yaw'][$key1][$key2] = round(floatval($sample[4]),5);
+                $templateData['pitch'][$key1][$key2] = round(floatval($sample[5]),5);
+                $templateData['rot_x'][$key1][$key2] = round(floatval($sample[6]),5);
+                $templateData['rot_y'][$key1][$key2] = round(floatval($sample[7]),5);
+                $templateData['rot_z'][$key1][$key2] = round(floatval($sample[8]),5);
             }
         }
         return $templateData;

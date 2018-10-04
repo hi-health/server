@@ -1,6 +1,7 @@
 <?php
 namespace App\AI;
 use Exception;
+use Log;
 
 class RepeatMultiDirectionAI extends AI{
 
@@ -146,8 +147,8 @@ class RepeatMultiDirectionAI extends AI{
 		$test_max = max($test_1repeat_1axis);
 		$test_min = min($test_1repeat_1axis);
 
-		$max = abs($template_max - $test_max) / abs($template_max);
-		$min = abs($template_min - $test_min) / abs($template_min);
+		$max = abs($template_max - $test_max) / max(abs($template_max),10e-5);
+		$min = abs($template_min - $test_min) / max(abs($template_min),10e-5);
 
 			
 		if ($max<$this->error_threshold && $min<$this->error_threshold){
@@ -369,7 +370,11 @@ class RepeatMultiDirectionAI extends AI{
         foreach ($template_1session_1axis as $key => $repeat) {
             $tmp[] = max($repeat);
         }
-        return array_sum($tmp)/count($tmp);
+        if(array_sum($tmp)>=0)
+        {
+          return max(array_sum($tmp)/count($tmp),10e-5);  
+        }
+        else return min(array_sum($tmp)/count($tmp),-10e-5);
     }
 
     protected function findTemplateMin($template_1session_1axis)
@@ -378,7 +383,11 @@ class RepeatMultiDirectionAI extends AI{
         foreach ($template_1session_1axis as $key => $repeat) {
             $tmp[] = min($repeat);
         }
-        return array_sum($tmp)/count($tmp);
+        if(array_sum($tmp)>=0)
+        {
+          return max(array_sum($tmp)/count($tmp),10e-5);  
+        }
+        else return min(array_sum($tmp)/count($tmp),-10e-5);
     }
 
     public function calScore()
@@ -431,18 +440,50 @@ class RepeatMultiDirectionAI extends AI{
                 $pitch_min_ratio = abs(min($this->testData[$i]['pitch'][$j])-$this->findTemplateMin($this->templateData['pitch']))/abs($this->findTemplateMin($this->templateData['pitch']));
 
 
-                $score_1session['acc_x'] += ( 50/6*(1-$acc_x_max_ratio) + 50/6*(1-$acc_x_min_ratio) )/2 /$this->test_repeat_time;
-                $score_1session['acc_y'] += ( 50/6*(1-$acc_y_max_ratio) + 50/6*(1-$acc_y_min_ratio) )/2 /$this->test_repeat_time;
-                $score_1session['acc_z'] += ( 50/6*(1-$acc_z_max_ratio) + 50/6*(1-$acc_z_min_ratio) )/2 /$this->test_repeat_time;
-                $score_1session['roll'] += ( 50/6*(1-$roll_max_ratio) + 50/6*(1-$roll_min_ratio) )/2 /$this->test_repeat_time;
-                $score_1session['yaw'] += ( 50/6*(1-$yaw_max_ratio) + 50/6*(1-$yaw_min_ratio) )/2 /$this->test_repeat_time;
-                $score_1session['pitch'] += ( 50/6*(1-$pitch_max_ratio) + 50/6*(1-$pitch_min_ratio) )/2 /$this->test_repeat_time;
+                $score_1session['acc_x'] += 50 * $acc_x_weight * (2-$acc_x_max_ratio-$acc_x_min_ratio)/2 /$this->test_repeat_time;
+                $score_1session['acc_y'] += 50 * $acc_y_weight * (2-$acc_y_max_ratio-$acc_y_min_ratio)/2 /$this->test_repeat_time;
+                $score_1session['acc_z'] += 50 * $acc_z_weight * (2-$acc_z_max_ratio-$acc_z_min_ratio)/2 /$this->test_repeat_time;
+                $score_1session['roll'] += 50 * $roll_weight * (2-$roll_max_ratio-$roll_min_ratio)/2 /$this->test_repeat_time;
+                $score_1session['yaw'] += 50 * $yaw_weight * (2-$yaw_max_ratio-$yaw_min_ratio)/2 /$this->test_repeat_time;
+                $score_1session['pitch'] += 50 * $pitch_weight * (2-$pitch_max_ratio-$pitch_min_ratio)/2 /$this->test_repeat_time;
 
             
                 $score_1session['acce_goodMove'] += 50/2*$isGoodMove[$j]['acce']/$this->test_repeat_time;
                 $score_1session['gyro_goodMove'] += 50/2*$isGoodMove[$j]['gyro']/$this->test_repeat_time;
+
+                Log::debug('AI session: '.strval($i).' repeat: '.$j.'  $acc_x_max_ratio: '.strval(round($acc_x_max_ratio,3)));
+                Log::debug('AI session: '.strval($i).' repeat: '.$j.'  $acc_x_min_ratio: '.strval(round($acc_x_min_ratio,3)));
+                Log::debug('AI session: '.strval($i).' repeat: '.$j.'  $acc_y_max_ratio: '.strval(round($acc_y_max_ratio,3)));
+                Log::debug('AI session: '.strval($i).' repeat: '.$j.'  $acc_y_min_ratio: '.strval(round($acc_y_min_ratio,3)));
+                Log::debug('AI session: '.strval($i).' repeat: '.$j.'  $acc_z_max_ratio: '.strval(round($acc_z_max_ratio,3)));
+                Log::debug('AI session: '.strval($i).' repeat: '.$j.'  $acc_z_min_ratio: '.strval(round($acc_z_min_ratio,3)));
+                Log::debug('AI session: '.strval($i).' repeat: '.$j.'  $roll_max_ratio: '.strval(round($roll_max_ratio,3)));
+                Log::debug('AI session: '.strval($i).' repeat: '.$j.'  $roll_min_ratio: '.strval(round($roll_min_ratio,3)));
+                Log::debug('AI session: '.strval($i).' repeat: '.$j.'  $yaw_max_ratio: '.strval(round($yaw_max_ratio,3)));
+                Log::debug('AI session: '.strval($i).' repeat: '.$j.'  $yaw_min_ratio: '.strval(round($yaw_min_ratio,3)));
+                Log::debug('AI session: '.strval($i).' repeat: '.$j.'  $pitch_max_ratio: '.strval(round($pitch_max_ratio,3)));
+                Log::debug('AI session: '.strval($i).' repeat: '.$j.'  $pitch_min_ratio: '.strval(round($pitch_min_ratio,3)));
+
             }
-            $score[] = round(array_sum($score_1session),3);
+
+            Log::debug('AI session: '.strval($i).'  $acc_x_weight: '.strval(round($acc_x_weight,3)));
+            Log::debug('AI session: '.strval($i).'  $acc_y_weight: '.strval(round($acc_y_weight,3)));
+            Log::debug('AI session: '.strval($i).'  $acc_z_weight: '.strval(round($acc_z_weight,3)));
+            Log::debug('AI session: '.strval($i).'  $roll_weight: '.strval(round($roll_weight,3)));
+            Log::debug('AI session: '.strval($i).'  $yaw_weight: '.strval(round($yaw_weight,3)));
+            Log::debug('AI session: '.strval($i).'  $pitch_weight: '.strval(round($pitch_weight,3)));
+
+            Log::debug('AI session: '.strval($i).'  $score_1session[\'acc_x\']: '.strval(round($score_1session['acc_x'])));
+            Log::debug('AI session: '.strval($i).'  $score_1session[\'acc_y\']: '.strval(round($score_1session['acc_y'])));
+            Log::debug('AI session: '.strval($i).'  $score_1session[\'acc_z\']: '.strval(round($score_1session['acc_z'])));
+            Log::debug('AI session: '.strval($i).'  $score_1session[\'roll\']: '.strval(round($score_1session['roll'])));
+            Log::debug('AI session: '.strval($i).'  $score_1session[\'yaw\']: '.strval(round($score_1session['yaw'])));
+            Log::debug('AI session: '.strval($i).'  $score_1session[\'pitch\']: '.strval(round($score_1session['pitch'])));
+            
+            Log::debug('AI session: '.strval($i).'  $score_1session[\'acce_goodMove\']: '.strval(round($score_1session['acce_goodMove'])));
+            Log::debug('AI session: '.strval($i).'  $score_1session[\'gyro_goodMove\']: '.strval(round($score_1session['gyro_goodMove'])));
+            Log::debug('AI session: '.strval($i).'  $score_1session: '.strval(round(array_sum($score_1session))));
+            $score[] = round(array_sum($score_1session));
         
         }
         return $score;

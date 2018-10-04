@@ -5,6 +5,7 @@
 /storage/*.key
 /storage/debugbar
 /storage/framework/cache
+/storage/logs
 /vendor
 /.idea
 /.vagrant

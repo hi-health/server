@@ -201,6 +201,8 @@ class ServicePlanController extends Controller
                             '{extension}' => $video_file->getClientOriginalExtension(),
                         ]);
 
+                        Log::alert('@@extension  '.$video_file->getClientOriginalExtension());
+
                         if ($video_file->move($path, $new_file)) {
                             $data['video'] = strtr('{folder_name}/{file_name}', [
                                 '{folder_name}' => $folder_name,

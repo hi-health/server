@@ -48,20 +48,26 @@ class ServiceController extends Controller
 
     public function getUploadedVideo(Request $request, $service_id)
     {
-        $service = Service
-            ::where('id', $service_id)
+        $service = Service::where('id', $service_id)
             ->first();\Log::info($service_id);
         if (!$service) {
             return response()->json(null, 404);
         }
-        $arr_video = array();
         foreach($service->plans as $plan){
             foreach($plan['videos'] as $videos){ 
-                $arr_video[] = $videos;
+                $arr_video[] = $videos; //要檢查video欄位
+                $attribute_video[] = $videos->video;
+                $unique_video = array_unique($attribute_video);
+                foreach($arr_video as $key=>$value){
+                    if(isset($unique_video[$key])){
+                        continue;
+                    } else{
+                        unset($arr_video[$key]);
+                    } 
+                }
             }
-        }
-
-        return response()->json(array_unique($arr_video));
+        }   
+        return response()->json(array_values($arr_video));
     }
 
     public function getInvoice($service_id)
@@ -150,8 +156,7 @@ class ServiceController extends Controller
         $this->validate($request, [
             'accept' => ['required', 'in:1,2'],
         ]);
-        $service = Service
-            ::where('id', $service_id)->where('payment_status', 1)->first();
+        $service = Service::where('id', $service_id)->where('payment_status', 1)->first();
         if (!$service) {
             return response()->json(null, 404);
         }
@@ -164,8 +169,7 @@ class ServiceController extends Controller
                 '{order_number}' => $service->order_number,
                 '{current_treatment_time}' => $service->current_treatment_time,
                 ]);
-            $result = Pay2GoCancel
-                ::setOrderNumber($service->order_number)->setAmount($service->charge_amount)->send();
+            $result = Pay2GoCancel::setOrderNumber($service->order_number)->setAmount($service->charge_amount)->send();
             
             if ($result and $result->success) {
                 $service->payment_status = '2';
@@ -187,15 +191,39 @@ class ServiceController extends Controller
             event(
                 new MemberServiceCompletedEvent($service)
             );
-            $member_request_model = MemberRequest
-                ::where('members_id', $service->members_id);
+            $member_request_model = MemberRequest::where('members_id', $service->members_id);
             $member_requests = $member_request_model->get();
             $member_request_model->forceDelete();
             $this->slackNotify('服務完成，清除會員('.$service->members_id.')的需求接單，共'.$member_requests->count().'筆');
 
             //0927應該補上繼承之前課表的功能
+            $before_service = Service::where('members_id',$service->members_id)
+                            ->where('doctors_id',$service->doctors_id)
+                            ->where('payment_status', '3')
+                            ->where('order_number','!=',$service->order_number)
+                            ->get()
+                            ->last();
+            if($before_service){
+                try{
+                    $Service_plan = ServicePlan::where('services_id', $before_service->id)
+                                    ->get();
+                    foreach($Service_plan as $plan){
+                        $extend_plan = $plan->replicate();
+                        $extend_plan->services_id = $before_service->id;
+                        $extend_plan->push();
 
-
+                        $ServicePlanVideo = ServicePlanVideo::where('service_plans_id', $plan->id)
+                                            ->get();
+                        foreach($ServicePlanVideo as $video){
+                            $extend_video = $video->replicate();
+                            $extend_video->service_plans_id = $extend_plan->id;
+                            $extend_video->push();
+                        }
+                    }
+                } catch(Exception $e){
+                    return $e;
+                }
+            }
             //0920應該補上刪除之前該member的所有service (無論doctor或是payment_status)
             $member_services = Service::where('members_id',$service->members_id)->whereNotIn('id',[$service_id])->delete();
 
@@ -208,15 +236,14 @@ class ServiceController extends Controller
 
     public function getHistoryByDoctor(Request $request, $doctor_id)
     {
-        $doctor = User
-            ::withDoctor($doctor_id)
+        $doctor = User::withDoctor($doctor_id)
             ->first();
         if (!$doctor) {
             return response()->json(null, 404);
         }
         $per_page = $request->get('per_page', 20);
-        $pagination = Service
-            ::where('doctors_id', $doctor_id)
+        $pagination = Service::withTrashed()
+            ->where('doctors_id', $doctor_id)
             ->where('payment_status', 3)
             ->whereNotNull('paid_at')
             ->whereNotNull('started_at')
@@ -224,8 +251,8 @@ class ServiceController extends Controller
             ->orderBy('paid_at', 'DESC')
             ->paginate($per_page)
             ->toArray();
-        $total_amount = Service
-            ::where('doctors_id', $doctor_id)
+        $total_amount = Service::withTrashed()
+            ->where('doctors_id', $doctor_id)
             ->where('payment_status', 3)
             ->whereNotNull('paid_at')
             ->whereNotNull('started_at')
@@ -244,32 +271,33 @@ class ServiceController extends Controller
 
     public function getHistoryByMember(Request $request, $member_id)
     {
-        $member = User
-            ::withMember($member_id)
+        $member = User::withMember($member_id)
             ->first();
         if (!$member) {
             return response()->json(null, 404);
         }
         $per_page = $request->get('per_page', 20);
-        $pagination = Service
-            ::where('members_id', $member_id)
-            ->orderBy('created_at', 'DESC')
+        $pagination = Service::withTrashed()
+            ->where('members_id', $member_id)
+            ->where('payment_status', 3)
+            ->whereNotNull('paid_at')
+            ->whereNotNull('started_at')
+            ->whereNotNull('stopped_at')
+            ->orderBy('paid_at', 'DESC')
             ->paginate($per_page);
 
         return response()->json($pagination);
     }
     public function getStatusByMember(Request $request, $member_id)
     {
-        $member = User
-            ::withMember($member_id)
+        $member = User::withMember($member_id)
             ->first();
 
         if (!$member) {
             return response()->json(null, 404);
         }
 
-        $service = Service
-            ::where('members_id', $member_id)
+        $service = Service::where('members_id', $member_id)
             ->orderBy('created_at', 'DESC')
             ->first();
 
@@ -326,8 +354,7 @@ class ServiceController extends Controller
         $this->validate($request, [
             'treatment_type' => ['required', 'in:1,2'],
         ]);
-        $service = Service
-            ::where('id', $service_id)
+        $service = Service::where('id', $service_id)
             ->first();
         if (!$service) {
             return response()->json(null, 404);
@@ -340,8 +367,7 @@ class ServiceController extends Controller
 
     public function setStartedAt(Request $request, $service_id)
     {
-        $service = Service
-            ::where('id', $service_id)
+        $service = Service::where('id', $service_id)
             ->first();
         if (!$service) {
             return response()->json(null, 404);
@@ -354,8 +380,7 @@ class ServiceController extends Controller
 
     public function setStoppedAt(Request $request, $service_id)
     {
-        $service = Service
-            ::where('id', $service_id)
+        $service = Service::where('id', $service_id)
             ->first();
         if (!$service) {
             return response()->json(null, 404);
@@ -387,8 +412,7 @@ class ServiceController extends Controller
             event(
                 new MemberServiceCompletedEvent($service)
             );
-            $member_request_model = MemberRequest
-                ::where('members_id', $service->members_id);
+            $member_request_model = MemberRequest::where('members_id', $service->members_id);
             $member_requests = $member_request_model->get();
             $member_request_model->forceDelete();
             $this->slackNotify('服務完成，清除會員('.$service->members_id.')的需求接單，共'.$member_requests->count().'筆');
@@ -402,8 +426,7 @@ class ServiceController extends Controller
         $this->validate($request, [
             'email' => ['required', 'email'],
         ]);
-        $service = Service
-            ::where('id', $service_id)
+        $service = Service::where('id', $service_id)
             ->first();
         if (!$service) {
             return response()->json(null, 404);
@@ -411,8 +434,7 @@ class ServiceController extends Controller
         $email = $request->input('email');
         $result = false;
         try {
-            $result = Mail
-                ::to($email)
+            $result = Mail::to($email)
                 ->send(
                     new ServicePlanExportedById($service)
                 );
@@ -428,14 +450,13 @@ class ServiceController extends Controller
         $this->validate($request, [
             'email' => ['required', 'email'],
         ]);
-        $doctor = User
-            ::withDoctor($doctor_id)
+        $doctor = User::withDoctor($doctor_id)
             ->first();
         if (!$doctor) {
             return response()->json(null, 404);
         }
-        $services = Service
-            ::where('doctors_id', $doctor_id)
+        $services = Service::withTrashed()
+            ->where('doctors_id', $doctor_id)
             ->where('payment_status', 3)
             ->whereNotNull('paid_at')
             ->whereNotNull('started_at')

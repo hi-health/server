@@ -100,9 +100,10 @@ Route::group([
         $router->get('{users_id}/use', 'PointController@showListConsume')
             ->name('point-list-consume');
         $router->get('{users_id}/all', 'PointController@showListAllTransaction')
-            ->name('point-list-all-transaction');   
+            ->name('point-list-all-transaction'); 
         $router->get('{users_id}/transfer', 'PointController@showTransfer')  
             ->name('point-transfer');
+        $router->post('{users_id}/transfer', 'PointController@PointTransfer');
 });
 
 Route::group([

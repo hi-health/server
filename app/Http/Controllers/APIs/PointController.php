@@ -108,6 +108,7 @@ class PointController extends Controller
 
     public function PointTransfer(Request $request, $users_id)
     {
+        \Log::INFO("sucess");
         $this->validate($request, [
             'receiver_account' => 'required', 
             'transferred_point' => 'required|integer',

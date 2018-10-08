@@ -21,15 +21,18 @@ class MessageController extends Controller
         $member = User
             ::withMember($member_id)
             ->first();
+        Log::alert('1');
         if (!$member) {
             return response()->json(null, 404);
         }
         $doctor = User
             ::withDoctor($doctor_id)
             ->first();
+        Log::alert('2');
         if (!$doctor) {
             return response()->json(null, 404);
         }
+        Log::alert('3');
         $first_id = $request->get('first_id', null);
         $latest_id = $request->get('latest_id', null);
         $member_request_id = $request->get('member_request_id', null);
@@ -134,6 +137,7 @@ class MessageController extends Controller
 
     public function send(Request $request)
     {
+        Log::alert('@@@@@@@@@@@@@@@@');
         $this->validate($request, [
             'source' => ['required', 'in:doctor,member'],
             'doctors_id' => ['required', 'exists:doctors,users_id'],
@@ -225,7 +229,7 @@ class MessageController extends Controller
                 );
             }
 //        }
-
+        Log::alert('5');
         return response()->json($message);
     }
 }

@@ -19,7 +19,6 @@ class SendMemberServicePlanBefore15MinutesNotification implements ShouldQueue
 
     public function handle(MemberServicePlanBefore15MinutesEvent $event)
     {
-        Log::alert('into Listeners');
         $message = '您的課程即將於'.$event->before_minutes.'分鐘後開始';
         $event->members->each(function ($member) use ($message) {
             if (empty($member->deviceToken)) {

@@ -10,6 +10,7 @@ use App\Mail\ServicePlanExportedById;
 use App\MemberRequest;
 use App\PaymentHistory;
 use App\Service;
+use App\ServicePlan;
 use App\Services\Pay2GoInvoice;
 use App\Services\Facades\Pay2GoCancel;
 use App\Traits\SettingUtility;

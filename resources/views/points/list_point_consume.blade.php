@@ -28,7 +28,7 @@ h1 {letter-spacing: 6px}
       <a href="{{ route('point-list-produce', ['users_id' => $users_id]) }}" class="w3-bar-item w3-button">獲得紀錄</a>
       <a href="{{ route('point-transfer', ['users_id' => $users_id]) }}" class="w3-bar-item w3-button">點數轉移</a>
     </div>
-    <table align="center" style="width:30%">
+    <table align="center">
       <thead>
         <tr>
           <td>使用點數</td>

@@ -7,9 +7,10 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
-body,h1 {font-family: "Raleway", Arial, sans-serif}
-h1 {letter-spacing: 6px}
-.w3-row-padding img {margin-bottom: 12px}
+  body,h1 {font-family: "Raleway", Arial, sans-serif}
+  h1 {letter-spacing: 6px}
+  .w3-row-padding img {margin-bottom: 12px}
+  .button {background-color: #e7e7e7; color: black;} /* Gray */ 
 </style>
 <body>
 
@@ -27,25 +28,31 @@ h1 {letter-spacing: 6px}
       <a href="<?php echo e(route('point-list-consume', ['users_id' => $users_id])); ?>" class="w3-bar-item w3-button">使用紀錄</a>
       <a href="<?php echo e(route('point-list-produce', ['users_id' => $users_id])); ?>" class="w3-bar-item w3-button">獲得紀錄</a>
       <a href="<?php echo e(route('point-transfer', ['users_id' => $users_id])); ?>" class="w3-bar-item w3-button">點數轉移</a>
-    </div>
-    <table align="center" style="width:30%">
-      <thead>
-        <tr>
-          <td>點數</td>
-          <td>時間</td>
-        </tr>
-      </thead>
-      <?php $__currentLoopData = $Transaction; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $Transactions): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-      <tbody>
-        <tr>
-          <td><?php echo e($Transactions->point); ?></td>
-          <td><?php echo e($Transactions->created_at->format('Y-m-d')); ?></td>
-        </tr>
-      </tbody>
-      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+    </div><br><br>
+    <table align="left" style="width:40%">
+      <form action="<?php echo e(url('api/point/'.$users_id.'/transfer')); ?>" method="post">
+        <input type="hidden" name="_token" value="<?php echo e(csrf_token()); ?>">
+        <font face="monospace" size="4">轉移給 : </font>
+        <input type="text" name="receiver_account" class="form-control" placeholder="請輸入轉入者之手機號碼"><br><br>
+        <font face="monospace" size="4">欲轉移的點數 : </font>
+        <input type="text" name="transferred_point" class="form-control" placeholder="請輸入欲轉出點數" style="ime-mode:disabled" onkeyup="return ValidateNumber(this,value)"><br><br>
+        <input type="submit" value="送出" class="button">
+      </form>
     </table>
   </div>
 </header>
 
 </body>
 </html>
+
+
+  <script>
+    function ValidateNumber(e, pnumber)
+    {
+      if (!/^\d+$/.test(pnumber))
+      {
+        e.value = /^\d+/.exec(e.value);
+      }
+      return false;
+    }
+  </script>

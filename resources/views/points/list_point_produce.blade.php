@@ -18,24 +18,24 @@ h1 {letter-spacing: 6px}
 
 <!-- Header -->
 <header class="w3-panel w3-center w3-opacity" style="padding:128px 16px">
-  <h1 class="w3-xlarge">Welcome to Points System</h1>
-  <h1>Your Remain Points : {{$RemainedPoint}} </h1>
+  <h1 class="w3-xlarge">歡迎來到點數系統</h1>
+  <h1>您的點數 : {{$RemainedPoint}} </h1>
   
   <div class="w3-padding-32">
     <div class="w3-bar w3-border">
-      <a href="{{ route('point-list-all-transaction', ['users_id' => $users_id]) }}" class="w3-bar-item w3-button">All Transaction</a>
-      <a href="{{ route('point-list-consume', ['users_id' => $users_id]) }}" class="w3-bar-item w3-button">Use History</a>
-      <a href="{{ route('point-list-produce', ['users_id' => $users_id]) }}" class="w3-bar-item w3-button">Earn History</a>
-      <a href="{{ route('point-transfer', ['users_id' => $users_id]) }}" class="w3-bar-item w3-button">Point Transfer</a>
+      <a href="{{ route('point-list-all-transaction', ['users_id' => $users_id]) }}" class="w3-bar-item w3-button">交易紀錄</a>
+      <a href="{{ route('point-list-consume', ['users_id' => $users_id]) }}" class="w3-bar-item w3-button">使用紀錄</a>
+      <a href="{{ route('point-list-produce', ['users_id' => $users_id]) }}" class="w3-bar-item w3-button">獲得紀錄</a>
+      <a href="{{ route('point-transfer', ['users_id' => $users_id]) }}" class="w3-bar-item w3-button">點數轉移</a>
     </div><br>
 
-    <h3>Get From User</h3>
+    <h3>從使用者獲得的點數：</h3>
     <table align="center" style="width:30%">
       <thead>
         <tr>
-          <td>get point</td>
-          <td>from</td>
-          <td>time</td>
+          <td>點數</td>
+          <td>使用者</td>
+          <td>時間</td>
         </tr>
       </thead>
       @foreach($PointProduce_FromUser as $PointProduce_FromUsers)
@@ -49,13 +49,13 @@ h1 {letter-spacing: 6px}
       @endforeach
     </table>
 
-    <h3>Get From Daily</h3>
+    <h3>從每日復健獲得的點數</h3>
     <table align="center" style="width:30%">
       <thead>
         <tr>
-          <td>get point</td>
-          <td>from</td>
-          <td>at</td>
+          <td>點數</td>
+          <td>復健</td>
+          <td>時間</td>
         </tr>
       </thead>
       @foreach($PointProduce_FromDaily as $PointProduce_FromDailys)

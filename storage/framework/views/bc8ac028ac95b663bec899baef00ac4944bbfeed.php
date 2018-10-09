@@ -18,14 +18,15 @@ h1 {letter-spacing: 6px}
 
 <!-- Header -->
 <header class="w3-panel w3-center w3-opacity" style="padding:128px 16px">
-  <h1 class="w3-xlarge">Welcome to Points View</h1>
-  <h1>BoCheng    剩餘點數 : <?php echo e($RemainedPoint); ?> </h1>
+  <h1 class="w3-xlarge">歡迎來到點數系統</h1>
+  <h1>您的點數 : <?php echo e($RemainedPoint); ?> </h1>
   
   <div class="w3-padding-32">
     <div class="w3-bar w3-border">
-      <a href="<?php echo e(route('point-list-all-transaction', ['users_id' => $users_id])); ?>" class="w3-bar-item w3-button">All Transaction</a>
-      <a href="<?php echo e(route('point-list-consume', ['users_id' => $users_id])); ?>" class="w3-bar-item w3-button w3-light-grey">Use History</a>
-      <a href="<?php echo e(route('point-list-produce', ['users_id' => $users_id])); ?>" class="w3-bar-item w3-button">Earn History</a>
+      <a href="<?php echo e(route('point-list-all-transaction', ['users_id' => $users_id])); ?>" class="w3-bar-item w3-button">交易紀錄</a>
+      <a href="<?php echo e(route('point-list-consume', ['users_id' => $users_id])); ?>" class="w3-bar-item w3-button w3-light-grey">使用紀錄</a>
+      <a href="<?php echo e(route('point-list-produce', ['users_id' => $users_id])); ?>" class="w3-bar-item w3-button">獲得紀錄</a>
+      <a href="<?php echo e(route('point-transfer', ['users_id' => $users_id])); ?>" class="w3-bar-item w3-button">點數轉移</a>
     </div>
   </div>
 </header>

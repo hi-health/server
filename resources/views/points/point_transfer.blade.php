@@ -19,22 +19,22 @@
 
 <!-- Header -->
 <header class="w3-panel w3-center w3-opacity" style="padding:128px 16px">
-  <h1 class="w3-xlarge">Welcome to Points System</h1>
-  <h1>Your Remain Points : {{$RemainedPoint}} </h1>
+  <h1 class="w3-xlarge">歡迎來到點數系統</h1>
+  <h1>您的點數 : {{$RemainedPoint}} </h1>
   
   <div class="w3-padding-32">
     <div class="w3-bar w3-border">
-      <a href="{{ route('point-list-all-transaction', ['users_id' => $users_id]) }}" class="w3-bar-item w3-button">All Transaction</a>
-      <a href="{{ route('point-list-consume', ['users_id' => $users_id]) }}" class="w3-bar-item w3-button">Use History</a>
-      <a href="{{ route('point-list-produce', ['users_id' => $users_id]) }}" class="w3-bar-item w3-button">Earn History</a>
-      <a href="{{ route('point-transfer', ['users_id' => $users_id]) }}" class="w3-bar-item w3-button">Point Transfer</a>
+      <a href="{{ route('point-list-all-transaction', ['users_id' => $users_id]) }}" class="w3-bar-item w3-button">交易紀錄</a>
+      <a href="{{ route('point-list-consume', ['users_id' => $users_id]) }}" class="w3-bar-item w3-button">使用紀錄</a>
+      <a href="{{ route('point-list-produce', ['users_id' => $users_id]) }}" class="w3-bar-item w3-button">獲得紀錄</a>
+      <a href="{{ route('point-transfer', ['users_id' => $users_id]) }}" class="w3-bar-item w3-button">點數轉移</a>
     </div><br><br>
     <table align="left" style="width:40%">
-      <form action="{{ url('api/point/'.$users_id.'transfer') }}" method="post">
+      <form action="{{ url('api/point/'.$users_id.'/transfer') }}" method="post">
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
-        <font face="monospace" size="4">Transfer to : </font>
-        <input type="text" name="receiver_account" class="form-control" placeholder="請輸入轉入者之手機號碼" style="ime-mode:disabled" onkeyup="return ValidateNumber(this,value)"><br><br>
-        <font face="monospace" size="4">Transferred Points : </font>
+        <font face="monospace" size="4">轉移給 : </font>
+        <input type="text" name="receiver_account" class="form-control" placeholder="請輸入轉入者之手機號碼"><br><br>
+        <font face="monospace" size="4">欲轉移的點數 : </font>
         <input type="text" name="transferred_point" class="form-control" placeholder="請輸入欲轉出點數" style="ime-mode:disabled" onkeyup="return ValidateNumber(this,value)"><br><br>
         <input type="submit" value="送出" class="button">
       </form>

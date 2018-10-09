@@ -29,7 +29,7 @@
       <a href="{{ route('point-list-produce', ['users_id' => $users_id]) }}" class="w3-bar-item w3-button">獲得紀錄</a>
       <a href="{{ route('point-transfer', ['users_id' => $users_id]) }}" class="w3-bar-item w3-button">點數轉移</a>
     </div><br><br>
-    <table align="left" style="width:40%">
+    <table align="left">
       <form action="{{ url('api/point/'.$users_id.'/transfer') }}" method="post">
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
         <font face="monospace" size="4">轉移給 : </font>

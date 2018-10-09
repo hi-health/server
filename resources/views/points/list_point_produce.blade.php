@@ -30,7 +30,13 @@ h1 {letter-spacing: 6px}
     </div><br>
 
     <h3>從使用者獲得的點數：</h3>
+<<<<<<< HEAD
     <table align="center">
+=======
+
+    <table align="center">
+
+>>>>>>> c188eaedbd37d12db97ac2efe7b674a58b89c96d
       <thead>
         <tr>
           <td>點數</td>
@@ -50,7 +56,13 @@ h1 {letter-spacing: 6px}
     </table>
 
     <h3>從每日復健獲得的點數</h3>
+<<<<<<< HEAD
     <table align="center">
+=======
+
+    <table align="center">
+
+>>>>>>> c188eaedbd37d12db97ac2efe7b674a58b89c96d
       <thead>
         <tr>
           <td>點數</td>

@@ -10,6 +10,8 @@ use App\Mail\ServicePlanExportedById;
 use App\MemberRequest;
 use App\PaymentHistory;
 use App\Service;
+use App\ServicePlan;
+use App\ServicePlanVideo;
 use App\Services\Pay2GoInvoice;
 use App\Services\Facades\Pay2GoCancel;
 use App\Traits\SettingUtility;
@@ -203,18 +205,22 @@ class ServiceController extends Controller
                             ->where('order_number','!=',$service->order_number)
                             ->get()
                             ->last();
+            
             if($before_service){
                 try{
+                    
                     $Service_plan = ServicePlan::where('services_id', $before_service->id)
                                     ->get();
                     foreach($Service_plan as $plan){
+                        error_log('aaaaa1');
                         $extend_plan = $plan->replicate();
-                        $extend_plan->services_id = $before_service->id;
+                        $extend_plan->services_id = $service->id;
                         $extend_plan->push();
 
                         $ServicePlanVideo = ServicePlanVideo::where('service_plans_id', $plan->id)
                                             ->get();
                         foreach($ServicePlanVideo as $video){
+                            error_log('aaaaa2');
                             $extend_video = $video->replicate();
                             $extend_video->service_plans_id = $extend_plan->id;
                             $extend_video->push();

@@ -91,7 +91,6 @@ trait AWSSNS
                 'MessageStructure' => 'json',
             ];
             $this->sns_handler->publish($push_parameter);
-            Log::alert('TTRRUUEE');
             return true;
         } catch (Exception $exception) {
 //            throw new Exception('SNS Push Error Device ARN: '.$device_arn);

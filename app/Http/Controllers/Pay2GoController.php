@@ -8,6 +8,7 @@ use App\Services\Facades\Pay2GoMPG;
 use App\Traits\SlackNotify;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Log;
 
 class Pay2GoController extends Controller
 {
@@ -15,6 +16,7 @@ class Pay2GoController extends Controller
 
     public function notifyProcess(Request $request)
     {
+        Log::alert('Pay2Go notify!!!');
         $this->slackNotify('收錢通知啦～～～{br}{request}', [
             '{request}' => json_encode($request->all()),
         ]);

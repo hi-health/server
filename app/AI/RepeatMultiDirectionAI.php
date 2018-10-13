@@ -10,6 +10,7 @@ class RepeatMultiDirectionAI extends AI{
 	public function __construct($template, $test, $param)
     {
         parent::__construct($template, $test, $param);
+        $this->template_repeat_time = count($this->templateData['acc_x']);
     }
 
     protected function calMajorLevel()

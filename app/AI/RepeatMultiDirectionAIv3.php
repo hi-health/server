@@ -10,6 +10,7 @@ class RepeatMultiDirectionAIv3 extends AI{
 	public function __construct($template, $test, $param)
     {
         parent::__construct($template, $test, $param);
+        $this->template_repeat_time = count($this->templateData['acc_x']);
     }
 
     protected function calMajorLevelForTemplate()
@@ -200,70 +201,70 @@ class RepeatMultiDirectionAIv3 extends AI{
             if( $absSum_test_6axis[$i]['acc_x'] >= $absSum_test_6axis[$i]['acc_y']*$this->major_threshold &&
                 $absSum_test_6axis[$i]['acc_x'] >= $absSum_test_6axis[$i]['acc_z']*$this->major_threshold)
             {
-                $majorLevel_6axis['acc_x'] += 2;
+                $majorLevel_6axis[$i]['acc_x'] += 2;
             }
             elseif( $absSum_test_6axis[$i]['acc_y'] >= $absSum_test_6axis[$i]['acc_x']*$this->major_threshold &&
                 $absSum_test_6axis[$i]['acc_y'] >= $absSum_test_6axis[$i]['acc_z']*$this->major_threshold)
             {
-                $majorLevel_6axis['acc_y'] += 2;
+                $majorLevel_6axis[$i]['acc_y'] += 2;
             }
             elseif( $absSum_test_6axis[$i]['acc_z'] >= $absSum_test_6axis[$i]['acc_x']*$this->major_threshold &&
                 $absSum_test_6axis[$i]['acc_z'] >= $absSum_test_6axis[$i]['acc_y']*$this->major_threshold)
             {
-                $majorLevel_6axis['acc_z'] += 2;
+                $majorLevel_6axis[$i]['acc_z'] += 2;
             }
             elseif( $absSum_test_6axis[$i]['acc_x'] <= $absSum_test_6axis[$i]['acc_y']/$this->major_threshold &&
                 $absSum_test_6axis[$i]['acc_x'] <= $absSum_test_6axis[$i]['acc_z']/$this->major_threshold)
             {
-                $majorLevel_6axis['acc_y'] += 1;
-                $majorLevel_6axis['acc_z'] += 1;
+                $majorLevel_6axis[$i]['acc_y'] += 1;
+                $majorLevel_6axis[$i]['acc_z'] += 1;
             }
             elseif( $absSum_test_6axis[$i]['acc_y'] <= $absSum_test_6axis[$i]['acc_x']/$this->major_threshold &&
                 $absSum_test_6axis[$i]['acc_y'] <= $absSum_test_6axis[$i]['acc_z']/$this->major_threshold)
             {
-                $majorLevel_6axis['acc_x'] += 1;
-                $majorLevel_6axis['acc_z'] += 1;
+                $majorLevel_6axis[$i]['acc_x'] += 1;
+                $majorLevel_6axis[$i]['acc_z'] += 1;
             }
             elseif( $absSum_test_6axis[$i]['acc_z'] <= $absSum_test_6axis[$i]['acc_x']/$this->major_threshold &&
                 $absSum_test_6axis[$i]['acc_z'] <= $absSum_test_6axis[$i]['acc_y']/$this->major_threshold)
             {
-                $majorLevel_6axis['acc_x'] += 1;
-                $majorLevel_6axis['acc_y'] += 1;
+                $majorLevel_6axis[$i]['acc_x'] += 1;
+                $majorLevel_6axis[$i]['acc_y'] += 1;
             }
 
             //gyro
             if( $absSum_test_6axis[$i]['roll'] >= $absSum_test_6axis[$i]['yaw']*$this->major_threshold &&
                 $absSum_test_6axis[$i]['roll'] >= $absSum_test_6axis[$i]['pitch']*$this->major_threshold)
             {
-                $majorLevel_6axis['roll'] += 2;
+                $majorLevel_6axis[$i]['roll'] += 2;
             }
             elseif( $absSum_test_6axis[$i]['yaw'] >= $absSum_test_6axis[$i]['roll']*$this->major_threshold &&
                 $absSum_test_6axis[$i]['yaw'] >= $absSum_test_6axis[$i]['pitch']*$this->major_threshold)
             {
-                $majorLevel_6axis['yaw'] += 2;
+                $majorLevel_6axis[$i]['yaw'] += 2;
             }
             elseif( $absSum_test_6axis[$i]['pitch'] >= $absSum_test_6axis[$i]['roll']*$this->major_threshold &&
                 $absSum_test_6axis[$i]['pitch'] >= $absSum_test_6axis[$i]['yaw']*$this->major_threshold)
             {
-                $majorLevel_6axis['pitch'] += 2;
+                $majorLevel_6axis[$i]['pitch'] += 2;
             }
             elseif( $absSum_test_6axis[$i]['roll'] <= $absSum_test_6axis[$i]['yaw']/$this->major_threshold &&
                 $absSum_test_6axis[$i]['roll'] <= $absSum_test_6axis[$i]['pitch']/$this->major_threshold)
             {
-                $majorLevel_6axis['yaw'] += 1;
-                $majorLevel_6axis['pitch'] += 1;
+                $majorLevel_6axis[$i]['yaw'] += 1;
+                $majorLevel_6axis[$i]['pitch'] += 1;
             }
             elseif( $absSum_test_6axis[$i]['yaw'] <= $absSum_test_6axis[$i]['roll']/$this->major_threshold &&
                 $absSum_test_6axis[$i]['yaw'] <= $absSum_test_6axis[$i]['pitch']/$this->major_threshold)
             {
-                $majorLevel_6axis['roll'] += 1;
-                $majorLevel_6axis['pitch'] += 1;
+                $majorLevel_6axis[$i]['roll'] += 1;
+                $majorLevel_6axis[$i]['pitch'] += 1;
             }
             elseif( $absSum_test_6axis[$i]['pitch'] <= $absSum_test_6axis[$i]['roll']/$this->major_threshold &&
                 $absSum_test_6axis[$i]['pitch'] <= $absSum_test_6axis[$i]['yaw']/$this->major_threshold)
             {
-                $majorLevel_6axis['roll'] += 1;
-                $majorLevel_6axis['yaw'] += 1;
+                $majorLevel_6axis[$i]['roll'] += 1;
+                $majorLevel_6axis[$i]['yaw'] += 1;
             }
 
         }
@@ -325,12 +326,15 @@ class RepeatMultiDirectionAIv3 extends AI{
         $majorLevel_acceSum = $majorLevel['acc_x'] + $majorLevel['acc_y'] + $majorLevel['acc_z'];
         $majorLevel_gyroSum = $majorLevel['roll'] + $majorLevel['yaw'] + $majorLevel['pitch'];
 
+        $majorLevel_test = $this->calMajorLevelForTest($test_1session);
+
         if($majorLevel_acceSum>=6){
             if( $majorLevel['acc_x'] > $majorLevel_acceSum/2 ||
                 ($majorLevel['acc_x'] == 4 && $majorLevel['acc_y'] == 2 && $majorLevel['acc_z'] == 2) )
             {
                 for ($i=0; $i < $this->test_repeat_time; $i++) { 
-                    if ($peakScale_6axis[$i]['acc_x'] >= $this->point_threshold) {
+                    if ($majorLevel_test[$i]['acc_x'] == 2) //Improve:這裡可以設計若等於1則給部分分數
+                    {
                         $isGoodMove[$i]['acce'] = 1;
                     }
                 }
@@ -339,7 +343,8 @@ class RepeatMultiDirectionAIv3 extends AI{
                     ($majorLevel['acc_y'] == 4 && $majorLevel['acc_x'] == 2 && $majorLevel['acc_z'] == 2) )
             {
                 for ($i=0; $i < $this->test_repeat_time; $i++) { 
-                    if ($peakScale_6axis[$i]['acc_y'] >= $this->point_threshold) {
+                    if ($majorLevel_test[$i]['acc_y'] == 2)
+                    {
                         $isGoodMove[$i]['acce'] = 1;
                     }
                 }
@@ -348,7 +353,8 @@ class RepeatMultiDirectionAIv3 extends AI{
                     ($majorLevel['acc_z'] == 4 && $majorLevel['acc_x'] == 2 && $majorLevel['acc_y'] == 2) )
             {
                 for ($i=0; $i < $this->test_repeat_time; $i++) { 
-                    if ($peakScale_6axis[$i]['acc_z'] >= $this->point_threshold) {
+                    if ($majorLevel_test[$i]['acc_z'] == 2)
+                    {
                         $isGoodMove[$i]['acce'] = 1;
                     }
                 }
@@ -357,8 +363,7 @@ class RepeatMultiDirectionAIv3 extends AI{
                     $majorLevel['acc_y'] > $majorLevel_acceSum/3 )
             {
                 for ($i=0; $i < $this->test_repeat_time; $i++) { 
-                    if( $peakScale_6axis[$i]['acc_x'] >= $this->point_threshold &&
-                        $peakScale_6axis[$i]['acc_y'] >= $this->point_threshold ) 
+                    if ( $majorLevel_test[$i]['acc_x'] == 1 && $majorLevel_test[$i]['acc_y'] == 1 ) //Improve:這裡可以設計若等於2則給部分分數
                     {
                         $isGoodMove[$i]['acce'] = 1;
                     }
@@ -368,8 +373,7 @@ class RepeatMultiDirectionAIv3 extends AI{
                     $majorLevel['acc_z'] > $majorLevel_acceSum/3 )
             {
                 for ($i=0; $i < $this->test_repeat_time; $i++) { 
-                    if( $peakScale_6axis[$i]['acc_x'] >= $this->point_threshold &&
-                        $peakScale_6axis[$i]['acc_z'] >= $this->point_threshold ) 
+                    if ( $majorLevel_test[$i]['acc_x'] == 1 && $majorLevel_test[$i]['acc_z'] == 1 )
                     {
                         $isGoodMove[$i]['acce'] = 1;
                     }
@@ -379,8 +383,7 @@ class RepeatMultiDirectionAIv3 extends AI{
                     $majorLevel['acc_z'] > $majorLevel_acceSum/3 )
             {
                 for ($i=0; $i < $this->test_repeat_time; $i++) { 
-                    if( $peakScale_6axis[$i]['acc_y'] >= $this->point_threshold &&
-                        $peakScale_6axis[$i]['acc_z'] >= $this->point_threshold ) 
+                    if ( $majorLevel_test[$i]['acc_y'] == 1 && $majorLevel_test[$i]['acc_z'] == 1 )
                     {
                         $isGoodMove[$i]['acce'] = 1;
                     }
@@ -388,22 +391,16 @@ class RepeatMultiDirectionAIv3 extends AI{
             }
             else{
                 for ($i=0; $i < $this->test_repeat_time; $i++) { 
-                    if( $peakScale_6axis[$i]['acc_x'] < $this->point_threshold &&
-                        $peakScale_6axis[$i]['acc_y'] < $this->point_threshold &&
-                        $peakScale_6axis[$i]['acc_z'] < $this->point_threshold ) 
-                    {
+                    if( $majorLevel_test[$i]['acc_y'] == 0 && $majorLevel_test[$i]['acc_z'] == 0 && $majorLevel_test[$i]['acc_z'] == 0 ){
                         $isGoodMove[$i]['acce'] = 1;
                     }
                 }
             }
         }
-        else{
+        else{ //Improve:若template模糊，則判斷失準
             for ($i=0; $i < $this->test_repeat_time; $i++) { 
-                if( $peakScale_6axis[$i]['acc_x'] < $this->point_threshold &&
-                    $peakScale_6axis[$i]['acc_y'] < $this->point_threshold &&
-                    $peakScale_6axis[$i]['acc_z'] < $this->point_threshold ) 
-                {
-                    $isGoodMove[$i]['acce'] = 1;
+                if( $majorLevel_test[$i]['acc_y'] == 0 && $majorLevel_test[$i]['acc_z'] == 0 && $majorLevel_test[$i]['acc_z'] == 0 ){
+                        $isGoodMove[$i]['acce'] = 1;
                 }
             }
         }
@@ -413,7 +410,8 @@ class RepeatMultiDirectionAIv3 extends AI{
                 ($majorLevel['roll'] == 4 && $majorLevel['yaw'] == 2 && $majorLevel['pitch'] == 2) )
             {
                 for ($i=0; $i < $this->test_repeat_time; $i++) { 
-                    if ($peakScale_6axis[$i]['roll'] >= $this->point_threshold) {
+                    if ($majorLevel_test[$i]['roll'] == 2) //Improve:這裡可以設計若等於1則給部分分數
+                    {
                         $isGoodMove[$i]['gyro'] = 1;
                     }
                 }
@@ -422,7 +420,8 @@ class RepeatMultiDirectionAIv3 extends AI{
                     ($majorLevel['yaw'] == 4 && $majorLevel['roll'] == 2 && $majorLevel['pitch'] == 2) )
             {
                 for ($i=0; $i < $this->test_repeat_time; $i++) { 
-                    if ($peakScale_6axis[$i]['yaw'] >= $this->point_threshold) {
+                    if ($majorLevel_test[$i]['yaw'] == 2) //Improve:這裡可以設計若等於1則給部分分數
+                    {
                         $isGoodMove[$i]['gyro'] = 1;
                     }
                 }
@@ -431,7 +430,8 @@ class RepeatMultiDirectionAIv3 extends AI{
                     ($majorLevel['pitch'] == 4 && $majorLevel['roll'] == 2 && $majorLevel['yaw'] == 2) )
             {
                 for ($i=0; $i < $this->test_repeat_time; $i++) { 
-                    if ($peakScale_6axis[$i]['pitch'] >= $this->point_threshold) {
+                    if ($majorLevel_test[$i]['pitch'] == 2) //Improve:這裡可以設計若等於1則給部分分數
+                    {
                         $isGoodMove[$i]['gyro'] = 1;
                     }
                 }
@@ -440,8 +440,7 @@ class RepeatMultiDirectionAIv3 extends AI{
                     $majorLevel['yaw'] > $majorLevel_gyroSum/3 )
             {
                 for ($i=0; $i < $this->test_repeat_time; $i++) { 
-                    if( $peakScale_6axis[$i]['roll'] >= $this->point_threshold &&
-                        $peakScale_6axis[$i]['yaw'] >= $this->point_threshold ) 
+                    if ( $majorLevel_test[$i]['roll'] == 1 && $majorLevel_test[$i]['yaw'] == 1 ) //Improve:這裡可以設計若等於2則給部分分數
                     {
                         $isGoodMove[$i]['gyro'] = 1;
                     }
@@ -451,8 +450,7 @@ class RepeatMultiDirectionAIv3 extends AI{
                     $majorLevel['pitch'] > $majorLevel_gyroSum/3 )
             {
                 for ($i=0; $i < $this->test_repeat_time; $i++) { 
-                    if( $peakScale_6axis[$i]['roll'] >= $this->point_threshold &&
-                        $peakScale_6axis[$i]['pitch'] >= $this->point_threshold ) 
+                    if ( $majorLevel_test[$i]['roll'] == 1 && $majorLevel_test[$i]['pitch'] == 1 ) //Improve:這裡可以設計若等於2則給部分分數
                     {
                         $isGoodMove[$i]['gyro'] = 1;
                     }
@@ -462,8 +460,7 @@ class RepeatMultiDirectionAIv3 extends AI{
                     $majorLevel['pitch'] > $majorLevel_gyroSum/3 )
             {
                 for ($i=0; $i < $this->test_repeat_time; $i++) { 
-                    if( $peakScale_6axis[$i]['yaw'] >= $this->point_threshold &&
-                        $peakScale_6axis[$i]['pitch'] >= $this->point_threshold ) 
+                    if ( $majorLevel_test[$i]['yaw'] == 1 && $majorLevel_test[$i]['pitch'] == 1 ) //Improve:這裡可以設計若等於2則給部分分數
                     {
                         $isGoodMove[$i]['gyro'] = 1;
                     }
@@ -471,22 +468,16 @@ class RepeatMultiDirectionAIv3 extends AI{
             }
             else{
                 for ($i=0; $i < $this->test_repeat_time; $i++) { 
-                    if( $peakScale_6axis[$i]['roll'] < $this->point_threshold &&
-                        $peakScale_6axis[$i]['yaw'] < $this->point_threshold &&
-                        $peakScale_6axis[$i]['pitch'] < $this->point_threshold ) 
-                    {
-                        $isGoodMove[$i]['gyro'] = 1;
+                    if( $majorLevel_test[$i]['roll'] == 0 && $majorLevel_test[$i]['yaw'] == 0 && $majorLevel_test[$i]['pitch'] == 0 ){
+                        $isGoodMove[$i]['acce'] = 1;
                     }
                 }
             }
         }
         else{
             for ($i=0; $i < $this->test_repeat_time; $i++) { 
-                if( $peakScale_6axis[$i]['roll'] < $this->point_threshold &&
-                    $peakScale_6axis[$i]['yaw'] < $this->point_threshold &&
-                    $peakScale_6axis[$i]['pitch'] < $this->point_threshold ) 
-                {
-                    $isGoodMove[$i]['gyro'] = 1;
+                if( $majorLevel_test[$i]['roll'] == 0 && $majorLevel_test[$i]['yaw'] == 0 && $majorLevel_test[$i]['pitch'] == 0 ){
+                    $isGoodMove[$i]['acce'] = 1;
                 }
             }
         }

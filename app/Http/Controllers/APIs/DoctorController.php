@@ -10,6 +10,8 @@ use App\MemberRequestDoctor;
 use App\Message;
 use App\Service;
 use App\Setting;
+use App\PointProduce;
+use App\PointConsume;
 use App\Traits\MemberUtility;
 use App\Traits\SettingUtility;
 use App\User;
@@ -30,7 +32,12 @@ class DoctorController extends Controller
         if (!$user or !$user->doctor) {
             return response()->json(null, 404);
         }
+        $PointProduce = PointProduce::where('users_id', $doctor_id)->sum('point');
+        $PointConsume = PointConsume::where('users_id', $doctor_id)->sum('point');
+        $RemainedPoint = $PointConsume + $PointProduce;
 
+        $user->points=$RemainedPoint;
+        $user->points_url=url("/point/{$doctor_id}");
         return response()->json($user);
     }
 
@@ -105,9 +112,11 @@ class DoctorController extends Controller
         $doctor = User
             ::withDoctor($doctor_id)
             ->first();
+        Log::alert('11111111');
         if (!$doctor) {
             return response()->json(null, 404);
         }
+        Log::alert('22222222');
         $is_paid = $request->get('is_paid', null);
         // 先取得該醫生有服務記錄的病人編號
         $members_id = Service

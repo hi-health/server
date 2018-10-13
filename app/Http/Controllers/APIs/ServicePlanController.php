@@ -116,8 +116,7 @@ class ServicePlanController extends Controller
             return response()->json(null, 404);
         }
         Log::alert('5');
-        return response()->json(null, 404);
-        //return response('uploaded successfully', 200)->header('Content-Type', 'text/plain');
+        return response('uploaded successfully', 200)->header('Content-Type', 'text/plain');
     }
     
     public function updateOrCreate(Request $request, $service_id)

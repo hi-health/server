@@ -17,7 +17,6 @@ class CreateServicesTable extends Migration
             $table->integer('charge_amount');
             $table->string('payment_method', 1)->default(0);
             $table->string('payment_status', 1)->default(0);
-            $table->string('invoice')->nullable();
             $table->timestamp('opened_at')->nullable();
             $table->timestamp('paid_at')->nullable();
             $table->timestamp('started_at')->nullable();

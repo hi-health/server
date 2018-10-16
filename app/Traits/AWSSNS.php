@@ -31,7 +31,11 @@ trait AWSSNS
                 'CustomUserData' => null,
                 'Attributes' => $attributes,
             ];
+            Log::alert($application_arn);
+            Log::alert(gettype($this->sns_handler->listEndpointsByPlatformApplication(['PlatformApplicationArn' => $application_arn])));
+            Log::alert('ADD SNS in 2-1');
             $endpoints = $this->sns_handler->listEndpointsByPlatformApplication(['PlatformApplicationArn' => $application_arn]);
+            Log::alert('ADD SNS in 2-4');
             if (is_array($endpoints['Endpoints']) && count($endpoints['Endpoints']) > 0) {
                 foreach ($endpoints['Endpoints'] as $endpoint) {
                     if ($endpoint['Attributes']['Token'] === $device_token) {
@@ -42,12 +46,13 @@ trait AWSSNS
                                 'Attributes' => $attributes,
                             ]);
                         }
-
+                        Log::alert('ADD SNS in 3');
                         return $endpoint_arn;
                     }
                 }
             }
             $res = $this->sns_handler->createPlatformEndpoint($parameter);
+            Log::alert('ADD SNS success');
 
             return $res['EndpointArn'];
         } catch (Exception $exception) {

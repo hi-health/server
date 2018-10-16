@@ -27,7 +27,7 @@ class NotifyMemberServicePlanBefore15Minutes extends Command
     public function handle()
     {
         $before_minutes = $this->argument('before_minutes');
-
+        Log::alert('into NotifyMemberServicePlanBefore15Minutes command');
         $before_time = Carbon::now()->addMinutes($before_minutes)->format('H:i');
 //        $before_time = '08:00';
         $service_plans = ServicePlan

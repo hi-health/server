@@ -63,7 +63,7 @@ class ServicePlanDailyController extends Controller
                                                 ->first()
                                             ),
                                             'ai_score'     =>  $ai_score,
-                                            'ai_score_avg' =>  count($ai_score) > 0 ? array_sum($ai_score)/count($ai_score) : 0,
+                                            'ai_score_avg' =>  count($ai_score) > 0 ? round(array_sum($ai_score)/count($ai_score),1) : 0,
                                         ];
                                     })->values(),
                             ];

@@ -266,7 +266,7 @@ class ServicePlanDailyController extends Controller
             $this->slackNotify('自我評分表輸出信件已寄出給:'.$email);
             $result = true;
         } catch (Exception $exception) {
-            $result = false;
+            return $exception;
 //            dump($exception->getMessage());
         }
 

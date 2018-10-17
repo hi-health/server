@@ -17,7 +17,7 @@
         <![endif]-->
         <!-- <link href="table.css" rel="stylesheet"> -->
         <style type="text/css">
-            @import url(http://fonts.googleapis.com/earlyaccess/notosanstc.css);
+            @import  url(http://fonts.googleapis.com/earlyaccess/notosanstc.css);
             body {
                 background: #E8F1F2;
                 font-family: "Noto Sans TC", sans-serif;
@@ -45,7 +45,7 @@
 
             .container {
                 padding: 0px 0px 20px 0px; }
-            @media only screen and (min-width: 768px) {
+            @media  only screen and (min-width: 768px) {
                 .container {
                     padding-left: 25px;
                     padding-right: 25px; } }
@@ -53,7 +53,7 @@
             .rwd-table tr {
                 background: #FFF;
                 border-top: 1px solid #CFCFCF; }
-            @media only screen and (min-width: 768px) {
+            @media  only screen and (min-width: 768px) {
                 .rwd-table tr {
                     background: #F9F9F9; } }
 
@@ -82,7 +82,7 @@
                 background: #D3D3D3;
                 margin: 0;
                 padding: 5px; }
-            @media only screen and (min-width: 768px) {
+            @media  only screen and (min-width: 768px) {
                 .rwd-table td[rowspan="3"] {
                     background: transparent; } }
             .rwd-table td[data-th="time"] {
@@ -91,14 +91,14 @@
                 font-size: 18px;
                 font-weight: 400;
                 background: #E3E3E3; }
-            @media only screen and (min-width: 768px) {
+            @media  only screen and (min-width: 768px) {
                 .rwd-table td[data-th="time"] {
                     background: transparent; } }
 
             .hidden {
                 font-size: 19px;
                 text-align: center; }
-            @media only screen and (min-width: 768px) {
+            @media  only screen and (min-width: 768px) {
                 .hidden {
                     display: none; } }
 
@@ -112,7 +112,7 @@
                 padding-bottom: 6px;
                 padding-top: 10px;
                 margin: 0 auto 10px auto; }
-            @media only screen and (min-width: 768px) {
+            @media  only screen and (min-width: 768px) {
                 .rwd-table td:before {
                     display: none; } }
 
@@ -124,7 +124,7 @@
 
             .rwd-table th, .rwd-table td {
                 text-align: center; }
-            @media only screen and (min-width: 768px) {
+            @media  only screen and (min-width: 768px) {
                 .rwd-table th, .rwd-table td {
                     display: table-cell;
                     padding: 0.25em 0.5em;
@@ -137,12 +137,12 @@
             .rwd-table th {
                 color: #FFF; }
 
-            @media only screen and (min-width: 768px) {
+            @media  only screen and (min-width: 768px) {
                 .rwd-table th:first-child,
                 .rwd-table td:first-child {
                     padding-left: 0; } }
 
-            @media only screen and (min-width: 768px) {
+            @media  only screen and (min-width: 768px) {
                 .rwd-table th:last-child,
                 .rwd-table td:last-child {
                     padding-right: 0; } }
@@ -153,11 +153,11 @@
                 font-size: 20px; }
             .rwd-table tfoot tr:first-child td {
                 text-align: center; }
-            @media only screen and (min-width: 768px) {
+            @media  only screen and (min-width: 768px) {
                 .rwd-table tfoot tr:first-child td {
                     padding: 15px !important;
                     text-align: left; } }
-            @media only screen and (min-width: 768px) {
+            @media  only screen and (min-width: 768px) {
                 .rwd-table tfoot tr:first-child td:first-child {
                     text-align: right; } }
             .rwd-table tfoot tr:first-child td:last-child {
@@ -186,10 +186,10 @@
         ?>
         <div class="container">
             <h1>評分紀錄</h1>
-            <p class="hidden">開始日期：{{ $first_day->scored_at }}</p>
+            <p class="hidden">開始日期：<?php echo e($first_day->scored_at); ?></p>
             <table class="rwd-table">
                 <tr>
-                    <th colspan="2">開始日期：{{ $first_day->scored_at }}</th>
+                    <th colspan="2">開始日期：<?php echo e($first_day->scored_at); ?></th>
                     <th>第一日</th>
                     <th>第二日</th>
                     <th>第三日</th>
@@ -198,20 +198,21 @@
                     <th>第六日</th>
                     <th>第七日</th>
                 </tr>
-                @for ($i = 1; $i <= ceil($max_days / 7); $i++)
-                    @foreach ($plans as $row => $plan)
+                <?php for($i = 1; $i <= ceil($max_days / 7); $i++): ?>
+                    <?php $__currentLoopData = $plans; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row => $plan): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <tr>
-                            @if ($row === 0)
-                                <td rowspan="{{ $plans->count() }}" data-th="">
-                                    第{{ toChinessNumber($i) }}週
+                            <?php if($row === 0): ?>
+                                <td rowspan="<?php echo e($plans->count()); ?>" data-th="">
+                                    第<?php echo e(toChinessNumber($i)); ?>週
                                 </td>
-                            @endif
+                            <?php endif; ?>
                             <td data-th="time">
-                                {{ $plan->started_at }} ~ {{ $plan->stopped_at }}
+                                <?php echo e($plan->started_at); ?> ~ <?php echo e($plan->stopped_at); ?>
+
                             </td>
-                            @foreach ($plan->daily->forPage($i, 7) as $day)
+                            <?php $__currentLoopData = $plan->daily->forPage($i, 7); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $day): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <td data-th="第一日">
-                                    <div class="aspect-fill video_bmp" style="background: url('{{ $day->video->thumbnail_url }}');"></div>
+                                    <div class="aspect-fill video_bmp" style="background: url('<?php echo e($day->video->thumbnail_url); ?>');"></div>
                                     <div>
                                         <?php
                                         try{
@@ -224,13 +225,13 @@
                                         ?>
                                     </div>
                                 </td>
-                            @endforeach
-                            @for ($j = 0; $j < (7 - $plan->daily->forPage($i, 7)->count()); $j++)
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            <?php for($j = 0; $j < (7 - $plan->daily->forPage($i, 7)->count()); $j++): ?>
                                 <td></td>
-                            @endfor
+                            <?php endfor; ?>
                         </tr>
-                    @endforeach
-                @endfor
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                <?php endfor; ?>
             </table>
         </div>
 

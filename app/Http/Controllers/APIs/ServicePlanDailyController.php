@@ -259,16 +259,16 @@ class ServicePlanDailyController extends Controller
             return response()->json(null, 404);
         }
         $email = $request->input('email');
-        try {
+        //try {
             Mail::to($email)->send(
                 new ServicePlanExportedById($service)
             );
             $this->slackNotify('自我評分表輸出信件已寄出給:'.$email);
             $result = true;
-        } catch (Exception $exception) {
+        //} catch (Exception $exception) {
             $result = false;
 //            dump($exception->getMessage());
-        }
+        //}
 
         return response()->json($result);
     }
@@ -304,7 +304,7 @@ class ServicePlanDailyController extends Controller
         ];
 
         Log::debug('AI optimization: '.strval($servicePlanVideo_id));
-        $ai = new RepeatMultiDirectionAIv3($template, $test, $param);
+        $ai = new RepeatMultiDirectionAI($template, $test, $param);
         $score = $ai->calScore();
         return $score;
     }

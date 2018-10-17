@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Log;
 use App\AI\RepeatMultiDirectionAI;
+use App\AI\RepeatMultiDirectionAIv3;
 
 class ServicePlanDailyController extends Controller
 {
@@ -62,7 +63,7 @@ class ServicePlanDailyController extends Controller
                                                 ->first()
                                             ),
                                             'ai_score'     =>  $ai_score,
-                                            'ai_score_avg' =>  count($ai_score) > 0 ? array_sum($ai_score)/count($ai_score) : 0,
+                                            'ai_score_avg' =>  count($ai_score) > 0 ? round(array_sum($ai_score)/count($ai_score),1) : 0,
                                         ];
                                     })->values(),
                             ];
@@ -162,31 +163,45 @@ class ServicePlanDailyController extends Controller
             error_log('NOOOOO service plan video');
             return response()->json(null, 404);
         }
+       //try{
+            $service_plan_daily = ServicePlanDaily::updateOrCreate(
+                                                    [
+                                                        'services_id' => $service->id,
+                                                        'service_plans_id' => $plan_id,
+                                                        'service_plan_videos_id' => $video['id'],
+                                                        'scored_at' => $date,
+                                                    ], 
+                                                    [
+                                                        'movement_test_data' => json_encode($video['test_data'])
+                                                    ]);
+            $score = $this->claculateScore($plan_id,$video['id'],$video['test_data']);
+            $service_plan_daily = ServicePlanDaily::updateOrCreate(
+                                                    [
+                                                        'services_id' => $service->id,
+                                                        'service_plans_id' => $plan_id,
+                                                        'service_plan_videos_id' => $video['id'],
+                                                        'scored_at' => $date,
+                                                    ], 
+                                                    [
+                                                        'score' => json_encode($score),
+                                                        'movement_test_data' => json_encode($video['test_data'])
+                                                    ]);
 
-        $score = $this->claculateScore($plan_id,$video['id'],$video['test_data']);
-        $service_plan_daily = ServicePlanDaily::updateOrCreate(
-                                                [
-                                                    'services_id' => $service->id,
-                                                    'service_plans_id' => $plan_id,
-                                                    'service_plan_videos_id' => $video['id'],
-                                                    'scored_at' => $date,
-                                                ], 
-                                                [
-                                                    'score' => json_encode($score),
-                                                    'movement_test_data' => json_encode($video['test_data'])
-                                                ]);
+            $point = $this->claculatePoint($service_id, $plan_id, $service_plan_daily->id , $score);
+            $users_id = Service::where('id', $service_id)->first()->member->id;
+            $PointProduce = PointProduce::updateOrCreate(
+                [
+                    'service_plan_daily_id' => $service_plan_daily->id,
+                    'point' => $point,
+                    'users_id' => $users_id,
+                ]);
 
-        $point = $this->claculatePoint($service_id, $plan_id, $service_plan_daily->id , $score);
-        $users_id = Service::where('id', $service_id)->first()->member->id;
-        $PointProduce = PointProduce::updateOrCreate(
-            [
-                'service_plan_daily_id' => $service_plan_daily->id,
-                'point' => $point,
-                'users_id' => $users_id,
-            ]);
-
-        //return response($score,200);
-        return response()->json(["ai_score"=>$score]);
+            //return response($score,200);
+            return response()->json(["ai_score"=>$score]);
+        //}
+        //catch(Exception $exception){
+        //    return response()->json($exception, 500);
+        //}
     }
     /*
     public function updateOrCreate(Request $request, $service_id)
@@ -289,7 +304,7 @@ class ServicePlanDailyController extends Controller
         ];
 
         Log::debug('AI optimization: '.strval($servicePlanVideo_id));
-        $ai = new RepeatMultiDirectionAI($template, $test, $param);
+        $ai = new RepeatMultiDirectionAIv3($template, $test, $param);
         $score = $ai->calScore();
         return $score;
     }

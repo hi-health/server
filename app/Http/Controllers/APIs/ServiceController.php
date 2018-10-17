@@ -55,6 +55,7 @@ class ServiceController extends Controller
         if (!$service) {
             return response()->json(null, 404);
         }
+        $arr_video = [];
         foreach($service->plans as $plan){
             foreach($plan['videos'] as $videos){ 
                 $arr_video[] = $videos; //要檢查video欄位

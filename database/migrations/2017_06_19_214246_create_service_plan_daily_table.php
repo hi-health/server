@@ -14,7 +14,6 @@ class CreateServicePlanDailyTable extends Migration
             $table->integer('service_plans_id');
             $table->integer('service_plan_videos_id');
             $table->json('movement_test_data');
-            $table->integer('score');
             $table->date('scored_at');
             $table->timestamps();
             $table->softDeletes();

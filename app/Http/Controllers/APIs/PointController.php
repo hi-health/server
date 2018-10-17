@@ -112,45 +112,62 @@ class PointController extends Controller
         $this->validate($request, [
             'receiver_account' => 'required', 
             'transferred_point' => 'required|integer',
+            'account' => ['required', 'string'],
+            'password' => ['required', 'string'],
         ]);
-
-        $receiver = User::where('account',$request->receiver_account)
-                        ->first();
-        if($receiver)
-        {
-            $receiver_id = $receiver->id;
-        }else{
-            throw new Exception("Error Processing Request", 1);
+        $user = User::where('account', $request->input('account'))
+                ->where('id', $users_id)
+                ->where('status', 1)
+                ->first();
+        if (!$user) {
+            return response()->json(null, 400);
         }
 
-        try {
-            DB::beginTransaction();
-
-            $PointConsume = new PointConsume();
-            $PointConsume->users_id = $users_id;
-            $PointConsume->point = -$request->transferred_point;
-            $PointConsume->save();
-
-            $PointProduce = new PointProduce();
-            $PointProduce->users_id = $receiver_id;
-            $PointProduce->point = $request->transferred_point;
-            $PointProduce->pointconsume_id = $PointConsume->id;
-            $PointProduce->save();
-
-            $PointProduce = PointProduce::where('users_id', $users_id)->sum('point');
-            $PointConsume = PointConsume::where('users_id', $users_id)->sum('point');
-            $RemainedPoint = $PointConsume + $PointProduce;
-            if($RemainedPoint<0)
+        if ($user && Hash::check($request->input('password'), $user->password)) {
+            // 密碼是對的不做事等09行回覆
+        } else {
+            $user = null;
+            return response()->json(null, 401);
+        }
+        if($user){
+            $receiver = User::where('account',$request->receiver_account)
+                            ->first();
+            if($receiver)
             {
+                $receiver_id = $receiver->id;
+            }else{
                 throw new Exception("Error Processing Request", 1);
             }
 
-            DB::commit();
+            try {
+                DB::beginTransaction();
 
-        } catch (QueryException $exception) {
-            DB::rollback();
+                $PointConsume = new PointConsume();
+                $PointConsume->users_id = $users_id;
+                $PointConsume->point = -$request->transferred_point;
+                $PointConsume->save();
 
-            return response()->json(null, 500);
+                $PointProduce = new PointProduce();
+                $PointProduce->users_id = $receiver_id;
+                $PointProduce->point = $request->transferred_point;
+                $PointProduce->pointconsume_id = $PointConsume->id;
+                $PointProduce->save();
+
+                $PointProduce = PointProduce::where('users_id', $users_id)->sum('point');
+                $PointConsume = PointConsume::where('users_id', $users_id)->sum('point');
+                $RemainedPoint = $PointConsume + $PointProduce;
+                if($RemainedPoint<0)
+                {
+                    throw new Exception("Error Processing Request", 1);
+                }
+
+                DB::commit();
+
+            } catch (QueryException $exception) {
+                DB::rollback();
+
+                return response()->json(null, 500);
+            }
         }
 
         return view('points.point_transfer', compact('RemainedPoint','users_id'));

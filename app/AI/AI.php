@@ -31,7 +31,6 @@ abstract class AI
         $this->test_repeat_time = $param['repeat_time'];
         $this->templateData = $this->parseTemplateData($template);
         $this->testData = $this->parseTestData($test);
-        $this->template_repeat_time = count($this->templateData['acc_x']);
         
         $this->major_threshold = $param['major_threshold'];
         $this->error_threshold = $param['error_threshold'];

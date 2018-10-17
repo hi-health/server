@@ -259,16 +259,17 @@ class ServicePlanDailyController extends Controller
             return response()->json(null, 404);
         }
         $email = $request->input('email');
-        //try {
+        try {
             Mail::to($email)->send(
                 new ServicePlanExportedById($service)
             );
             $this->slackNotify('自我評分表輸出信件已寄出給:'.$email);
             $result = true;
+
         } catch (Exception $exception) {
             return $exception;
 //            dump($exception->getMessage());
-        //}
+        }
 
         return response()->json($result);
     }

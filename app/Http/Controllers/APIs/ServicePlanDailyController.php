@@ -316,8 +316,8 @@ class ServicePlanDailyController extends Controller
         $perday_point_given = $Service_charge/$Service_day *0.15;
 
         $total_daily_count = 0;
-        $Pervice_Plan = ServicePlan::where('services_id',$service_id)->get();
-        foreach ($Pervice_Plan as $service_plan) {
+        $Service_Plan = ServicePlan::where('services_id',$service_id)->get();
+        foreach ($Service_Plan as $service_plan) {
             $Service_Plan_Video = ServicePlanVideo::where('service_plans_id', $service_plan->id)->count();
             $total_daily_count += $Service_Plan_Video;
         }

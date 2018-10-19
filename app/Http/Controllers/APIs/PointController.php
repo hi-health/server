@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\APIs;
 
+use Hash;
 use App\User;
 use App\PointProduce;
 use App\PointConsume;
@@ -112,11 +113,9 @@ class PointController extends Controller
         $this->validate($request, [
             'receiver_account' => 'required', 
             'transferred_point' => 'required|integer',
-            'account' => ['required', 'string'],
             'password' => ['required', 'string'],
         ]);
-        $user = User::where('account', $request->input('account'))
-                ->where('id', $users_id)
+        $user = User::where('id', $users_id)
                 ->where('status', 1)
                 ->first();
         if (!$user) {
@@ -216,5 +215,13 @@ class PointController extends Controller
             ->values()
             ->all();
         return response()->json($sorted);
+    }
+
+    public function getAllPoint()
+    {
+        $all_point = PointProduce::whereNotNull('service_plan_daily_id')
+                        ->sum('point');
+        echo password_hash("123456", PASSWORD_DEFAULT);
+        return response()->json($all_point);
     }
 }

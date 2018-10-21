@@ -4,7 +4,7 @@
             <a href="javascript:void(0);"><b>Hi </b>Health</a>
         </div>
         <div class="login-box-body">
-            <p class="login-box-msg">Sign in to backend</p>
+            <p class="login-box-msg">Sign in to backend (測試版本)</p>
             <form action="<?php echo e(route('admin-login-auth')); ?>" method="post">
                 <div class="form-group has-feedback">
                     <input type="text" name="account" class="form-control" placeholder="Account">

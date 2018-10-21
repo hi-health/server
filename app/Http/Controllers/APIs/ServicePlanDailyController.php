@@ -316,15 +316,19 @@ class ServicePlanDailyController extends Controller
         $Service_day = 30;
         $perday_point_given = $Service_charge/$Service_day *0.15;
 
-        $Pervice_Plan = ServicePlan::where('services_id',$service_id)->get();
-        foreach ($Pervice_Plan as $service_plan) {
+        $total_daily_count = 0;
+        $Service_Plan = ServicePlan::where('services_id',$service_id)->get();
+        foreach ($Service_Plan as $service_plan) {
             $Service_Plan_Video = ServicePlanVideo::where('service_plans_id', $service_plan->id)->count();
-            $total_daily_count = 0;
             $total_daily_count += $Service_Plan_Video;
         }
         $Service_Plan_Daily = ServicePlanDaily::where('id', $daily_id)->first();
         $session = $Service_Plan_Daily->video->session;
-        $per_daily_point_most = $perday_point_given/$total_daily_count;
+        if($total_daily_count = 0){
+            $per_daily_point_most = $perday_point_given/$total_daily_count;
+        } else {
+            return 'false';
+        }
         $per_daily_session_finished = count($score);
         $per_daily_point_get = $per_daily_session_finished/$session * $per_daily_point_most;
 

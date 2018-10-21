@@ -259,7 +259,7 @@ class ServicePlanDailyController extends Controller
             return response()->json(null, 404);
         }
         $email = $request->input('email');
-        //try {
+        try {
             Mail::to($email)->send(
                 new ServicePlanExportedById($service)
             );
@@ -268,7 +268,7 @@ class ServicePlanDailyController extends Controller
         } catch (Exception $exception) {
             return $exception;
 //            dump($exception->getMessage());
-        //}
+        }
 
         return response()->json($result);
     }

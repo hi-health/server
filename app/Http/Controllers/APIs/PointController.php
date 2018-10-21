@@ -7,6 +7,7 @@ use App\User;
 use App\PointProduce;
 use App\PointConsume;
 use Exception;
+// use Illuminate\Support\MessageBag;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -157,14 +158,16 @@ class PointController extends Controller
                 $RemainedPoint = $PointConsume + $PointProduce;
                 if($RemainedPoint<0)
                 {
-                    throw new Exception("Error Processing Request", 1);
+                    // throw new Exception("Error Processing Request", 1);
+                    return back(); 
                 }
 
                 DB::commit();
 
             } catch (QueryException $exception) {
                 DB::rollback();
-
+                // $errors = new Illuminate\Support\MessageBag();
+                // return back()->withErrors(['點數不足']);
                 return response()->json(null, 500);
             }
         }
@@ -220,8 +223,7 @@ class PointController extends Controller
     public function getAllPoint()
     {
         $all_point = PointProduce::whereNotNull('service_plan_daily_id')
-                        ->sum('point');
-        echo password_hash("123456", PASSWORD_DEFAULT);
+                        ->sum('point');                       
         return response()->json($all_point);
     }
 }

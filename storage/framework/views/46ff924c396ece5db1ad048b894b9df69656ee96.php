@@ -30,6 +30,15 @@
       <a href="<?php echo e(route('point-transfer', ['users_id' => $users_id])); ?>" class="w3-bar-item w3-button">點數轉移</a>
     </div><br><br>
     <table align="left">
+        <!-- <?php if(count($errors) > 0): ?>
+        <div class="alert alert-danger">
+            <ul style="color:#fff;">
+            <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <li><?php echo e($error); ?></li>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            </ul>
+        </div>
+        <?php endif; ?> -->  <!-- 需要web middleware -->
       <form action="<?php echo e(url('api/point/'.$users_id.'/transfer')); ?>" method="post">
         <input type="hidden" name="_token" value="<?php echo e(csrf_token()); ?>">
         <font face="monospace" size="4">密碼 : </font>

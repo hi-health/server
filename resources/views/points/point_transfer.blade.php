@@ -30,6 +30,15 @@
       <a href="{{ route('point-transfer', ['users_id' => $users_id]) }}" class="w3-bar-item w3-button">點數轉移</a>
     </div><br><br>
     <table align="left">
+        <!-- @if (count($errors) > 0)
+        <div class="alert alert-danger">
+            <ul style="color:#fff;">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+            </ul>
+        </div>
+        @endif -->  <!-- 需要web middleware -->
       <form action="{{ url('api/point/'.$users_id.'/transfer') }}" method="post">
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
         <font face="monospace" size="4">密碼 : </font>

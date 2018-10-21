@@ -63,7 +63,7 @@ class ServicePlanDailyController extends Controller
                                                 ->first()
                                             ),
                                             'ai_score'     =>  $ai_score,
-                                            'ai_score_avg' =>  count($ai_score) > 0 ? round(array_sum($ai_score)/count($ai_score),1) : 0,
+                                            'ai_score_avg' =>  count($ai_score) > 0 ? round(array_sum($ai_score)/count($ai_score)) : 0,
                                         ];
                                     })->values(),
                             ];
@@ -265,6 +265,7 @@ class ServicePlanDailyController extends Controller
             );
             $this->slackNotify('自我評分表輸出信件已寄出給:'.$email);
             $result = true;
+
         } catch (Exception $exception) {
             return $exception;
 //            dump($exception->getMessage());
@@ -304,7 +305,7 @@ class ServicePlanDailyController extends Controller
         ];
 
         Log::debug('AI optimization: '.strval($servicePlanVideo_id));
-        $ai = new RepeatMultiDirectionAIv3($template, $test, $param);
+        $ai = new RepeatMultiDirectionAI($template, $test, $param);
         $score = $ai->calScore();
         return $score;
     }

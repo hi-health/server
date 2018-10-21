@@ -12,6 +12,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 
 class PointController extends Controller
 {
@@ -120,14 +121,14 @@ class PointController extends Controller
                 ->where('status', 1)
                 ->first();
         if (!$user) {
-            return response()->json(null, 400);
+            return response()->json('wrong account', 401);
         }
 
         if ($user && Hash::check($request->input('password'), $user->password)) {
             // 密碼是對的不做事等09行回覆
         } else {
             $user = null;
-            return response()->json(null, 401);
+            return response()->json('wrong password', 401);
         }
         if($user){
             $receiver = User::where('account',$request->receiver_account)
@@ -136,7 +137,7 @@ class PointController extends Controller
             {
                 $receiver_id = $receiver->id;
             }else{
-                throw new Exception("Error Processing Request", 1);
+                return response()->json('wrong receiver', 400);
             }
 
             try {

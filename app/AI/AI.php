@@ -63,8 +63,10 @@ abstract class AI
         for ($i=1; $i < $this->test_repeat_time; $i++) { 
             $max_index_arr[] = array_search(max(array_slice($arr, $i*$t1-$t2_1+1, $t2)), array_slice($arr, $i*$t1-$t2_1+1, $t2)) + $i*$t1-$t2_1+1;
         }
-        return $max_index_arr;
-        
+        if ($this->test_repeat_time==1){
+            return [count($arr)];
+        }
+        else return $max_index_arr;
     }
 
     protected function seperateEachRepeat($arr, $index)

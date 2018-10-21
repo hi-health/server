@@ -1,51 +1,25 @@
-<!DOCTYPE html>
-<html>
-<title>HI-Health</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<style>
-body,h1 {font-family: "Raleway", Arial, sans-serif}
-h1 {letter-spacing: 6px}
-.w3-row-padding img {margin-bottom: 12px}
-</style>
-<body>
 
-<!-- !PAGE CONTENT! -->
-<div class="w3-content" style="max-width:1500px">
 
-<!-- Header -->
-<header class="w3-panel w3-center w3-opacity" style="padding:128px 16px">
-  <h1 class="w3-xlarge">歡迎來到點數系統</h1>
-  <h1>您的點數 : {{ $RemainedPoint }} </h1>
+@extends('points.master')
+@section('content')
+	<ul class="w3-ul w3-card-4">
+		@foreach($Transaction as $Transactions)
+		<li class="w3-bar" style="padding-top: 0px; padding-bottom: 0px">
+			<div class="w3-bar-block w3-bar-item" style="padding-top: 0px; padding-bottom: 0px">
+				<span  class="w3-bar-item">
+					{{ $Transactions->created_at->format('Y-m-d') }}
+				</span>
+				<span  class="w3-bar-item" style="padding-top: 0px;"">
+					{{ $Transactions->created_at->format('H:i') }}
+				</span>
+			</div>
+			<span class="w3-right w3-bar-item">
+				<em style="font-size: 22px">{{ $Transactions->point }}</em>
+			</span>
+			
+		</li>
+		@endforeach
+
+	</ul>
+@endsection
   
-  <div class="w3-padding-32">
-    <div class="w3-bar w3-border">
-      <a href="{{ route('point-list-all-transaction', ['users_id' => $users_id]) }}" class="w3-bar-item w3-button">交易紀錄</a>
-      <a href="{{ route('point-list-consume', ['users_id' => $users_id]) }}" class="w3-bar-item w3-button">使用紀錄</a>
-      <a href="{{ route('point-list-produce', ['users_id' => $users_id]) }}" class="w3-bar-item w3-button">獲得紀錄</a>
-      <a href="{{ route('point-transfer', ['users_id' => $users_id]) }}" class="w3-bar-item w3-button">點數轉移</a>
-    </div>
-    <table align="center">
-      <thead>
-        <tr>
-          <td>點數</td>
-          <td>時間</td>
-        </tr>
-      </thead>
-      @foreach($Transaction as $Transactions)
-      <tbody>
-        <tr>
-          <td>{{ $Transactions->point }}</td>
-          <td>{{ $Transactions->created_at->format('Y-m-d') }}</td>
-        </tr>
-      </tbody>
-      @endforeach
-    </table>
-  </div>
-</header>
-
-</body>
-</html>

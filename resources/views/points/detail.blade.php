@@ -1,35 +1,16 @@
-<!DOCTYPE html>
-<html>
-<title>HI-Health</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<style>
-body,h1 {font-family: "Raleway", Arial, sans-serif}
-h1 {letter-spacing: 6px}
-.w3-row-padding img {margin-bottom: 12px}
-</style>
-<body>
 
-<!-- !PAGE CONTENT! -->
-<div class="w3-content" style="max-width:1500px">
 
-<!-- Header -->
-<header class="w3-panel w3-center w3-opacity" style="padding:128px 16px">
-  <h1 class="w3-xlarge">歡迎來到點數系統</h1>
-  <h1>您的點數 : {{ $RemainedPoint }} </h1>
-  
-  <div class="w3-padding-32">
-    <div class="w3-bar w3-border">
-      <a href="{{ route('point-list-all-transaction', ['users_id' => $users_id]) }}" class="w3-bar-item w3-button">交易紀錄</a>
-      <a href="{{ route('point-list-consume', ['users_id' => $users_id]) }}" class="w3-bar-item w3-button w3-light-grey">使用紀錄</a>
-      <a href="{{ route('point-list-produce', ['users_id' => $users_id]) }}" class="w3-bar-item w3-button">獲得紀錄</a>
-      <a href="{{ route('point-transfer', ['users_id' => $users_id]) }}" class="w3-bar-item w3-button">點數轉移</a>
-    </div>
-  </div>
-</header>
+@extends('points.master')
+@section('content')
+	<div class="w3-center" style="padding-top: 100px">
+		<em style="font-size: 16px;">HiPoint當前兌台幣匯率為 1:{{$HiPointRate}}</em>
+	</div>
+	<div class="w3-center" style="padding-top: 30px">
+		<em style="font-size: 18px;">您當前有 {{ $RemainedPoint }} HiPoint</em>
 
-</body>
-</html>
+	</div>
+	<div class="w3-center">
+		<em style="font-size: 18px;">共值 {{$RemainedPoint*$HiPointRate}} 台幣</em>
+	</div>
+	
+@endsection

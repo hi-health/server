@@ -7,12 +7,10 @@ use App\User;
 use App\PointProduce;
 use App\PointConsume;
 use Exception;
-// use Illuminate\Support\MessageBag;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
 
 class PointController extends Controller
 {
@@ -26,7 +24,9 @@ class PointController extends Controller
 
         $RemainedPoint = $PointConsume + $PointProduce;
 
-        return view('points.detail', compact('users_id','RemainedPoint'));
+        $HiPointRate = 1;
+
+        return view('points.detail', compact('users_id','RemainedPoint','HiPointRate'));
 
     }
 
@@ -78,9 +78,11 @@ class PointController extends Controller
         $RemainedPoint = $PointConsume + $PointProduce;
 
         $PointProduce = PointProduce::where('users_id', $users_id)
+                        ->with('user')
                         ->get();
 
         $PointConsume = PointConsume::where('users_id', $users_id)
+                        ->with('transaction')
                         ->get();
 
         $collection = collect([$PointProduce,$PointConsume]);
@@ -121,7 +123,7 @@ class PointController extends Controller
                 ->where('status', 1)
                 ->first();
         if (!$user) {
-            return response()->json('wrong account', 401);
+            return response()->json(null, 400);
         }
 
         if ($user && Hash::check($request->input('password'), $user->password)) {
@@ -137,7 +139,7 @@ class PointController extends Controller
             {
                 $receiver_id = $receiver->id;
             }else{
-                return response()->json('wrong receiver', 400);
+                return response()->json('wrong receiver', 401);//throw new Exception("Error Processing Request", 1);
             }
 
             try {
@@ -159,17 +161,15 @@ class PointController extends Controller
                 $RemainedPoint = $PointConsume + $PointProduce;
                 if($RemainedPoint<0)
                 {
-                    // throw new Exception("Error Processing Request", 1);
-                    return back(); 
+                    throw new Exception("Error Processing Request", 1);
                 }
 
                 DB::commit();
 
             } catch (QueryException $exception) {
                 DB::rollback();
-                // $errors = new Illuminate\Support\MessageBag();
-                // return back()->withErrors(['點數不足']);
-                return response()->json(null, 500);
+
+                return response()->json('no enough point', 500);
             }
         }
 
@@ -224,7 +224,7 @@ class PointController extends Controller
     public function getAllPoint()
     {
         $all_point = PointProduce::whereNotNull('service_plan_daily_id')
-                        ->sum('point');                       
+                        ->sum('point');
         return response()->json($all_point);
     }
 }

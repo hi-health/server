@@ -24,7 +24,9 @@ class PointController extends Controller
 
         $RemainedPoint = $PointConsume + $PointProduce;
 
-        return view('points.detail', compact('users_id','RemainedPoint'));
+        $HiPointRate = 1;
+
+        return view('points.detail', compact('users_id','RemainedPoint','HiPointRate'));
 
     }
 
@@ -76,9 +78,11 @@ class PointController extends Controller
         $RemainedPoint = $PointConsume + $PointProduce;
 
         $PointProduce = PointProduce::where('users_id', $users_id)
+                        ->with('user')
                         ->get();
 
         $PointConsume = PointConsume::where('users_id', $users_id)
+                        ->with('transaction')
                         ->get();
 
         $collection = collect([$PointProduce,$PointConsume]);

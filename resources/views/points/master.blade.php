@@ -10,7 +10,7 @@
 		<style>
 			.w3-row-padding img {margin-bottom: 12px}
 			.point-tab {
-				background-color: #a6a6a6;
+				background-color: #eceff4;
 			}
 			@media only screen and (max-width:620px) {
   				.w3-third {
@@ -31,7 +31,9 @@
 				</a>
 			</div>
 			<div class="w3-third w3-center">
-				<img src="{{asset('ico_HiPoint.png')}}" >
+				<a href="{{ route('point-index', ['users_id' => $users_id]) }}">
+					<img src="{{asset('ico_HiPoint.png')}}" >
+				</a>
 			</div>
 			<div class="w3-third w3-center">
 				<a href="{{ route('point-list-all-transaction', ['users_id' => $users_id]) }}">
@@ -41,13 +43,19 @@
 		</div>
 		<div class="w3-row point-tab w3-center">
 			<div class="w3-third w3-center" style="margin-top: 10px">
-				<a href="{{ route('point-transfer', ['users_id' => $users_id]) }}">交易點數</a>
+				<a href="{{ route('point-transfer', ['users_id' => $users_id]) }}">
+					<img src="{{asset('ico_pay_word.png')}}" >
+				</a>
 			</div>
 			<div class="w3-third w3-center" style="margin-top: 10px">
-				<img src="{{asset('ico_HiPoint_word.png')}}" style="width: 65%">
+				<a href="{{ route('point-index', ['users_id' => $users_id]) }}">
+					<img src="{{asset('ico_HiPoint_word.png')}}" style="width: 65%">
+				</a>
 			</div>
 			<div class="w3-third w3-center" style="margin-top: 10px">
-				<a href="{{ route('point-list-all-transaction', ['users_id' => $users_id]) }}">交易紀錄</a>
+				<a href="{{ route('point-list-all-transaction', ['users_id' => $users_id]) }}">
+					<img src="{{asset('ico_record_word.png')}}" >
+				</a>
 			</div>
 		</div>
 		<div class="w3-row point-tab" style="padding-bottom: 10px">

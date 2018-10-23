@@ -32,24 +32,25 @@ Route::group([
 Route::group([
     'prefix' => 'admin',
     'namespace' => 'Admin',
-    //'middleware' => ['auth:admin'],
+    'middleware' => ['auth:admin,manager'],
 ], function ($router) {
     $router->get('dashboard', 'DashboardController@showDashboardPage')
-        ->name('dashboard');
+        ->name('dashboard')->middleware('auth:admin');
 
     $router->group([
         'prefix' => 'doctors',
     ], function ($router) {
         $router->get('', 'DoctorController@showListPage')
-            ->name('admin-doctors-list');
+            ->name('admin-doctors-list')->middleware('auth:admin');
         $router->get('add', 'DoctorController@showAddForm')
             ->name('admin-doctors-add-form');
         $router->get('{doctor_id}', 'DoctorController@showEditForm')
-            ->name('admin-doctors-edit-form');
+            ->name('admin-doctors-edit-form')->middleware('auth:admin');
     });
 
     $router->group([
         'prefix' => 'members',
+        'middleware' => ['auth:admin'],
     ], function ($router) {
         $router->get('', 'MemberController@showListPage')
             ->name('admin-members-list');
@@ -59,6 +60,7 @@ Route::group([
 
     $router->group([
         'prefix' => 'services',
+        'middleware' => ['auth:admin'],
     ], function ($router) {
         $router->get('', 'ServiceController@showListPage')
             ->name('admin-services-list');
@@ -73,7 +75,8 @@ Route::group([
     });
     
     $router->group([
-        'prefix' => 'videos'
+        'prefix' => 'videos',
+        'middleware' => ['auth:admin'],
     ], function($router) {
         $router->get('', 'VideoController@showListPage')
             ->name('admin-videos-list');
@@ -82,7 +85,8 @@ Route::group([
     });
     
     $router->group([
-        'prefix' => 'settings'
+        'prefix' => 'settings',
+        'middleware' => ['auth:admin'],
     ], function($router) {
         $router->get('', 'SettingController@showSettingsForm')
             ->name('admin-settins-form');

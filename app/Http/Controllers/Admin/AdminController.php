@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Log;
 
 class AdminController extends Controller
 {
@@ -27,14 +28,29 @@ class AdminController extends Controller
             'login_type' => 0,
             'status' => true,
         ])) {
-            error_log('This is some useful information.');
-            error_log(Auth::user() -> role );
-            error_log(Auth::user());
-            if (Auth::user() && Auth::user() -> role == 2){
-                return redirect() ->route('admin-doctors-list');
+            Log::alert('~~~~~');
+            Log::alert(Auth::user());
+            if (Auth::check()){
+                return redirect() ->route('dashboard');
             }
-            return redirect()
-                ->route('dashboard');
+            return redirect()->route('admin-login')->withErrors([
+                                                        'account' => 'Auth::check() false',
+                                                    ]);
+        }
+        elseif (Auth::guard('manager')->attempt([
+            'account' => $account,
+            'password' => $password,
+            'login_type' => -1,
+            'status' => true,
+        ])) {
+            Log::alert('~~~~~');
+            Log::alert(Auth::guard('manager')->user());
+            if (Auth::guard('manager')->check()){
+                return redirect() ->route('admin-doctors-add-form');
+            }
+            return redirect()->route('admin-login')->withErrors([
+                                                        'account' => 'Auth::check() false',
+                                                    ]);
         }
 
         return redirect()->route('admin-login')

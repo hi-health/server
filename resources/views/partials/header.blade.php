@@ -2,12 +2,21 @@
 <header class="main-header">
 
     <!-- Logo -->
-    <a href="{{ route('dashboard') }}" class="logo">
-        <!-- mini logo for sidebar mini 50x50 pixels -->
-        <span class="logo-mini"><b>Hi</b></span>
-        <!-- logo for regular state and mobile devices -->
-        <span class="logo-lg"><b>Hi</b> - Health</span>
-    </a>
+    @if(Auth::guard('admin')->check())
+        <a href="{{ route('dashboard') }}" class="logo">
+            <!-- mini logo for sidebar mini 50x50 pixels -->
+            <span class="logo-mini"><b>Hi</b></span>
+            <!-- logo for regular state and mobile devices -->
+            <span class="logo-lg"><b>Hi</b> - Health</span>
+        </a>
+    @elseif(Auth::guard('manager')->check())
+        <a href="{{ route('admin-doctors-add-form') }}" class="logo">
+            <!-- mini logo for sidebar mini 50x50 pixels -->
+            <span class="logo-mini"><b>Hi</b></span>
+            <!-- logo for regular state and mobile devices -->
+            <span class="logo-lg"><b>Hi</b> - Health</span>
+        </a>
+    @endif
 
     <!-- Header Navbar -->
     <nav class="navbar navbar-static-top" role="navigation">

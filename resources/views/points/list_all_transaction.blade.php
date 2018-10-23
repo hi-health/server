@@ -28,7 +28,7 @@
 					</span>
 					<span  class="w3-bar-item" style="padding-top: 0px; font-size: 13px; color: #3b6279">
 						@if(isset($Transactions->pointconsume_id))
-							{{ $Transactions->pointconsume_id }}
+							{{ $Transactions->transaction->user->account }}
 						@else
 							您好健康APP
 						@endif

@@ -6,19 +6,33 @@
 		</div>
 
 		<div class="w3-row w3-section">
-			<input type="hidden" name="_token" value="{{ csrf_token() }}">
-			<font face="monospace" size="4">密碼 : </font>
-			<input type="password" name="password" class="form-control" placeholder="請輸入您的密碼">
+			
+			<div class="w3-quarter" style="width: 60px">
+				<i class="fa fa-lock" style="font-size:26px; margin-top: 5px"></i>
+			</div>
+			<div class="w3-rest">
+				<input type="hidden" name="_token" value="{{ csrf_token() }}">
+				<input type="password" name="password" class="w3-input w3-border" placeholder="請輸入您的密碼">
+			</div>
+			
 		</div>
 		
 		<div class="w3-row w3-section">
-			<font face="monospace" size="4">轉移給 : </font>
-			<input type="text" name="receiver_account" class="form-control" placeholder="請輸入轉入者之手機號碼">
+			<div class="w3-quarter" style="width: 60px">
+  				<i class="fas fa-phone fa-flip-horizontal" style="font-size:26px; margin-top: 5px"></i>
+			</div>
+			<div class="w3-rest">
+				<input type="text" name="receiver_account" class="w3-input w3-border" placeholder="請輸入轉入者之手機號碼">
+			</div>
 		</div>
 
 		<div class="w3-row w3-section">
-			<font face="monospace" size="4">欲轉移的點數 : </font>
-			<input type="text" name="transferred_point" class="form-control" placeholder="請輸入欲轉出點數" style="ime-mode:disabled" onkeyup="return ValidateNumber(this,value)">
+			<div class="w3-quarter" style="width: 60px">
+  				<i class="fas fa-coins" style="font-size:26px; margin-top: 5px"></i>
+			</div>
+			<div class="w3-rest">
+				<input type="text" name="transferred_point" class="w3-input w3-border" placeholder="請輸入欲轉出點數" style="ime-mode:disabled" onkeyup="return ValidateNumber(this,value)">
+			</div>
 		</div>
 
 		<div class="w3-row w3-section w3-center">

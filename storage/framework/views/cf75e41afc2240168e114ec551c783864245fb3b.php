@@ -29,7 +29,7 @@
             <?php $__empty_1 = true; $__currentLoopData = $service_plans_group; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $service_plan): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <?php
                     $service = $service_plan->service;
-		    if(!$service->members_id) continue;
+		          if(!$service->members_id) continue;
                     $plans = $service_plans->where('services_id', $service->id);
                     $video_count = $plans->sum(function($plan) {
                         return $plan->videos->count();

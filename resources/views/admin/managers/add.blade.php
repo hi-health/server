@@ -2,10 +2,10 @@
 @section('contents')
 <h3>
     <i class="fa fa-plus"></i>
-    員工管理 - 新增員工
+    業務管理 - 新增業務
 </h3>
 <hr />
-<div id="doctor-add">
+<div id="manager-add">
     <div class="form-group">
         <div class="row">
             <div class="col-md-3">
@@ -42,11 +42,7 @@
             </div>
             <div class="error" v-if="messages.status">@{{ messages.status.join(', ') }}</div>
             </div>
-            <div class="col-md-3">
-                <label id="due_at">會員期限</label>
-                <datepicker v-model="form.due_at" format="yyyy-MM-dd" input-class="form-control"></datepicker>
-                <div class="error" v-if="messages.due_at">@{{ messages.due_at.join(', ') }}</div>
-            </div>
+
             {{--<div class="col-md-3">
                 <label>在線</label>
                 <div class="radio">
@@ -95,6 +91,20 @@
     <div class="form-group">
         <div class="row">
             <div class="col-md-3">
+                <label for="name">銀行帳號</label>
+                <input type="text" class="form-control" id="bank_account" v-model="form.bank_account" placeholder="輸入銀行帳號">
+                <div class="error" v-if="messages.bank_account">@{{ messages.bank_account.join(', ') }}</div>
+            </div>
+            <div class="col-md-3">
+                <label for="name">聯絡電話</label>
+                <input type="text" class="form-control" id="phone" v-model="form.phone" placeholder="輸入聯絡電話">
+                <div class="error" v-if="messages.phone">@{{ messages.phone.join(', ') }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-3">
                 <label for="city">縣市</label>
                 <select v-model="form.city_id" id="city" class="form-control" v-on:change="selectCity">
                     @foreach($cities as $city)
@@ -124,11 +134,6 @@
     </div>
     <div class="form-group">
         <div class="row">
-            <div class="col-md-3">
-                <label for="title">職稱</label>
-                <input type="text" class="form-control" id="title" v-model="form.title" placeholder="輸入職稱">
-                <div class="error" v-if="messages.title">@{{ messages.title.join(', ') }}</div>
-            </div>
             {{-- 
             <div class="col-md-3">
                 <label for="treatment_type">服務類型</label>
@@ -140,11 +145,6 @@
                 <div class="error" v-if="messages.treatment_type">@{{ messages.treatment_type.join(', ') }}</div>
             </div>
              --}}
-            <div class="col-md-3">
-                <label for="experience_year">年資</label>
-                <input type="number" class="form-control" id="experience_year" v-model="form.experience_year" placeholder="輸入年資" value="0" />
-                <div class="error" v-if="messages.experience_year">@{{ messages.experience_year.join(', ') }}</div>
-            </div>
             {{-- 
             <div class="col-md-3">
                 <label for="education_bonus">學歷加給</label>
@@ -154,35 +154,8 @@
             --}}
         </div>
     </div>
-    {{--
-    @if(Auth::user())
-    <div class="row">
-        {{Auth::user()}}
-    </div>
-    @endif
-    --}}
     <div class="form-group">
         <div class="row">
-            <div class="col-md-6">
-                <label for="experience">經歷</label>
-                <textarea class="form-control" id="experience" v-model="form.experience" placeholder="輸入經歷，使用逗點分隔" rows="5"></textarea>
-                <div class="error" v-if="messages.experience">@{{ messages.experience.join(', ') }}</div>
-            </div>
-            <div class="col-md-6">
-                <label for="specialty">專長</label>
-                <textarea class="form-control" id="specialty" v-model="form.specialty" placeholder="輸入專長，使用逗點分隔" rows="5"></textarea>
-                <div class="error" v-if="messages.specialty">@{{ messages.specialty.join(', ') }}</div>
-            </div>
-            <div class="col-md-6">
-                <label for="education">學歷</label>
-                <textarea class="form-control" id="education" v-model="form.education" placeholder="輸入學歷，使用逗點分隔" rows="5"></textarea>
-                <div class="error" v-if="messages.education">@{{ messages.education.join(', ') }}</div>
-            </div>
-            <div class="col-md-6">
-                <label for="license">專業認證</label>
-                <textarea class="form-control" id="license" v-model="form.license" placeholder="輸入專業認證，使用逗點分隔" rows="5"></textarea>
-                <div class="error" v-if="messages.license">@{{ messages.license.join(', ') }}</div>
-            </div>
         </div>
     </div>
     <div class="form-group">
@@ -194,7 +167,7 @@
 @push('scripts')
 <script type="text/javascript">
     new Vue({
-        el: '#doctor-add',
+        el: '#manager-add',
         data: {
             districts: [],
             form: {
@@ -204,22 +177,12 @@
                 online: true,
                 name: null,
                 male: 1,
-                due_at: null,
                 birthday: null,
                 avatar: null,
                 city_id: null,
                 district_id: null,
-                longitude: null,
-                latitude: null,
-                title: '',
-                number: null,
-                treatment_type: null,
-                experience_year: null,
-                education_bonus: null,
-                experience: null,
-                specialty: null,
-                education: null,
-                license: null,
+                bank_account:null,
+                phone:null
             },
             messages: {}
         },
@@ -250,18 +213,13 @@
                     form_data.append(key, post_data[key]);
                 }
                 form_data.append('avatar', this.$data.form.avatar);
-                if('{{Auth::user()->login_type == 3}}'){
-                    alert('以manager的權限建立');
-                    form_data.append('managers_id', {{Auth::guard('manager')->user()->id}});
-                }
-
-                axios.post('/api/doctors', form_data, {
+                axios.post('/api/managers', form_data, {
                     headers: {
                         'content-type': 'multipart/form-data'
                     }
                 }).then(function(response) {
                     alert('建立完成');
-                    window.location.href = '{{ route('admin-doctors-list') }}';
+                    window.location.href = '{{ route('admin-managers-list') }}';
                 })
                 .catch(function(error) {
                     var response = error.response;

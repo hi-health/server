@@ -52,6 +52,12 @@
                     </a>
                 </li>
                 <li>
+                    <a href="{{ route('admin-managers-list') }}">
+                        <i class="fa fa-video-camera"></i>
+                        <span>業務管理</span>
+                    </a>
+                </li>
+                <li>
                     <a href="{{ route('admin-settins-form') }}">
                         <i class="fa fa-cog"></i>
                         <span>系統管理</span>

@@ -37,6 +37,7 @@ class Doctor extends Model
         'longitude',
         'latitude',
         'due_at',
+        'managers_id'
     ];
 
     protected $hidden = [

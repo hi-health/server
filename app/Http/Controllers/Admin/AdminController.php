@@ -40,7 +40,7 @@ class AdminController extends Controller
         elseif (Auth::guard('manager')->attempt([
             'account' => $account,
             'password' => $password,
-            'login_type' => -1,
+            'login_type' => 3,
             'status' => true,
         ])) {
             Log::alert('~~~~~');

@@ -62,6 +62,10 @@ class User extends Authenticatable
     {
         return $this->hasOne(Doctor::class, 'users_id', 'id');
     }
+    public function manager()
+    {
+        return $this->hasOne(Manager::class, 'users_id', 'id');
+    }
     
     public function deviceToken()
     {

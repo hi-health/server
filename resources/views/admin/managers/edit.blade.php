@@ -1,30 +1,23 @@
 @extends('layouts.admin')
 @section('contents')
 <h3>
-    <i class="fa fa-plus"></i>
-    員工管理 - 新增員工
+    <i class="fa fa-pencil"></i>
+    業務管理 - 修改業務資料
 </h3>
 <hr />
-<div id="doctor-add">
+<div id="manager-add">
     <div class="form-group">
         <div class="row">
             <div class="col-md-3">
                 <label for="account">帳號</label>
-                <input type="text" class="form-control" id="account" v-model="form.account" placeholder="輸入帳號">
-                <div class="error" v-if="messages.account">@{{ messages.account.join(', ') }}</div>
-            </div>
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="row">
-            <div class="col-md-3">
-                <label for="password">密碼</label>
-                <input type="password" class="form-control" id="password" v-model="form.password" placeholder="輸入密碼">
-                <div class="error" v-if="messages.password">@{{ messages.password.join(', ') }}</div>
+                <div>{{ $user->account }}</div>
             </div>
             <div class="col-md-3">
-                <label for="password-confirmation">再次輸入密碼</label>
-                <input type="password" class="form-control" id="password-confirmation" v-model="form.password_confirmation" placeholder="再次輸入密碼">
+                @if ($user->avatar)
+                    <div>
+                        <img src="{{ $user->avatar }}" width="150" />
+                    </div>
+                @endif
             </div>
         </div>
     </div>
@@ -42,12 +35,7 @@
             </div>
             <div class="error" v-if="messages.status">@{{ messages.status.join(', ') }}</div>
             </div>
-            <div class="col-md-3">
-                <label id="due_at">會員期限</label>
-                <datepicker v-model="form.due_at" format="yyyy-MM-dd" input-class="form-control"></datepicker>
-                <div class="error" v-if="messages.due_at">@{{ messages.due_at.join(', ') }}</div>
-            </div>
-            {{--<div class="col-md-3">
+{{--            <div class="col-md-3">
                 <label>在線</label>
                 <div class="radio">
                     <label>
@@ -95,6 +83,20 @@
     <div class="form-group">
         <div class="row">
             <div class="col-md-3">
+                <label for="name">銀行帳號</label>
+                <input type="text" class="form-control" id="bank_account" v-model="form.bank_account" placeholder="輸入銀行帳號">
+                <div class="error" v-if="messages.bank_account">@{{ messages.bank_account.join(', ') }}</div>
+            </div>
+            <div class="col-md-3">
+                <label for="name">聯絡電話</label>
+                <input type="text" class="form-control" id="phone" v-model="form.phone" placeholder="輸入聯絡電話">
+                <div class="error" v-if="messages.phone">@{{ messages.phone.join(', ') }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-3">
                 <label for="city">縣市</label>
                 <select v-model="form.city_id" id="city" class="form-control" v-on:change="selectCity">
                     @foreach($cities as $city)
@@ -124,11 +126,6 @@
     </div>
     <div class="form-group">
         <div class="row">
-            <div class="col-md-3">
-                <label for="title">職稱</label>
-                <input type="text" class="form-control" id="title" v-model="form.title" placeholder="輸入職稱">
-                <div class="error" v-if="messages.title">@{{ messages.title.join(', ') }}</div>
-            </div>
             {{-- 
             <div class="col-md-3">
                 <label for="treatment_type">服務類型</label>
@@ -140,95 +137,54 @@
                 <div class="error" v-if="messages.treatment_type">@{{ messages.treatment_type.join(', ') }}</div>
             </div>
              --}}
-            <div class="col-md-3">
-                <label for="experience_year">年資</label>
-                <input type="number" class="form-control" id="experience_year" v-model="form.experience_year" placeholder="輸入年資" value="0" />
-                <div class="error" v-if="messages.experience_year">@{{ messages.experience_year.join(', ') }}</div>
-            </div>
             {{-- 
             <div class="col-md-3">
                 <label for="education_bonus">學歷加給</label>
                 <input type="number" class="form-control" id="education_bonus" v-model="form.education_bonus" placeholder="輸入職務加給" value="0" />
                 <div class="error" v-if="messages.education_bonus">@{{ messages.education_bonus.join(', ') }}</div>
             </div>
-            --}}
+             --}}
         </div>
     </div>
-    {{--
-    @if(Auth::user())
-    <div class="row">
-        {{Auth::user()}}
-    </div>
-    @endif
-    --}}
     <div class="form-group">
         <div class="row">
-            <div class="col-md-6">
-                <label for="experience">經歷</label>
-                <textarea class="form-control" id="experience" v-model="form.experience" placeholder="輸入經歷，使用逗點分隔" rows="5"></textarea>
-                <div class="error" v-if="messages.experience">@{{ messages.experience.join(', ') }}</div>
-            </div>
-            <div class="col-md-6">
-                <label for="specialty">專長</label>
-                <textarea class="form-control" id="specialty" v-model="form.specialty" placeholder="輸入專長，使用逗點分隔" rows="5"></textarea>
-                <div class="error" v-if="messages.specialty">@{{ messages.specialty.join(', ') }}</div>
-            </div>
-            <div class="col-md-6">
-                <label for="education">學歷</label>
-                <textarea class="form-control" id="education" v-model="form.education" placeholder="輸入學歷，使用逗點分隔" rows="5"></textarea>
-                <div class="error" v-if="messages.education">@{{ messages.education.join(', ') }}</div>
-            </div>
-            <div class="col-md-6">
-                <label for="license">專業認證</label>
-                <textarea class="form-control" id="license" v-model="form.license" placeholder="輸入專業認證，使用逗點分隔" rows="5"></textarea>
-                <div class="error" v-if="messages.license">@{{ messages.license.join(', ') }}</div>
-            </div>
         </div>
     </div>
     <div class="form-group">
         <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-        <button class="btn btn-primary" v-on:click="submit">建立</button>
+        <button class="btn btn-primary" v-on:click="submit">儲存</button>
     </div>
 </div>
 @endsection
 @push('scripts')
 <script type="text/javascript">
     new Vue({
-        el: '#doctor-add',
+        el: '#manager-add',
         data: {
             districts: [],
             form: {
-                account: null,
-                password: null,
-                status: true,
-                online: true,
-                name: null,
-                male: 1,
-                due_at: null,
-                birthday: null,
-                avatar: null,
-                city_id: null,
-                district_id: null,
-                longitude: null,
-                latitude: null,
-                title: '',
-                number: null,
-                treatment_type: null,
-                experience_year: null,
-                education_bonus: null,
-                experience: null,
-                specialty: null,
-                education: null,
-                license: null,
+                status: {{ $user->status }},
+                online: {{ $user->online }},
+                name: '{{ $user->name }}',
+                male: {{ $user->male }},
+                birthday: '{{ $user->birthday }}',
+                city_id: {{ $user->city_id }},
+                district_id: {{ $user->district_id }},
+                bank_account: {{ $user->manager->bank_account }},
+                phone: '{{ $user->manager->phone }}'
+//                _method: 'PUT'
             },
             messages: {}
+        },
+        created: function() {
+            this.selectCity(null);
         },
         methods: {
             processAvatar: function(event) {
                 this.$data.form.avatar = event.target.files[0];
             },
-            selectCity: function(event) {
-                this.$data.districts = $('[value="' + this.$data.form.city_id + '"]', event.target).data('districts');
+            selectCity: function() {
+                this.$data.districts = $('[value="' + this.$data.form.city_id + '"]', '#city').data('districts');
             },
             submit: function(event) {
                 var self = this;
@@ -249,19 +205,16 @@
                 for (var key in post_data) {
                     form_data.append(key, post_data[key]);
                 }
-                form_data.append('avatar', this.$data.form.avatar);
-                if('{{Auth::user()->login_type == 3}}'){
-                    alert('以manager的權限建立');
-                    form_data.append('managers_id', {{Auth::guard('manager')->user()->id}});
+                if (this.$data.form.avatr) {
+                   form_data.append('avatar', this.$data.form.avatar);
                 }
-
-                axios.post('/api/doctors', form_data, {
+                axios.post('/api/managers/' + '{{ $user->id }}', form_data, {
                     headers: {
                         'content-type': 'multipart/form-data'
                     }
                 }).then(function(response) {
-                    alert('建立完成');
-                    window.location.href = '{{ route('admin-doctors-list') }}';
+                    alert('修改完成');
+                    window.location.href = '{{ route('admin-managers-list') }}';
                 })
                 .catch(function(error) {
                     var response = error.response;

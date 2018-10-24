@@ -5,9 +5,12 @@ namespace App\Http\Controllers\APIs;
 use App\Http\Controllers\Controller;
 use App\Note;
 use Illuminate\Http\Request;
+use App\Traits\MemberUtility;
 
 class NoteController extends Controller
 {
+    use MemberUtility;
+    
     public function getLatest($doctor_id, $member_id)
     {
         $note = Note
@@ -34,8 +37,8 @@ class NoteController extends Controller
             'members_id' => ['required', 'exists:users,id'],
             'note' => ['nullable', 'string'],
         ]);
-        if(!isVIPMember($members_id, $doctors_id))  {
-            return response()->json(invalid member, 404);
+        if(!$this->isVIPMember($members_id, $doctors_id))  {
+            return response()->json('invalid member', 404);
         }
         $note = $request->input('note');
         if (empty($note)) {

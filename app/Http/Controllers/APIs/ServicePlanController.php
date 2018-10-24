@@ -7,6 +7,7 @@ use App\Service;
 use App\ServicePlan;
 use App\ServicePlanVideo;
 use App\Traits\SlackNotify;
+use App\Traits\MemberUtility;
 use Exception;
 use FFMpeg;
 use Illuminate\Http\Request;
@@ -14,7 +15,8 @@ use Log;
 
 class ServicePlanController extends Controller
 {
-    use SlackNotify;
+    use MemberUtility,
+        SlackNotify;
 
     public function getAll(Request $request, $service_id)
     {
@@ -35,8 +37,8 @@ class ServicePlanController extends Controller
             error_log('NOOOOO service');
             return response()->json(null, 404);
         }
-        if(!isVIPMember($service->members_id, $service->doctors_id))  {
-            return response()->json(invalid member, 404);
+        if(!$this->isVIPMember($service->members_id, $service->doctors_id))  {
+            return response()->json('invalid member', 404);
         }
         $service_plan = ServicePlan::where('id', $plan_id)->where('services_id', $service_id)->first();
         if (!$service_plan) {
@@ -65,8 +67,8 @@ class ServicePlanController extends Controller
             error_log('NOOOOO service');
             return response()->json(null, 404);
         }
-        if(!isVIPMember($service->members_id, $service->doctors_id))  {
-            return response()->json(invalid member, 404);
+        if(!$this->isVIPMember($service->members_id, $service->doctors_id))  {
+            return response()->json('invalid member', 404);
         }
         $service_plan = ServicePlan::where('id', $plan_id)->where('services_id', $service_id)->first();
         if (!$service_plan) {
@@ -97,8 +99,8 @@ class ServicePlanController extends Controller
             Log::alert('1');
             return response()->json(null, 404);
         }
-        if(!isVIPMember($service->members_id, $service->doctors_id))  {
-            return response()->json(invalid member, 404);
+        if(!$this->isVIPMember($service->members_id, $service->doctors_id))  {
+            return response()->json('invalid member', 404);
         }
         $service_plan = ServicePlan::where('id', $plan_id)->where('services_id', $service_id)->first();
         if (!$service_plan) {
@@ -151,8 +153,8 @@ class ServicePlanController extends Controller
         if (!$service) {
             return response()->json(null, 404);
         }
-        if(!isVIPMember($service->members_id, $service->doctors_id))  {
-            return response()->json(invalid member, 404);
+        if(!$this->isVIPMember($service->members_id, $service->doctors_id))  {
+            return response()->json('invalid member', 404);
         }
             $plans = $request->input('plans');
             $plans_file = $request->file('plans');
@@ -280,8 +282,8 @@ class ServicePlanController extends Controller
         if (!$service) {
             return response()->json(null, 404);
         }
-        if(!isVIPMember($service->members_id, $service->doctors_id))  {
-            return response()->json(invalid member, 404);
+        if(!$this->isVIPMember($service->members_id, $service->doctors_id))  {
+            return response()->json('invalid member', 404);
         }
         $plans = $request->input('plans');
         $service_plans_delete = collect($plans)->map(function ($plan) {
@@ -319,8 +321,8 @@ class ServicePlanController extends Controller
         if (!$service) {
             return response()->json(null, 404);
         }
-        if(!isVIPMember($service->members_id, $service->doctors_id))  {
-            return response()->json(invalid member, 404);
+        if(!$this->isVIPMember($service->members_id, $service->doctors_id))  {
+            return response()->json('invalid member', 404);
         }
         $videos = $request->input('videos');
         $service_plan_videos_delete = collect($videos)->map(function ($video) {

@@ -5,6 +5,7 @@
 </style>
 @endpush
 @section('contents')
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
 <h3>
     <i class="fa fa-dashboard"></i>
     總覽
@@ -29,7 +30,18 @@
                 <p>成交總金額</p>
             </div>
             <div class="icon">
-                <i class="fa fa-dollar"></i>
+                <i class="fas fa-dollar-sign"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="small-box bg-teal-active">
+            <div class="inner">
+                <h3>${{ number_format($sum_points) }}</h3>
+                <p>總發放點數</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-hospital-symbol"></i>
             </div>
         </div>
     </div>

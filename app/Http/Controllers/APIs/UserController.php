@@ -247,7 +247,7 @@ class UserController extends Controller
     }
 
     public function deleteByAccount(Request $request, $account)
-    {
+    {   
         $user = User
             ::where('account', $account)
             ->first();
@@ -260,7 +260,12 @@ class UserController extends Controller
                 'deleted' => true,
             ]);
         }
-
         return response()->json(null, 400);
+    }
+
+    public function CreateNewPassword()
+    {
+        echo password_hash(" ", PASSWORD_DEFAULT); //在" "內輸入新密碼
+        return 'Copy it to password column';
     }
 }

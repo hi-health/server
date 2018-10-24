@@ -153,6 +153,9 @@ class ServicePlanDailyController extends Controller
             error_log('NOOOOO service');
             return response()->json(null, 404);
         }
+        if(!isVIPMember($service->members_id, $service->doctors_id))  {
+            return response()->json(invalid member, 404);
+        }
         $service_plan = ServicePlan::where('id', $plan_id)->where('services_id', $service_id)->first();
         if (!$service_plan) {
             error_log('NOOOOO service plan');

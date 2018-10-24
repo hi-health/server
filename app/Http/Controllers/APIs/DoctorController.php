@@ -63,12 +63,10 @@ class DoctorController extends Controller
             return response()->json(null, 404);
         }
         $not_read_member_requests = max(0, MemberRequest::count() - MemberRequestDoctor::where('doctors_id', $doctor_id)->count());
-        $not_open_services = Service
-            ::where('doctors_id', $doctor_id)
+        $not_open_services = Service::where('doctors_id', $doctor_id)
             ->whereNull('opened_at')
             ->count();
-        $not_read_members_id = Message
-            ::where('doctors_id', $doctor_id)
+        $not_read_members_id = Message::where('doctors_id', $doctor_id)
             ->whereNull('doctor_readed_at')
             ->where('visible', true)
             ->orderBy('created_at', 'DESC')
@@ -82,8 +80,7 @@ class DoctorController extends Controller
         $not_read_members_vip = $not_read_members_status->where('is_vip', true)->count();
         $not_read_members_normal = $not_read_members_status->where('is_vip', false)->count();
         $not_read_messages = $not_read_members_id->count();
-        $banners = Setting
-            ::where('type', 'banner')
+        $banners = Setting::where('type', 'banner')
             ->get();
 
         return response()->json([
@@ -119,15 +116,13 @@ class DoctorController extends Controller
         Log::alert('22222222');
         $is_paid = $request->get('is_paid', null);
         // 先取得該醫生有服務記錄的病人編號
-        $members_id = Service
-            ::where('doctors_id', $doctor_id)
+        $members_id = Service::where('doctors_id', $doctor_id)
             ->whereNotNull('members_id')
             ->get()
             ->unique('members_id')
             ->pluck('members_id');
         // 從病人編號開始查詢服務記錄
-        $service_model = Service
-            ::with(['member'])
+        $service_model = Service::with(['member'])
             ->where('doctors_id', $doctor_id)
             ->whereIn('members_id', $members_id);
         if ($is_paid === '1') { // 只取得已付款
@@ -189,8 +184,7 @@ class DoctorController extends Controller
         })->values();
         if ($is_paid === '0') {
             // 排除已付款的病人
-            $paid_members_id = Service
-                ::where('doctors_id', $doctor_id)
+            $paid_members_id = Service::where('doctors_id', $doctor_id)
                 ->whereIn('members_id', $members_id)
                 ->where('payment_status', 3)
                 ->get()
@@ -207,8 +201,7 @@ class DoctorController extends Controller
         
         $services->sortBy('service_status');
 
-        $updated = Service
-            ::where('doctors_id', $doctor_id)
+        $updated = Service::where('doctors_id', $doctor_id)
             ->whereNull('opened_at')
             ->update([
                 'opened_at' => Carbon::now(),
@@ -220,24 +213,20 @@ class DoctorController extends Controller
     public function getMembersPaginationWithMemberRequestByDoctor(Request $request, $doctor_id)
     {
         $per_page = $request->get('per_page', 20);
-        $doctor = User
-            ::withDoctor($doctor_id)
+        $doctor = User::withDoctor($doctor_id)
             ->first();
         if (!$doctor) {
             return response()->json(null, 404);
         }
-        $services = Service
-            ::where('doctors_id', $doctor_id)
+        $services = Service::where('doctors_id', $doctor_id)
             ->where('payment_status', 3)
             //->where('paid_at', '>', Carbon::now()->subMonth())
             ->get();
-        $messages = Message
-            ::where('doctors_id', $doctor_id)
+        $messages = Message::where('doctors_id', $doctor_id)
             ->whereNotIn('members_id', $services->unique('members_id')->pluck('members_id'))
             ->where('visible', true)
             ->get();
-        $members = Member
-            ::with(['latestRequest'])
+        $members = Member::with(['latestRequest'])
             ->whereIn('id', $messages->unique('members_id')->pluck('members_id'))
             ->where('login_type', 1)
             ->paginate($per_page);
@@ -265,8 +254,7 @@ class DoctorController extends Controller
 
         // aleiku 2017.08.30 改成用使用者的服務區域去找。
 
-        $doctors = User
-            ::with(['firstMessage' => function ($query) use ($members_id) {
+        $doctors = User::with(['firstMessage' => function ($query) use ($members_id) {
                 $query->where('members_id', $members_id);
             }])
             ->where('city_id', $member->city_id)
@@ -360,8 +348,7 @@ class DoctorController extends Controller
         $city_id = $request->input('city_id');
         $treatment_type = $request->input('treatment_type', null);
         $members_id = $request->input('members_id');
-        $user_model = User
-            ::with([
+        $user_model = User::with([
                 'doctor',
                 'firstMessage' => function ($query) use ($members_id) {
                     $query->where('members_id', $members_id);
@@ -424,6 +411,7 @@ class DoctorController extends Controller
             'specialty' => ['nullable', 'string'],
             'education' => ['nullable', 'string'],
             'license' => ['nullable', 'string'],
+            'managers_id' => ['nullable', 'integer'],
             // 'education_bonus' => ['numeric', 'min:0'],
             // 'longitude' => [], //, 'regex:/^[-]?((((1[0-7][0-9])|([0-9]?[0-9]))\.(\d+))|180(\.0+)?)$/'],
             // 'latitude' => [], // 'regex:/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?)$/'],
@@ -470,8 +458,7 @@ class DoctorController extends Controller
 //            'longitude' => [], //, 'regex:/^[-]?((((1[0-7][0-9])|([0-9]?[0-9]))\.(\d+))|180(\.0+)?)$/'],
 //            'latitude' => [], // 'regex:/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?)$/'],
         ]);
-        $user = User
-            ::with('doctor')
+        $user = User::with('doctor')
             ->where('id', $doctor_id)
             ->first();
         if (!$user) {

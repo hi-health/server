@@ -69,6 +69,14 @@ Route::group([
 });
 
 Route::group([
+    'prefix' => 'managers',
+], function ($router) {
+    $router->post('', 'ManagerController@create');
+    $router->post('{manager_id}', 'ManagerController@update');
+    $router->put('{manager_id}', 'ManagerController@update');
+});
+
+Route::group([
     'prefix' => 'services',
 ], function ($router) {
     $router->get('{service_id}', 'ServiceController@getById');

@@ -83,6 +83,18 @@ Route::group([
         $router->get('service/{service_id}', 'VideoController@showDetailPage')
             ->name('admin-videos-detail');
     });
+
+    $router->group([
+        'prefix' => 'managers',
+        'middleware' => ['auth:admin'],
+    ], function ($router) {
+        $router->get('', 'ManagerController@showListPage')
+            ->name('admin-managers-list');
+        $router->get('add', 'ManagerController@showAddForm')
+            ->name('admin-managers-add-form');
+        $router->get('{manager_id}', 'ManagerController@showEditForm')
+            ->name('admin-managers-edit-form');
+    });
     
     $router->group([
         'prefix' => 'settings',

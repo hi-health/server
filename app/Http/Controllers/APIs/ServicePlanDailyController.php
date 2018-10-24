@@ -329,6 +329,7 @@ class ServicePlanDailyController extends Controller
             return 'false';
         }
         $per_daily_session_finished = count($score);
+
         $per_daily_point_get = $per_daily_session_finished/$session * $per_daily_point_most;
 
         return $per_daily_point_get;

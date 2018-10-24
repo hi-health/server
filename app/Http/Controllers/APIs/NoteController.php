@@ -34,6 +34,9 @@ class NoteController extends Controller
             'members_id' => ['required', 'exists:users,id'],
             'note' => ['nullable', 'string'],
         ]);
+        if(!isVIPMember($members_id, $doctors_id))  {
+            return response()->json(invalid member, 404);
+        }
         $note = $request->input('note');
         if (empty($note)) {
             $note = '';

@@ -7,6 +7,7 @@ use App\Service;
 use App\ServicePlan;
 use App\ServicePlanVideo;
 use App\Traits\SlackNotify;
+use App\Traits\MemberUtility;
 use Exception;
 use FFMpeg;
 use Illuminate\Http\Request;
@@ -14,7 +15,8 @@ use Log;
 
 class ServicePlanController extends Controller
 {
-    use SlackNotify;
+    use MemberUtility,
+        SlackNotify;
 
     public function getAll(Request $request, $service_id)
     {
@@ -34,6 +36,9 @@ class ServicePlanController extends Controller
         if (!$service) {
             error_log('NOOOOO service');
             return response()->json(null, 404);
+        }
+        if(!$this->isVIPMember($service->members_id, $service->doctors_id))  {
+            return response()->json('invalid member', 404);
         }
         $service_plan = ServicePlan::where('id', $plan_id)->where('services_id', $service_id)->first();
         if (!$service_plan) {
@@ -61,6 +66,9 @@ class ServicePlanController extends Controller
         if (!$service) {
             error_log('NOOOOO service');
             return response()->json(null, 404);
+        }
+        if(!$this->isVIPMember($service->members_id, $service->doctors_id))  {
+            return response()->json('invalid member', 404);
         }
         $service_plan = ServicePlan::where('id', $plan_id)->where('services_id', $service_id)->first();
         if (!$service_plan) {
@@ -90,6 +98,9 @@ class ServicePlanController extends Controller
         if (!$service) {
             Log::alert('1');
             return response()->json(null, 404);
+        }
+        if(!$this->isVIPMember($service->members_id, $service->doctors_id))  {
+            return response()->json('invalid member', 404);
         }
         $service_plan = ServicePlan::where('id', $plan_id)->where('services_id', $service_id)->first();
         if (!$service_plan) {
@@ -142,13 +153,16 @@ class ServicePlanController extends Controller
         if (!$service) {
             return response()->json(null, 404);
         }
-        $plans = $request->input('plans');
-        $plans_file = $request->file('plans');
-        $service_plans = collect($plans)->map(function ($item) use ($service, &$plans_file) {
+        if(!$this->isVIPMember($service->members_id, $service->doctors_id))  {
+            return response()->json('invalid member', 404);
+        }
+            $plans = $request->input('plans');
+            $plans_file = $request->file('plans');
+            $service_plans = collect($plans)->map(function ($item) use ($service, &$plans_file) {
             if (isset($item['id'])) {
-                $service_plan = ServicePlan
-                    ::where('id', $item['id'])
-                    ->first();
+                    $service_plan = ServicePlan
+                        ::where('id', $item['id'])
+                        ->first();
                 if ($service_plan) {
                     $service_plan->update([
                         'services_id' => $service->id,
@@ -250,7 +264,8 @@ class ServicePlanController extends Controller
             });
 
             return $service_plan;
-        });
+            });
+        
 
         return response()->json($service_plans);
     }
@@ -266,6 +281,9 @@ class ServicePlanController extends Controller
             ->first();
         if (!$service) {
             return response()->json(null, 404);
+        }
+        if(!$this->isVIPMember($service->members_id, $service->doctors_id))  {
+            return response()->json('invalid member', 404);
         }
         $plans = $request->input('plans');
         $service_plans_delete = collect($plans)->map(function ($plan) {
@@ -302,6 +320,9 @@ class ServicePlanController extends Controller
             ->first();
         if (!$service) {
             return response()->json(null, 404);
+        }
+        if(!$this->isVIPMember($service->members_id, $service->doctors_id))  {
+            return response()->json('invalid member', 404);
         }
         $videos = $request->input('videos');
         $service_plan_videos_delete = collect($videos)->map(function ($video) {

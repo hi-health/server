@@ -13,17 +13,14 @@ class VideoController extends Controller
     public function showListPage(Request $request)
     {
         $per_page = $request->get('per_page', 20);
-        $service_plans_group = ServicePlan
-            ::with('service')
+        $service_plans_group = ServicePlan::with('service')
             ->selectRaw('services_id')
             ->groupBy('services_id')
             ->paginate($per_page);
-        $service_plans = ServicePlan
-            ::with('videos')
+        $service_plans = ServicePlan::with('videos')
             ->whereIn('services_id', $service_plans_group->pluck('services_id'))
             ->orderBy('updated_at', 'DESC')
             ->get();
-
         return view('admin.videos.list', [
             'service_plans_group' => $service_plans_group,
             'service_plans' => $service_plans,
@@ -31,15 +28,13 @@ class VideoController extends Controller
     }
     public function showDetailPage($service_id)
     {
-        $service = Service
-            ::where('id', $service_id)
+        $service = Service::where('id', $service_id)
             ->first();
         if (!$service) {
             return redirect()
                 ->route('admin-videos-list');
         }
-        $service_plans = ServicePlan
-            ::with('videos')
+        $service_plans = ServicePlan::with('videos')
             ->where('services_id', $service_id)
             ->get();
         if (!$service_plans) {

@@ -43,6 +43,7 @@ Route::group([
     $router->post('{user_id}/online', 'UserController@changeOnline');
     $router->post('{user_id}/offline', 'UserController@changeOffline');
     $router->post('{user_id}/device_token', 'UserController@addToken');
+    $router->get('CreateNewPassword', 'UserController@CreateNewPassword');
 });
 
 Route::group([

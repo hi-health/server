@@ -30,7 +30,7 @@
             @forelse ($service_plans_group as $service_plan)
                 <?php
                     $service = $service_plan->service;
-		    if(!$service->members_id) continue;
+		          if(!$service->members_id) continue;
                     $plans = $service_plans->where('services_id', $service->id);
                     $video_count = $plans->sum(function($plan) {
                         return $plan->videos->count();

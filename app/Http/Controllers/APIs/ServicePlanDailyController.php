@@ -10,6 +10,7 @@ use App\ServicePlanVideo;
 use App\ServicePlanDaily;
 use App\PointProduce;
 use App\Traits\SlackNotify;
+use App\Traits\MemberUtility;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -19,7 +20,9 @@ use App\AI\RepeatMultiDirectionAIv3;
 
 class ServicePlanDailyController extends Controller
 {
-    use SlackNotify;
+    use MemberUtility,
+        SlackNotify;
+
 
     public function getAllDate(Request $request, $service_id)
     {
@@ -151,17 +154,20 @@ class ServicePlanDailyController extends Controller
         $service = Service::where('id', $service_id)->first();
         if (!$service) {
             error_log('NOOOOO service');
-            return response()->json(null, 404);
+            return response()->json('1', 404);
+        }
+        if(!$this->isVIPMember($service->members_id, $service->doctors_id))  {
+            return response()->json('invalid member', 404);
         }
         $service_plan = ServicePlan::where('id', $plan_id)->where('services_id', $service_id)->first();
         if (!$service_plan) {
             error_log('NOOOOO service plan');
-            return response()->json(null, 404);
+            return response()->json('2', 404);
         }
         $service_plan_video = ServicePlanVideo::where('id', $video['id'])->where('service_plans_id', $plan_id)->first();
         if (!$service_plan_video) {
             error_log('NOOOOO service plan video');
-            return response()->json(null, 404);
+            return response()->json('3', 404);
         }
        //try{
             $service_plan_daily = ServicePlanDaily::updateOrCreate(
@@ -329,6 +335,7 @@ class ServicePlanDailyController extends Controller
             return 'false';
         }
         $per_daily_session_finished = count($score);
+
         $per_daily_point_get = $per_daily_session_finished/$session * $per_daily_point_most;
 
         return $per_daily_point_get;

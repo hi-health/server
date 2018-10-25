@@ -225,7 +225,6 @@ class PointController extends Controller
     {
         $all_point = PointProduce::whereNotNull('service_plan_daily_id')
                         ->sum('point');
-        echo password_hash("123456", PASSWORD_DEFAULT);
         return response()->json($all_point);
     }
 }

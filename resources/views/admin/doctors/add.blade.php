@@ -250,9 +250,11 @@
                     form_data.append(key, post_data[key]);
                 }
                 form_data.append('avatar', this.$data.form.avatar);
-                if('{{Auth::user()->login_type == 3}}'){
-                    alert('以manager的權限建立');
-                    form_data.append('managers_id', {{Auth::guard('manager')->user()->id}});
+                if('{{Auth::user()}}'){
+                    if('{{Auth::user()->login_type == 3}}'){
+                        alert('以manager的權限建立');
+                        form_data.append('managers_id', {{Auth::user()->id}});
+                    }   
                 }
 
                 axios.post('/api/doctors', form_data, {

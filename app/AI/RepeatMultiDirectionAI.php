@@ -441,12 +441,12 @@ class RepeatMultiDirectionAI extends AI{
                 $pitch_min_ratio = abs(min($this->testData[$i]['pitch'][$j])-$this->findTemplateMin($this->templateData['pitch']))/abs($this->findTemplateMin($this->templateData['pitch']));
 
 
-                $score_1session['acc_x'] += 50 * $acc_x_weight * (2-$acc_x_max_ratio-$acc_x_min_ratio)/2 /$this->test_repeat_time;
-                $score_1session['acc_y'] += 50 * $acc_y_weight * (2-$acc_y_max_ratio-$acc_y_min_ratio)/2 /$this->test_repeat_time;
-                $score_1session['acc_z'] += 50 * $acc_z_weight * (2-$acc_z_max_ratio-$acc_z_min_ratio)/2 /$this->test_repeat_time;
-                $score_1session['roll'] += 50 * $roll_weight * (2-$roll_max_ratio-$roll_min_ratio)/2 /$this->test_repeat_time;
-                $score_1session['yaw'] += 50 * $yaw_weight * (2-$yaw_max_ratio-$yaw_min_ratio)/2 /$this->test_repeat_time;
-                $score_1session['pitch'] += 50 * $pitch_weight * (2-$pitch_max_ratio-$pitch_min_ratio)/2 /$this->test_repeat_time;
+                $score_1session['acc_x'] += 50 * $acc_x_weight * max((2-$acc_x_max_ratio-$acc_x_min_ratio)/2,0.2) /$this->test_repeat_time;
+                $score_1session['acc_y'] += 50 * $acc_y_weight * max((2-$acc_y_max_ratio-$acc_y_min_ratio)/2,0.2) /$this->test_repeat_time;
+                $score_1session['acc_z'] += 50 * $acc_z_weight * max((2-$acc_z_max_ratio-$acc_z_min_ratio)/2,0.2) /$this->test_repeat_time;
+                $score_1session['roll'] += 50 * $roll_weight * max((2-$roll_max_ratio-$roll_min_ratio)/2,0.2) /$this->test_repeat_time;
+                $score_1session['yaw'] += 50 * $yaw_weight * max((2-$yaw_max_ratio-$yaw_min_ratio)/2,0.2) /$this->test_repeat_time;
+                $score_1session['pitch'] += 50 * $pitch_weight * max((2-$pitch_max_ratio-$pitch_min_ratio)/2,0.2) /$this->test_repeat_time;
 
             
                 $score_1session['acce_goodMove'] += 50/2*$isGoodMove[$j]['acce']/$this->test_repeat_time;

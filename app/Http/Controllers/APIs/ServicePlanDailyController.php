@@ -203,6 +203,12 @@ class ServicePlanDailyController extends Controller
                 ]);
 
             //return response($score,200);
+            $arr = [];
+            foreach ($score as $key => $value) {
+                if($value<0){
+                    $score[$key] = 0;
+                }
+            }
             return response()->json(["ai_score"=>$score]);
         //}
         //catch(Exception $exception){
@@ -310,7 +316,7 @@ class ServicePlanDailyController extends Controller
         ];
 
         Log::debug('AI optimization: '.strval($servicePlanVideo_id));
-        $ai = new RepeatMultiDirectionAI($template, $test, $param);
+        $ai = new RepeatMultiDirectionAIv3($template, $test, $param);
         $score = $ai->calScore();
         return $score;
     }

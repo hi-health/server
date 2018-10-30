@@ -57,9 +57,7 @@ abstract class AI
         $t2_1 = ceil($t2/2);
         $t2_2 = $t2 - $t2_1;
         $max_index_arr = [];
-        Log::alert(strval($t1));
-        Log::alert(strval($t2));
-        Log::alert(strval(count($arr)));
+
         for ($i=1; $i < $this->test_repeat_time; $i++) { 
             $max_index_arr[] = array_search(max(array_slice($arr, $i*$t1-$t2_1+1, $t2)), array_slice($arr, $i*$t1-$t2_1+1, $t2)) + $i*$t1-$t2_1+1;
         }
@@ -104,6 +102,9 @@ abstract class AI
                 $testData[$key1]['rot_y'][$key2] = round(floatval($sample[7]),5);
                 $testData[$key1]['rot_z'][$key2] = round(floatval($sample[8]),5);
             }
+            Log::alert(strval($t1));
+            Log::alert(strval($t2));
+            Log::alert(strval(count($this->autocorrelation($testData[$key1]['acc_x']))));
             $testData_eachRepeat[$key1]['acc_x'] = 
                 $this->seperateEachRepeat(  $testData[$key1]['acc_x'], 
                                             $this->findMaxIndexOfAutocorrelation(
@@ -159,8 +160,19 @@ abstract class AI
                                                 $this->autocorrelation($testData[$key1]['rot_z']), $t1, $t2
                                             )
                 );
-            
         }
+        Log::debug('test max acc_x: '.max($testData_eachRepeat[0]['acc_x'][0]));
+        Log::debug('test min acc_x: '.min($testData_eachRepeat[0]['acc_x'][0]));
+        Log::debug('test max acc_y: '.max($testData_eachRepeat[0]['acc_y'][0]));
+        Log::debug('test min acc_y: '.min($testData_eachRepeat[0]['acc_y'][0]));
+        Log::debug('test max acc_z: '.max($testData_eachRepeat[0]['acc_z'][0]));
+        Log::debug('test min acc_z: '.min($testData_eachRepeat[0]['acc_z'][0]));
+        Log::debug('test max roll: '.max($testData_eachRepeat[0]['roll'][0]));
+        Log::debug('test min roll: '.min($testData_eachRepeat[0]['roll'][0]));
+        Log::debug('test max yaw: '.max($testData_eachRepeat[0]['yaw'][0]));
+        Log::debug('test min yaw: '.min($testData_eachRepeat[0]['yaw'][0]));
+        Log::debug('test max pitch: '.max($testData_eachRepeat[0]['pitch'][0]));
+        Log::debug('test min pitch: '.min($testData_eachRepeat[0]['pitch'][0]));
         return $testData_eachRepeat;
     }
 
@@ -181,6 +193,18 @@ abstract class AI
                 $templateData['rot_z'][$key1][$key2] = round(floatval($sample[8]),5);
             }
         }
+        Log::debug('template max acc_x: '.max($templateData['acc_x'][0]));
+        Log::debug('template min acc_x: '.min($templateData['acc_x'][0]));
+        Log::debug('template max acc_y: '.max($templateData['acc_y'][0]));
+        Log::debug('template min acc_y: '.min($templateData['acc_y'][0]));
+        Log::debug('template max acc_z: '.max($templateData['acc_z'][0]));
+        Log::debug('template min acc_z: '.min($templateData['acc_z'][0]));
+        Log::debug('template max roll: '.max($templateData['roll'][0]));
+        Log::debug('template min roll: '.min($templateData['roll'][0]));
+        Log::debug('template max yaw: '.max($templateData['yaw'][0]));
+        Log::debug('template min yaw: '.min($templateData['yaw'][0]));
+        Log::debug('template max pitch: '.max($templateData['pitch'][0]));
+        Log::debug('template min pitch: '.min($templateData['pitch'][0]));
         return $templateData;
     }
 

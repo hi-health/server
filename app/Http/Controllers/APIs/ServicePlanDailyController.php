@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Mail;
 use Log;
 use App\AI\RepeatMultiDirectionAI;
 use App\AI\RepeatMultiDirectionAIv3;
+use App\AI\RepeatMultiDirectionAIv3_1;
 
 class ServicePlanDailyController extends Controller
 {
@@ -316,7 +317,7 @@ class ServicePlanDailyController extends Controller
         ];
 
         Log::debug('AI optimization: '.strval($servicePlanVideo_id));
-        $ai = new RepeatMultiDirectionAIv3($template, $test, $param);
+        $ai = new RepeatMultiDirectionAIv3_1($template, $test, $param);
         $score = $ai->calScore();
         return $score;
     }

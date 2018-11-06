@@ -95,12 +95,14 @@ abstract class AI
                 $testData[$key1]['acc_x'][$key2] = round(floatval($sample[0]),5);
                 $testData[$key1]['acc_y'][$key2] = round(floatval($sample[1]),5);
                 $testData[$key1]['acc_z'][$key2] = round(floatval($sample[2]),5);
+                $testData[$key1]['acc'][$key2] = round(floatval(sqrt($sample[0]**2 + $sample[1]**2 + $sample[2]**2)),5);
                 $testData[$key1]['roll'][$key2] = round(floatval($sample[3]),5);
                 $testData[$key1]['yaw'][$key2] = round(floatval($sample[4]),5);
                 $testData[$key1]['pitch'][$key2] = round(floatval($sample[5]),5);
-                $testData[$key1]['rot_x'][$key2] = round(floatval($sample[6]),5);
-                $testData[$key1]['rot_y'][$key2] = round(floatval($sample[7]),5);
-                $testData[$key1]['rot_z'][$key2] = round(floatval($sample[8]),5);
+                $testData[$key1]['gyro'][$key2] = round(floatval(sqrt($sample[3]**2 + $sample[4]**2 + $sample[5]**2)),5);
+                //$testData[$key1]['rot_x'][$key2] = round(floatval($sample[6]),5);
+                //$testData[$key1]['rot_y'][$key2] = round(floatval($sample[7]),5);
+                //$testData[$key1]['rot_z'][$key2] = round(floatval($sample[8]),5);
             }
             Log::alert(strval($t1));
             Log::alert(strval($t2));
@@ -124,6 +126,12 @@ abstract class AI
                                                 $this->autocorrelation($testData[$key1]['acc_z']), $t1, $t2
                                             )
                 );
+            $testData_eachRepeat[$key1]['acc'] = 
+                $this->seperateEachRepeat(  $testData[$key1]['acc'], 
+                                            $this->findMaxIndexOfAutocorrelation(
+                                                $this->autocorrelation($testData[$key1]['acc']), $t1, $t2
+                                            )
+                );
             $testData_eachRepeat[$key1]['roll'] = 
                 $this->seperateEachRepeat(  $testData[$key1]['roll'], 
                                             $this->findMaxIndexOfAutocorrelation(
@@ -140,6 +148,12 @@ abstract class AI
                 $this->seperateEachRepeat(  $testData[$key1]['pitch'], 
                                             $this->findMaxIndexOfAutocorrelation(
                                                 $this->autocorrelation($testData[$key1]['pitch']), $t1, $t2
+                                            )
+                );
+            $testData_eachRepeat[$key1]['gyro'] = 
+                $this->seperateEachRepeat(  $testData[$key1]['gyro'], 
+                                            $this->findMaxIndexOfAutocorrelation(
+                                                $this->autocorrelation($testData[$key1]['gyro']), $t1, $t2
                                             )
                 );
             $testData_eachRepeat[$key1]['rot_x'] = 
@@ -161,6 +175,7 @@ abstract class AI
                                             )
                 );
         }
+        /*
         Log::debug('test max acc_x: '.max($testData_eachRepeat[0]['acc_x'][0]));
         Log::debug('test min acc_x: '.min($testData_eachRepeat[0]['acc_x'][0]));
         Log::debug('test max acc_y: '.max($testData_eachRepeat[0]['acc_y'][0]));
@@ -173,6 +188,7 @@ abstract class AI
         Log::debug('test min yaw: '.min($testData_eachRepeat[0]['yaw'][0]));
         Log::debug('test max pitch: '.max($testData_eachRepeat[0]['pitch'][0]));
         Log::debug('test min pitch: '.min($testData_eachRepeat[0]['pitch'][0]));
+        */
         return $testData_eachRepeat;
     }
 
@@ -185,14 +201,17 @@ abstract class AI
                 $templateData['acc_x'][$key1][$key2] = round(floatval($sample[0]),5);
                 $templateData['acc_y'][$key1][$key2] = round(floatval($sample[1]),5);
                 $templateData['acc_z'][$key1][$key2] = round(floatval($sample[2]),5);
+                $templateData['acc'][$key2] = round(floatval(sqrt($sample[0]**2 + $sample[1]**2 + $sample[2]**2)),5);
                 $templateData['roll'][$key1][$key2] = round(floatval($sample[3]),5);
                 $templateData['yaw'][$key1][$key2] = round(floatval($sample[4]),5);
                 $templateData['pitch'][$key1][$key2] = round(floatval($sample[5]),5);
-                $templateData['rot_x'][$key1][$key2] = round(floatval($sample[6]),5);
-                $templateData['rot_y'][$key1][$key2] = round(floatval($sample[7]),5);
-                $templateData['rot_z'][$key1][$key2] = round(floatval($sample[8]),5);
+                $templateData['gyro'][$key2] = round(floatval(sqrt($sample[3]**2 + $sample[4]**2 + $sample[5]**2)),5);
+                //$templateData['rot_x'][$key1][$key2] = round(floatval($sample[6]),5);
+                //$templateData['rot_y'][$key1][$key2] = round(floatval($sample[7]),5);
+                //$templateData['rot_z'][$key1][$key2] = round(floatval($sample[8]),5);
             }
         }
+        /*
         Log::debug('template max acc_x: '.max($templateData['acc_x'][0]));
         Log::debug('template min acc_x: '.min($templateData['acc_x'][0]));
         Log::debug('template max acc_y: '.max($templateData['acc_y'][0]));
@@ -205,12 +224,36 @@ abstract class AI
         Log::debug('template min yaw: '.min($templateData['yaw'][0]));
         Log::debug('template max pitch: '.max($templateData['pitch'][0]));
         Log::debug('template min pitch: '.min($templateData['pitch'][0]));
+        */
         return $templateData;
     }
 
     protected function exception($message)
     {
         throw new Exception($message);
+    }
+
+    protected function stats_standard_deviation(array $a, $sample = false) 
+    {
+        $n = count($a);
+        if ($n === 0) {
+            //The array has zero element
+            return 0;
+        }
+        if ($sample && $n === 1) {
+            //The array has only 1 element
+            return 0;
+        }
+        $mean = array_sum($a) / $n;
+        $carry = 0.0;
+        foreach ($a as $val) {
+            $d = ((double) $val) - $mean;
+            $carry += $d * $d;
+        };
+        if ($sample) {
+           --$n;
+        }
+        return sqrt($carry / $n);
     }
 }
 

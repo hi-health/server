@@ -156,6 +156,7 @@ abstract class AI
                                                 $this->autocorrelation($testData[$key1]['gyro']), $t1, $t2
                                             )
                 );
+            /*
             $testData_eachRepeat[$key1]['rot_x'] = 
                 $this->seperateEachRepeat(  $testData[$key1]['rot_x'], 
                                             $this->findMaxIndexOfAutocorrelation(
@@ -174,6 +175,7 @@ abstract class AI
                                                 $this->autocorrelation($testData[$key1]['rot_z']), $t1, $t2
                                             )
                 );
+            */
         }
         /*
         Log::debug('test max acc_x: '.max($testData_eachRepeat[0]['acc_x'][0]));

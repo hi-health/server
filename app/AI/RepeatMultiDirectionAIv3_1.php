@@ -65,7 +65,7 @@ class RepeatMultiDirectionAIv3_1 extends AI{
 								'pitch' => $filler,
 							];
 		
-		foreach (['pos','neg']] as $sign_key) {
+		foreach (['pos','neg'] as $sign_key) {
 			for ($i=0; $i < $this->template_repeat_time; $i++) { 
 				//acce
 				if(	$sum_6axis[$i]['acc_x'][$sign_key] >= $sum_6axis[$i]['acc_y'][$sign_key]*$this->major_threshold &&
@@ -197,7 +197,7 @@ class RepeatMultiDirectionAIv3_1 extends AI{
 										]
 									);
 
-		foreach (['pos','neg']] as $sign_key) {
+		foreach (['pos','neg'] as $sign_key) {
 			for ($i=0; $i < $this->test_repeat_time; $i++) { 
 				//acce
 				if( $sum_6axis[$i]['acc_x'][$sign_key] >= $sum_6axis[$i]['acc_y'][$sign_key]*$this->major_threshold &&
@@ -491,7 +491,7 @@ class RepeatMultiDirectionAIv3_1 extends AI{
 		$majorLevel_sum = [
 			'acce' => ['pos'=>0, 'neg'=>0],
 			'gyro' => ['pos'=>0, 'neg'=>0],
-		]
+		];
 		$majorLevel_sum['acce']['pos'] = $majorLevel['acc_x']['pos'] + $majorLevel['acc_y']['pos'] + $majorLevel['acc_z']['pos'];
 		$majorLevel_sum['gyro']['pos'] = $majorLevel['roll']['pos'] + $majorLevel['yaw']['pos'] + $majorLevel['pitch']['pos'];
 		$majorLevel_sum['acce']['neg'] = $majorLevel['acc_x']['neg'] + $majorLevel['acc_y']['neg'] + $majorLevel['acc_z']['neg'];
@@ -711,7 +711,7 @@ class RepeatMultiDirectionAIv3_1 extends AI{
 		$majorLevel_sum = [
 			'acce' => ['pos'=>0, 'neg'=>0],
 			'gyro' => ['pos'=>0, 'neg'=>0],
-		]
+		];
 		$majorLevel_sum['acce']['pos'] = $majorLevel['acc_x']['pos'] + $majorLevel['acc_y']['pos'] + $majorLevel['acc_z']['pos'];
 		$majorLevel_sum['gyro']['pos'] = $majorLevel['roll']['pos'] + $majorLevel['yaw']['pos'] + $majorLevel['pitch']['pos'];
 		$majorLevel_sum['acce']['neg'] = $majorLevel['acc_x']['neg'] + $majorLevel['acc_y']['neg'] + $majorLevel['acc_z']['neg'];

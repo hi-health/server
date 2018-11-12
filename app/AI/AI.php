@@ -70,11 +70,11 @@ abstract class AI
     protected function seperateEachRepeat($arr, $index)
     {
         $arr_seperated = [];
-        $arr_seperated[] = array_slice($arr,0,$index[0]);
+        $arr_seperated[] = $this->cutOffArr(array_slice($arr,0,$index[0]),-0.1,0.1);
         for ($i=1; $i < count($index); $i++) { 
-            $arr_seperated[] = array_slice($arr,$index[$i-1],$index[$i]-$index[$i-1]);
+            $arr_seperated[] = $this->cutOffArr(array_slice($arr,$index[$i-1],$index[$i]-$index[$i-1]),-0.1,0.1);
         }
-        $arr_seperated[] = array_slice($arr,$index[count($index)-1]);
+        $arr_seperated[] = $this->cutOffArr(array_slice($arr,$index[count($index)-1]),-0.1,0.1);
 
         return $arr_seperated;
     }
@@ -203,15 +203,23 @@ abstract class AI
                 $templateData['acc_x'][$key1][$key2] = round(floatval($sample[0]),5);
                 $templateData['acc_y'][$key1][$key2] = round(floatval($sample[1]),5);
                 $templateData['acc_z'][$key1][$key2] = round(floatval($sample[2]),5);
-                $templateData['acc'][$key2] = round(floatval(sqrt($sample[0]**2 + $sample[1]**2 + $sample[2]**2)),5);
+                $templateData['acc'][$key1][$key2] = round(floatval(sqrt($sample[0]**2 + $sample[1]**2 + $sample[2]**2)),5);
                 $templateData['roll'][$key1][$key2] = round(floatval($sample[3]),5);
                 $templateData['yaw'][$key1][$key2] = round(floatval($sample[4]),5);
                 $templateData['pitch'][$key1][$key2] = round(floatval($sample[5]),5);
-                $templateData['gyro'][$key2] = round(floatval(sqrt($sample[3]**2 + $sample[4]**2 + $sample[5]**2)),5);
+                $templateData['gyro'][$key1][$key2] = round(floatval(sqrt($sample[3]**2 + $sample[4]**2 + $sample[5]**2)),5);
                 //$templateData['rot_x'][$key1][$key2] = round(floatval($sample[6]),5);
                 //$templateData['rot_y'][$key1][$key2] = round(floatval($sample[7]),5);
                 //$templateData['rot_z'][$key1][$key2] = round(floatval($sample[8]),5);
             }
+            $templateData['acc_x'][$key1] = $this->cutOffArr($templateData['acc_x'][$key1],-0.1,0.1);
+            $templateData['acc_y'][$key1] = $this->cutOffArr($templateData['acc_y'][$key1],-0.1,0.1);
+            $templateData['acc_z'][$key1] = $this->cutOffArr($templateData['acc_z'][$key1],-0.1,0.1);
+            $templateData['acc'][$key1] = $this->cutOffArr($templateData['acc'][$key1],-0.1,0.1);
+            $templateData['roll'][$key1] = $this->cutOffArr($templateData['roll'][$key1],-0.1,0.1);
+            $templateData['yaw'][$key1] = $this->cutOffArr($templateData['yaw'][$key1],-0.1,0.1);
+            $templateData['pitch'][$key1] = $this->cutOffArr($templateData['pitch'][$key1],-0.1,0.1);
+            $templateData['gyro'][$key1] = $this->cutOffArr($templateData['gyro'][$key1],-0.1,0.1);
         }
         /*
         Log::debug('template max acc_x: '.max($templateData['acc_x'][0]));
@@ -256,6 +264,28 @@ abstract class AI
            --$n;
         }
         return sqrt($carry / $n);
+    }
+
+    protected function cutOffArr(array $a , $min, $max){
+        $tmp = [];
+        foreach ($a as $key => $value) {
+            if($value>$max || $value<$min){
+                $tmp[] = $value;
+            }
+            else{
+                $tmp[] = 0;
+            }
+        }
+        return $tmp;
+    }
+
+    protected function cutOffNum($n , $min, $max){
+        if($n>$max || $n<$min){
+            return $n;
+        }
+        else{
+            return 0;
+        }
     }
 }
 

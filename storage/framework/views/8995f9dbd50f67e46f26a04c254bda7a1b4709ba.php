@@ -16,6 +16,7 @@
           <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->
         <!-- <link href="table.css" rel="stylesheet"> -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         <style type="text/css">
             @import  url(http://fonts.googleapis.com/earlyaccess/notosanstc.css);
             body {
@@ -77,7 +78,7 @@
             .rwd-table td {
                 display: block; }
             .rwd-table td[rowspan="3"] {
-                font-size: 18px;
+                font-size: 13px;
                 font-weight: 400;
                 background: #D3D3D3;
                 margin: 0;
@@ -88,7 +89,7 @@
             .rwd-table td[data-th="time"] {
                 margin: 0;
                 padding: 5px;
-                font-size: 18px;
+                font-size: 13px;
                 font-weight: 400;
                 background: #E3E3E3; }
             @media  only screen and (min-width: 768px) {
@@ -105,7 +106,7 @@
             .rwd-table td:before {
                 content: attr(data-th);
                 font-weight: bold;
-                font-size: 19px;
+                font-size: 13px;
                 border-bottom: 1px solid #CCC;
                 display: block;
                 width: 100%;
@@ -132,10 +133,11 @@
 
             .rwd-table th, .rwd-table td:before {
                 color: #333333;
-                font-weight: 400; }
+                font-weight: 300;
+                font-size: 13px; }
 
             .rwd-table th {
-                color: #FFF; }
+                color: #333333; }
 
             @media  only screen and (min-width: 768px) {
                 .rwd-table th:first-child,
@@ -184,60 +186,52 @@
                 }
             }
         ?>
+
         <div class="container">
             <h1>評分紀錄</h1>
-            <p class="hidden">開始日期：<?php echo e($first_day->scored_at); ?></p>
-            <table class="rwd-table">
-                <tr>
-                    <th colspan="2">開始日期：<?php echo e($first_day->scored_at); ?></th>
-                    <th>第一日</th>
-                    <th>第二日</th>
-                    <th>第三日</th>
-                    <th>第四日</th>
-                    <th>第五日</th>
-                    <th>第六日</th>
-                    <th>第七日</th>
-                </tr>
-                <?php for($i = 1; $i <= ceil($max_days / 7); $i++): ?>
-                    <?php $__currentLoopData = $plans; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row => $plan): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <tr>
-                            <?php if($row === 0): ?>
-                                <td rowspan="<?php echo e($plans->count()); ?>" data-th="">
-                                    第<?php echo e(toChinessNumber($i)); ?>週
-                                </td>
-                            <?php endif; ?>
-                            <td data-th="time">
-                                <?php echo e($plan->started_at); ?> ~ <?php echo e($plan->stopped_at); ?>
 
-                            </td>
-                            <?php $__currentLoopData = $plan->daily->forPage($i, 7); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $day): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <td data-th="第一日">
-                                    <div class="aspect-fill video_bmp" style="background: url('<?php echo e($day->video->thumbnail_url); ?>');"></div>
-                                    <div>
+            <?php $__currentLoopData = $service->plans; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $plan): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+
+            <h2>課表時間：<?php echo e($plan->started_at); ?> ~ <?php echo e($plan->stopped_at); ?></h2> 
+
+                <?php $__currentLoopData = $plan->videos()->withTrashed()->get(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $video): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <h3 style="text-align:left">影片名稱：<?php echo e($video->description); ?></h3>
+                    <img src="<?php echo e(asset($video->thumbnail)); ?>" width="100"><br><br>
+                    <table class="table table-sm" style="width:400px">
+                        <thead bgcolor="#84c1ff">
+                            <tr>
+                                <th scope="col">執行日期</th>
+                                <th scope="col">平均分數</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <?php
+                                $dailys = $service->daily()->where('service_plan_videos_id', $video->id)->orderBy('scored_at', 'ASC')->get()
+                            ?>
+
+                            <?php $__currentLoopData = $dailys; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $daily): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <tr>
+                                    <td><?php echo e($daily->created_at->format('Y-m-d')); ?></td>
+                                    <td>
                                         <?php
-                                        try{
-                                            $score = json_decode($day->score);
-                                            $average_score = array_sum($score) / $day->video->session;
+                                            $score = json_decode($daily->score);
+                                            $average_score = array_sum($score) / $video->session;
                                             echo $average_score;
-                                        } catch(Exception $exception){
-                                            echo '無分數';
-                                        }
                                         ?>
-                                    </div>
-                                </td>
+                                    </td>
+                                </tr>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                            <?php for($j = 0; $j < (7 - $plan->daily->forPage($i, 7)->count()); $j++): ?>
-                                <td></td>
-                            <?php endfor; ?>
-                        </tr>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                <?php endfor; ?>
-            </table>
-        </div>
 
+                        </tbody>
+                    </table>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+        </div>
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-        <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
+        <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>  -->
         <!-- Include all compiled plugins (below), or include individual files as needed -->
-        <!--<script src="js/bootstrap.min.js"></script> -->
+        <!-- <script src="js/bootstrap.min.js"></script>  -->
     </body>
 </html>

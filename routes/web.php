@@ -15,6 +15,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// 使用網頁看 export_by_id.blade.php(匯出課表的view)
+// Route::group([
+//     'namespace' => 'Admin',
+// ], function ($router) {
+//     $router->get('email/{service_id}', 'ServiceController@email');
+// });        
+
 Route::get('/shops.html', 'APIs\ParameterController@getClinic');
 
 Route::group([

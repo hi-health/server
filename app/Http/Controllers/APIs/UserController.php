@@ -263,9 +263,29 @@ class UserController extends Controller
         return response()->json(null, 400);
     }
 
+    public function ResetPassword(Request $request, $user_id)
+    {
+        $this->validate($request, [
+            'old_password' => ['required', 'string'],
+            'new_password' => ['required', 'string'],
+        ]);
+
+        $user = User::where('id', $user_id)
+                ->first();
+
+        if ($user && password_verify($request->input('old_password'), $user->password)) {
+            $user->password = $request->input('new_password');
+            $user->save();
+            return response()->json($user->password);
+        } else {
+            return 'failed';
+        }
+    }
+
     public function CreateNewPassword()
     {
-        echo password_hash(" ", PASSWORD_DEFAULT); //在" "內輸入新密碼
+        echo password_hash("123456", PASSWORD_DEFAULT); //在" "內輸入新密碼
+        echo '<br><br>';
         return 'Copy it to password column';
     }
 }

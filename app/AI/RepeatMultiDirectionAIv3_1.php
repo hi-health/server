@@ -448,6 +448,12 @@ class RepeatMultiDirectionAIv3_1 extends AI{
 										'gyro' => ['pos'=>0, 'neg'=>0],
 									]
 								);
+		$printGoodMove = array_fill(   0,
+									$this->test_repeat_time,
+									[   'acce' => ['pos'=>[0,0,0], 'neg'=>[0,0,0]],
+										'gyro' => ['pos'=>[0,0,0], 'neg'=>[0,0,0]],
+									]
+								);
 		/*
 		for ($i=0; $i < $this->test_repeat_time; $i++) { //test
 			$peakScale_1test_6axis = [
@@ -527,25 +533,31 @@ class RepeatMultiDirectionAIv3_1 extends AI{
 				//compare
 					//$test_1repeat[$axis_key][$sign_key]
 					//$feature_template[$axis_key][$sign_key]
-				$threshold = 0.5;
+				$threshold = 0.7;
 
 				if(checkGoopMove($feature_template['acc_x'][$sign_key], $test_1repeat['acc_x'][$sign_key], $threshold)){
 					$isGoodMove[$key]['acce'][$sign_key] += 0.34;
+					$isGoodMove[$key]['acce'][$sign_key][0] = 1;
 				}
 				if(checkGoopMove($feature_template['acc_y'][$sign_key], $test_1repeat['acc_y'][$sign_key], $threshold)){
 					$isGoodMove[$key]['acce'][$sign_key] += 0.34;
+					$isGoodMove[$key]['acce'][$sign_key][1] = 1;
 				}
 				if(checkGoopMove($feature_template['acc_z'][$sign_key], $test_1repeat['acc_z'][$sign_key], $threshold)){
 					$isGoodMove[$key]['acce'][$sign_key] += 0.34;
+					$isGoodMove[$key]['acce'][$sign_key][2] = 1;
 				}
 				if(checkGoopMove($feature_template['roll'][$sign_key], $test_1repeat['roll'][$sign_key], $threshold)){
 					$isGoodMove[$key]['gyro'][$sign_key] += 0.34;
+					$isGoodMove[$key]['gyro'][$sign_key][0] = 1;
 				}
 				if(checkGoopMove($feature_template['yaw'][$sign_key], $test_1repeat['yaw'][$sign_key], $threshold)){
 					$isGoodMove[$key]['gyro'][$sign_key] += 0.34;
+					$isGoodMove[$key]['gyro'][$sign_key][1] = 1;
 				}
 				if(checkGoopMove($feature_template['pitch'][$sign_key], $test_1repeat['pitch'][$sign_key], $threshold)){
 					$isGoodMove[$key]['gyro'][$sign_key] += 0.34;
+					$isGoodMove[$key]['gyro'][$sign_key][2] = 1;
 				}
 				/*
 				if($feature_template['acc_x'][$sign_key]['avg']!=0 && $feature_template['acc_x'][$sign_key]['std']!=0){
@@ -1080,9 +1092,14 @@ class RepeatMultiDirectionAIv3_1 extends AI{
 
 			for ($j=0; $j < $this->test_repeat_time; $j++) { 
 				Log::debug('AI session: '.strval($i).' repeat: '.$j.'  $isGoodMove["acce"]["pos"]: '.strval($isGoodMove[$j]["acce"]["pos"]));
+				//$isGoodMove[$key]['acce'][$sign_key][0]
+				Log::debug('												   : '.strval($isGoodMove[$j]['acce']['pos'][0]).' '.strval($isGoodMove[$j]['acce']['pos'][1]).' '.strval($isGoodMove[$j]['acce']['pos'][2]));
 				Log::debug('AI session: '.strval($i).' repeat: '.$j.'  $isGoodMove["acce"]["neg"]: '.strval($isGoodMove[$j]["acce"]["neg"]));
+				Log::debug('												   : '.strval($isGoodMove[$j]['acce']['neg'][0]).' '.strval($isGoodMove[$j]['acce']['neg'][1]).' '.strval($isGoodMove[$j]['acce']['neg'][2]));
 				Log::debug('AI session: '.strval($i).' repeat: '.$j.'  $isGoodMove["gyro"]["pos"]: '.strval($isGoodMove[$j]["gyro"]["pos"]));
+				Log::debug('												   : '.strval($isGoodMove[$j]['gyro']['pos'][0]).' '.strval($isGoodMove[$j]['gyro']['pos'][1]).' '.strval($isGoodMove[$j]['gyro']['pos'][2]));
 				Log::debug('AI session: '.strval($i).' repeat: '.$j.'  $isGoodMove["gyro"]["neg"]: '.strval($isGoodMove[$j]["gyro"]["neg"]));
+				Log::debug('												   : '.strval($isGoodMove[$j]['gyro']['neg'][0]).' '.strval($isGoodMove[$j]['gyro']['neg'][1]).' '.strval($isGoodMove[$j]['gyro']['neg'][2]));
 			}
 			Log::debug('');
 

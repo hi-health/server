@@ -45,8 +45,7 @@ class MemberController extends Controller
             return response()->json(null, 404);
         }
         
-        $services = Service
-            :: with('doctor')
+        $services = Service:: with('doctor')
             -> where('members_id', $member_id)
             -> where('payment_status', 3)
             -> orderBy('paid_at', 'DESC')
@@ -54,8 +53,9 @@ class MemberController extends Controller
         $member_doctors = $services->unique('doctors_id')
             ->pluck('doctor');
         $last_service_id = !$services->isEmpty() ? $services->first()->id : null;
-        $banners = Setting
-            ::where('type', 'banner')
+        $last_leave_days = !$services->isEmpty() ? $services->first()->leave_days : null;
+
+        $banners = Setting::where('type', 'banner')
             ->get();
 
         $PointProduce = PointProduce::where('users_id', $member_id)->sum('point');
@@ -75,6 +75,7 @@ class MemberController extends Controller
             }),
             'doctors' => $member_doctors,
             'last_service_id' => $last_service_id,
+            'last_leave_days' => $last_leave_days,
             'online_status' => $user->online,
             'points' => $RemainedPoint
         ]);
@@ -88,8 +89,7 @@ class MemberController extends Controller
         if (!$member) {
             return response()->json(null, 404);
         }
-        $requests = MemberRequest
-            ::where('members_id', $member_id)
+        $requests = MemberRequest::where('members_id', $member_id)
             ->get();
         return response()->json($requests);
     }

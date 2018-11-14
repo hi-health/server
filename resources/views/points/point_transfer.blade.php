@@ -36,7 +36,7 @@
 		</div>
 
 		<div class="w3-row w3-section w3-center">
-			<input type="submit" onClick="return confirm('點數一旦轉移則無法收回，確定要轉移嗎？');" value="送出" class="w3-button w3-block w3-section w3-ripple w3-padding" style="background-color: #628194; color: white;">
+			<input type="submit" value="送出" class="w3-button w3-block w3-section w3-ripple w3-padding" style="background-color: #628194; color: white;">
 		</div>
 
 	</form>

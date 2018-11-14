@@ -43,6 +43,7 @@ Route::group([
     $router->post('{user_id}/online', 'UserController@changeOnline');
     $router->post('{user_id}/offline', 'UserController@changeOffline');
     $router->post('{user_id}/device_token', 'UserController@addToken');
+    $router->post('{user_id}/ResetPassword', 'UserController@ResetPassword');
     $router->get('CreateNewPassword', 'UserController@CreateNewPassword');
 });
 
@@ -162,4 +163,10 @@ Route::group([
     $router->get('{users_id}/total', 'PointController@getRemainedPoint');
     $router->post('{users_id}/transfer', 'PointController@PointTransfer');
     $router->get('getAllPoint', 'PointController@getAllPoint');
+});
+
+Route::group([
+    'prefix' => 'ai_develop',
+], function ($router) {
+    $router->get('{video_id}/{daily_id}', 'ServicePlanDailyController@AIDevelop');
 });

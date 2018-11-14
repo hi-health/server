@@ -4,6 +4,16 @@
     "keywords": ["framework", "laravel"],
     "license": "MIT",
     "type": "project",
+    "minimum-stability":"dev",
+    "repositories":[
+        {
+            "type": "composer",
+            "url": "https:\/\/www.phpclasses.org\/"
+        },
+        {
+            "packagist": false
+        }
+    ],
     "require": {
         "php": ">=5.6.4",
         "aws/aws-sdk-php-laravel": "^3.1",
@@ -14,7 +24,8 @@
         "laravel/framework": "5.4.*",
         "laravel/tinker": "~1.0",
         "pbmedia/laravel-ffmpeg": "^1.1",
-        "vluzrmos/slack-api": "^0.4.8"
+        "vluzrmos/slack-api": "^0.4.8",
+        "phpclasses/fft": ">=0.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

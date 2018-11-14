@@ -32,6 +32,40 @@ class RepeatMultiDirectionAIv3_1 extends AI{
 									]
 								);
 
+		$feature_template = $this->calFeatureForTemplate();
+
+		$majorLevel_6axis = [   'acc_x' => $filler,
+								'acc_y' => $filler,
+								'acc_z' => $filler,
+								'roll' => $filler,
+								'yaw' => $filler,
+								'pitch' => $filler,
+							];
+
+		foreach (['pos','neg'] as $sign_key) {
+			foreach (['acc_x','acc_y','acc_z'] as $axis_key) {
+				if(abs($feature_template['acc'][$sign_key]['avg']) != 0){
+					if(abs($feature_template[$axis_key][$sign_key]['avg'])/abs($feature_template['acc'][$sign_key]['avg']) > 1/sqrt(2)){
+						$majorLevel_6axis[$axis_key][$sign_key] += 2;
+					}
+					elseif(abs($feature_template[$axis_key][$sign_key]['avg'])/abs($feature_template['acc'][$sign_key]['avg']) > 1/sqrt(3)){
+						$majorLevel_6axis[$axis_key][$sign_key] += 1;
+					}
+				}
+			}
+			foreach (['roll','yaw','pitch'] as $axis_key) {
+				if(abs($feature_template['gyro'][$sign_key]['avg']) != 0){
+					if(abs($feature_template[$axis_key][$sign_key]['avg'])/abs($feature_template['gyro'][$sign_key]['avg']) > 1/sqrt(2)){
+						$majorLevel_6axis[$axis_key][$sign_key] += 2;
+					}
+					elseif(abs($feature_template[$axis_key][$sign_key]['avg'])/abs($feature_template['gyro'][$sign_key]['avg']) > 1/sqrt(3)){
+						$majorLevel_6axis[$axis_key][$sign_key] += 1;
+					}
+				}
+			}
+		}
+
+		/*
 		foreach ($this->templateData as $axis_key => $value) {
 			foreach ($value as $key1 => $v1) {
 				$posArr = array_filter($v1, array($this, '_pos'));
@@ -124,6 +158,7 @@ class RepeatMultiDirectionAIv3_1 extends AI{
 
 			}
 		}
+		*/
 		return $majorLevel_6axis;
 	}
 
@@ -409,23 +444,59 @@ class RepeatMultiDirectionAIv3_1 extends AI{
 			Log::debug('template: $feature_6axis['.$axis_key.']["neg"]["avg"]: '.strval(round($feature_6axis[$axis_key]['neg']['avg'],3)));
 			Log::debug('template: $feature_6axis['.$axis_key.']["neg"]["std"]: '.strval(round($feature_6axis[$axis_key]['neg']['std'],3)));
 		}
-		/*
-		foreach (['acc_x','acc_y','acc_z'] as $axis_key) {
-			$feature_6axis[$axis_key]['pos']['avg'] = $feature_6axis[$axis_key]['pos']['avg']/$feature_6axis['acc']['pos']['avg'];
-			$feature_6axis[$axis_key]['pos']['std'] = $feature_6axis[$axis_key]['pos']['std']/$feature_6axis['acc']['pos']['std'];
-			$feature_6axis[$axis_key]['neg']['avg'] = $feature_6axis[$axis_key]['neg']['avg']/$feature_6axis['acc']['pos']['avg'];
-			$feature_6axis[$axis_key]['neg']['std'] = $feature_6axis[$axis_key]['neg']['std']/$feature_6axis['acc']['pos']['std'];
-		}
-		foreach (['roll','yaw','pitch'] as $axis_key) {
-			$feature_6axis[$axis_key]['pos']['avg'] = $feature_6axis[$axis_key]['pos']['avg']/$feature_6axis['gyro']['pos']['avg'];
-			$feature_6axis[$axis_key]['pos']['std'] = $feature_6axis[$axis_key]['pos']['std']/$feature_6axis['gyro']['pos']['std'];
-			$feature_6axis[$axis_key]['neg']['avg'] = $feature_6axis[$axis_key]['neg']['avg']/$feature_6axis['gyro']['pos']['avg'];
-			$feature_6axis[$axis_key]['neg']['std'] = $feature_6axis[$axis_key]['neg']['std']/$feature_6axis['gyro']['pos']['std'];
-		}
-		*/
 		return $feature_6axis;
 	}
 
+	protected function checkGoodMove($f_template, $f_test, $threshold){
+		if($f_template['avg'] == 0){
+			if($f_template['std'] == 0){
+				Log::debug('1');
+				if(	$f_test['avg'] < 0.2 &&
+					$f_test['avg'] > -0.2 &&
+					$f_test['std'] < 0.2 &&
+					$f_test['std'] > -0.2
+				){
+					return true;
+				}
+				else return false;
+			}
+			else{
+				Log::debug('2');
+				if(	$f_test['std']/$f_template['std'] > $threshold &&
+					$f_test['std']/$f_template['std'] < 1/$threshold &&
+					$f_test['avg'] < 0.2 &&
+					$f_test['avg'] > -0.2
+				){
+					return true;
+				}
+				else return false;
+			}
+		}
+		else{
+			if($f_template['std'] == 0){
+				Log::debug('3');
+				if(	$f_test['avg']/$f_template['avg'] > $threshold &&
+				$f_test['avg']/$f_template['avg'] < 1/$threshold &&
+					$f_test['std'] < 0.2 &&
+					$f_test['std'] > -0.2
+				){
+					return true;
+				}
+				else return false;
+			}
+			else{
+				Log::debug('4');
+				if(	$f_test['avg']/$f_template['avg'] > $threshold &&
+					$f_test['avg']/$f_template['avg'] < 1/$threshold &&
+					$f_test['std']/$f_template['std'] > $threshold &&
+					$f_test['std']/$f_template['std'] < 1/$threshold 
+				){
+					return true;
+				}
+				else return false;
+			}
+		}
+	}
 	// v3_1 modified
 	protected function validateMove($test_1session)
 	{
@@ -475,56 +546,7 @@ class RepeatMultiDirectionAIv3_1 extends AI{
 			$peakScale_6axis[] = $peakScale_1test_6axis;
 		}
 		*/
-		function checkGoopMove($f_template, $f_test, $threshold){
-			if($f_template['avg'] == 0){
-				if($f_template['std'] == 0){
-					Log::debug('1');
-					if(	$f_test['avg'] <0.2 &&
-						$f_test['avg'] > -0.2 &&
-						$f_test['std'] < 0.2 &&
-						$f_test['std'] > -0.2
-					){
-						return true;
-					}
-					else return false;
-				}
-				else{
-					Log::debug('2');
-					if(	$f_test['std']/$f_template['std'] > $threshold &&
-						$f_test['std']/$f_template['std'] < 1/$threshold &&
-						$f_test['avg'] < 0.2 &&
-						$f_test['avg'] > -0.2
-					){
-						return true;
-					}
-					else return false;
-				}
-			}
-			else{
-				if($f_template['std'] == 0){
-					Log::debug('3');
-					if(	$f_test['avg']/$f_template['avg'] > $threshold &&
-						$f_test['avg']/$f_template['avg'] < 1/$threshold &&
-						$f_test['std'] < 0.2 &&
-						$f_test['std'] > -0.2
-					){
-						return true;
-					}
-					else return false;
-				}
-				else{
-					Log::debug('4');
-					if(	$f_test['avg']/$f_template['avg'] > $threshold &&
-						$f_test['avg']/$f_template['avg'] < 1/$threshold &&
-						$f_test['std']/$f_template['std'] > $threshold &&
-						$f_test['std']/$f_template['std'] < 1/$threshold 
-					){
-						return true;
-					}
-					else return false;
-				}
-			}
-		}
+		
 		$feature_test = $this->calFeatureForTest($test_1session);
 		$feature_template = $this->calFeatureForTemplate();
 
@@ -535,108 +557,33 @@ class RepeatMultiDirectionAIv3_1 extends AI{
 					//$feature_template[$axis_key][$sign_key]
 				$threshold = 0.7;
 
-				if(checkGoopMove($feature_template['acc_x'][$sign_key], $test_1repeat['acc_x'][$sign_key], $threshold)){
+				if($this->checkGoodMove($feature_template['acc_x'][$sign_key], $test_1repeat['acc_x'][$sign_key], $threshold)){
 					$isGoodMove[$key]['acce'][$sign_key] += 0.34;
-					$isGoodMove[$key]['acce'][$sign_key][0] = 1;
+					$printGoodMove[$key]['acce'][$sign_key][0] = 1;
 				}
-				if(checkGoopMove($feature_template['acc_y'][$sign_key], $test_1repeat['acc_y'][$sign_key], $threshold)){
+				if($this->checkGoodMove($feature_template['acc_y'][$sign_key], $test_1repeat['acc_y'][$sign_key], $threshold)){
 					$isGoodMove[$key]['acce'][$sign_key] += 0.34;
-					$isGoodMove[$key]['acce'][$sign_key][1] = 1;
+					$printGoodMove[$key]['acce'][$sign_key][1] = 1;
 				}
-				if(checkGoopMove($feature_template['acc_z'][$sign_key], $test_1repeat['acc_z'][$sign_key], $threshold)){
+				if($this->checkGoodMove($feature_template['acc_z'][$sign_key], $test_1repeat['acc_z'][$sign_key], $threshold)){
 					$isGoodMove[$key]['acce'][$sign_key] += 0.34;
-					$isGoodMove[$key]['acce'][$sign_key][2] = 1;
+					$printGoodMove[$key]['acce'][$sign_key][2] = 1;
 				}
-				if(checkGoopMove($feature_template['roll'][$sign_key], $test_1repeat['roll'][$sign_key], $threshold)){
+				if($this->checkGoodMove($feature_template['roll'][$sign_key], $test_1repeat['roll'][$sign_key], $threshold)){
 					$isGoodMove[$key]['gyro'][$sign_key] += 0.34;
-					$isGoodMove[$key]['gyro'][$sign_key][0] = 1;
+					$printGoodMove[$key]['gyro'][$sign_key][0] = 1;
 				}
-				if(checkGoopMove($feature_template['yaw'][$sign_key], $test_1repeat['yaw'][$sign_key], $threshold)){
+				if($this->checkGoodMove($feature_template['yaw'][$sign_key], $test_1repeat['yaw'][$sign_key], $threshold)){
 					$isGoodMove[$key]['gyro'][$sign_key] += 0.34;
-					$isGoodMove[$key]['gyro'][$sign_key][1] = 1;
+					$printGoodMove[$key]['gyro'][$sign_key][1] = 1;
 				}
-				if(checkGoopMove($feature_template['pitch'][$sign_key], $test_1repeat['pitch'][$sign_key], $threshold)){
+				if($this->checkGoodMove($feature_template['pitch'][$sign_key], $test_1repeat['pitch'][$sign_key], $threshold)){
 					$isGoodMove[$key]['gyro'][$sign_key] += 0.34;
-					$isGoodMove[$key]['gyro'][$sign_key][2] = 1;
+					$printGoodMove[$key]['gyro'][$sign_key][2] = 1;
 				}
-				/*
-				if($feature_template['acc_x'][$sign_key]['avg']!=0 && $feature_template['acc_x'][$sign_key]['std']!=0){
-					$importantAxisMap[$key]['acce'][$sign_key] += 1;
-					if(	$test_1repeat['acc_x'][$sign_key]['std']/$feature_template['acc_x'][$sign_key]['std'] > $threshold &&
-						$test_1repeat['acc_x'][$sign_key]['std']/$feature_template['acc_x'][$sign_key]['std'] < 1/$threshold &&
-						$test_1repeat['acc_x'][$sign_key]['avg']/$feature_template['acc_x'][$sign_key]['avg'] > $threshold &&
-						$test_1repeat['acc_x'][$sign_key]['avg']/$feature_template['acc_x'][$sign_key]['avg'] < 1/$threshold
-					){
-						$goodMoveMap[$key]['acce'][$sign_key] += 1;
-					}
-				}
-
-				if($feature_template['acc_y'][$sign_key]['avg']!=0 && $feature_template['acc_y'][$sign_key]['std']!=0){
-					$importantAxisMap[$key]['acce'][$sign_key] += 1;
-					if(	$test_1repeat['acc_y'][$sign_key]['std']/$feature_template['acc_y'][$sign_key]['std'] > $threshold &&
-						$test_1repeat['acc_y'][$sign_key]['std']/$feature_template['acc_y'][$sign_key]['std'] < 1/$threshold &&
-						$test_1repeat['acc_y'][$sign_key]['avg']/$feature_template['acc_y'][$sign_key]['avg'] > $threshold &&
-						$test_1repeat['acc_y'][$sign_key]['avg']/$feature_template['acc_y'][$sign_key]['avg'] < 1/$threshold
-					){
-						$goodMoveMap[$key]['acce'][$sign_key] += 1;
-					}
-				}
-
-				if($feature_template['acc_z'][$sign_key]['avg']!=0 && $feature_template['acc_z'][$sign_key]['std']!=0){
-					$importantAxisMap[$key]['acce'][$sign_key] += 1;
-					if(	$test_1repeat['acc_z'][$sign_key]['std']/$feature_template['acc_z'][$sign_key]['std'] > $threshold &&
-						$test_1repeat['acc_z'][$sign_key]['std']/$feature_template['acc_z'][$sign_key]['std'] < 1/$threshold &&
-						$test_1repeat['acc_z'][$sign_key]['avg']/$feature_template['acc_z'][$sign_key]['avg'] > $threshold &&
-						$test_1repeat['acc_z'][$sign_key]['avg']/$feature_template['acc_z'][$sign_key]['avg'] < 1/$threshold
-					){
-						$goodMoveMap[$key]['acce'][$sign_key] += 1;
-					}
-				}
-
-				if($feature_template['roll'][$sign_key]['avg']!=0 && $feature_template['roll'][$sign_key]['std']!=0){
-					$importantAxisMap[$key]['gyro'][$sign_key] += 1;
-					if(	$test_1repeat['roll'][$sign_key]['std']/$feature_template['roll'][$sign_key]['std'] > $threshold &&
-						$test_1repeat['roll'][$sign_key]['std']/$feature_template['roll'][$sign_key]['std'] < 1/$threshold &&
-						$test_1repeat['roll'][$sign_key]['avg']/$feature_template['roll'][$sign_key]['avg'] > $threshold &&
-						$test_1repeat['roll'][$sign_key]['avg']/$feature_template['roll'][$sign_key]['avg'] < 1/$threshold
-					){
-						$goodMoveMap[$key]['gyro'][$sign_key] += 1;
-					}
-				}
-
-				if($feature_template['yaw'][$sign_key]['avg']!=0 && $feature_template['yaw'][$sign_key]['std']!=0){
-					$importantAxisMap[$key]['gyro'][$sign_key] += 1;
-					if(	$test_1repeat['yaw'][$sign_key]['std']/$feature_template['yaw'][$sign_key]['std'] > $threshold &&
-						$test_1repeat['yaw'][$sign_key]['std']/$feature_template['yaw'][$sign_key]['std'] < 1/$threshold &&
-						$test_1repeat['yaw'][$sign_key]['avg']/$feature_template['yaw'][$sign_key]['avg'] > $threshold &&
-						$test_1repeat['yaw'][$sign_key]['avg']/$feature_template['yaw'][$sign_key]['avg'] < 1/$threshold
-					){
-						$goodMoveMap[$key]['gyro'][$sign_key] += 1;
-					}
-				}
-
-				if($feature_template['pitch'][$sign_key]['avg']!=0 && $feature_template['pitch'][$sign_key]['std']!=0){
-					$importantAxisMap[$key]['gyro'][$sign_key] += 1;
-					if(	$test_1repeat['pitch'][$sign_key]['std']/$feature_template['pitch'][$sign_key]['std'] > $threshold &&
-						$test_1repeat['pitch'][$sign_key]['std']/$feature_template['pitch'][$sign_key]['std'] < 1/$threshold &&
-						$test_1repeat['pitch'][$sign_key]['avg']/$feature_template['pitch'][$sign_key]['avg'] > $threshold &&
-						$test_1repeat['pitch'][$sign_key]['avg']/$feature_template['pitch'][$sign_key]['avg'] < 1/$threshold
-					){
-						$goodMoveMap[$key]['gyro'][$sign_key] += 1;
-					}
-				}
-				*/
 			}
 		}
-		/*
-		foreach (['pos','neg'] as $sign_key) {
-			foreach ($feature_test as $key => $test_1repeat) {
-				$isGoodMove[$key]['acce'][$sign_key] = $goodMoveMap[$key]['acce'][$sign_key]/$importantAxisMap[$key]['acce'][$sign_key];
-				$isGoodMove[$key]['gyro'][$sign_key] = $goodMoveMap[$key]['gyro'][$sign_key]/$importantAxisMap[$key]['gyro'][$sign_key];
-			}
-		}
-		*/
-		
+
 		$majorLevel = $this->calMajorLevelForTemplate();
 		$majorLevel_sum = [
 			'acce' => ['pos'=>0, 'neg'=>0],
@@ -647,166 +594,7 @@ class RepeatMultiDirectionAIv3_1 extends AI{
 		$majorLevel_sum['acce']['neg'] = $majorLevel['acc_x']['neg'] + $majorLevel['acc_y']['neg'] + $majorLevel['acc_z']['neg'];
 		$majorLevel_sum['gyro']['neg'] = $majorLevel['roll']['neg'] + $majorLevel['yaw']['neg'] + $majorLevel['pitch']['neg'];
 
-		$majorLevel_test = $this->calMajorLevelForTest($test_1session);
-		/*
-		foreach ($majorLevel_sum['acce'] as $sign_key => $v1) {
-			if($v1>=6){
-				if( $majorLevel['acc_x'][$sign_key] > $majorLevel_sum['acce'][$sign_key]/2 ||
-					($majorLevel['acc_x'][$sign_key] == 4 && $majorLevel['acc_y'][$sign_key] == 2 && $majorLevel['acc_z'][$sign_key] == 2) )
-				{
-					for ($i=0; $i < $this->test_repeat_time; $i++) { 
-						if ($majorLevel_test[$i]['acc_x'][$sign_key] == 2) //Improve:這裡可以設計若等於1則給部分分數
-						{
-							$isGoodMove[$i]['acce'][$sign_key] = 1;
-						}
-					}
-				}
-				elseif( $majorLevel['acc_y'][$sign_key] > $majorLevel_sum['acce'][$sign_key]/2 ||
-						($majorLevel['acc_y'][$sign_key] == 4 && $majorLevel['acc_x'][$sign_key] == 2 && $majorLevel['acc_z'][$sign_key] == 2) )
-				{
-					for ($i=0; $i < $this->test_repeat_time; $i++) { 
-						if ($majorLevel_test[$i]['acc_y'][$sign_key] == 2)
-						{
-							$isGoodMove[$i]['acce'][$sign_key] = 1;
-						}
-					}
-				}
-				elseif( $majorLevel['acc_z'][$sign_key] > $majorLevel_sum['acce'][$sign_key]/2 ||
-						($majorLevel['acc_z'][$sign_key] == 4 && $majorLevel['acc_x'][$sign_key] == 2 && $majorLevel['acc_y'][$sign_key] == 2) )
-				{
-					for ($i=0; $i < $this->test_repeat_time; $i++) { 
-						if ($majorLevel_test[$i]['acc_z'][$sign_key] == 2)
-						{
-							$isGoodMove[$i]['acce'][$sign_key] = 1;
-						}
-					}
-				}
-				elseif( $majorLevel['acc_x'][$sign_key] > $majorLevel_sum['acce'][$sign_key]/3 &&
-						$majorLevel['acc_y'][$sign_key] > $majorLevel_sum['acce'][$sign_key]/3 )
-				{
-					for ($i=0; $i < $this->test_repeat_time; $i++) { 
-						if ( $majorLevel_test[$i]['acc_x'][$sign_key] == 1 && $majorLevel_test[$i]['acc_y'][$sign_key] == 1 ) //Improve:這裡可以設計若等於2則給部分分數
-						{
-							$isGoodMove[$i]['acce'][$sign_key] = 1;
-						}
-					}
-				}
-				elseif( $majorLevel['acc_x'][$sign_key] > $majorLevel_sum['acce'][$sign_key]/3 &&
-						$majorLevel['acc_z'][$sign_key] > $majorLevel_sum['acce'][$sign_key]/3 )
-				{
-					for ($i=0; $i < $this->test_repeat_time; $i++) { 
-						if ( $majorLevel_test[$i]['acc_x'][$sign_key] == 1 && $majorLevel_test[$i]['acc_z'][$sign_key] == 1 )
-						{
-							$isGoodMove[$i]['acce'][$sign_key] = 1;
-						}
-					}
-				}
-				elseif( $majorLevel['acc_y'][$sign_key] > $majorLevel_sum['acce'][$sign_key]/3 &&
-						$majorLevel['acc_z'][$sign_key] > $majorLevel_sum['acce'][$sign_key]/3 )
-				{
-					for ($i=0; $i < $this->test_repeat_time; $i++) { 
-						if ( $majorLevel_test[$i]['acc_y'][$sign_key] == 1 && $majorLevel_test[$i]['acc_z'][$sign_key] == 1 )
-						{
-							$isGoodMove[$i]['acce'][$sign_key] = 1;
-						}
-					}
-				}
-				else{
-					for ($i=0; $i < $this->test_repeat_time; $i++) { 
-						if( $majorLevel_test[$i]['acc_y'][$sign_key] == 0 && $majorLevel_test[$i]['acc_z'][$sign_key] == 0 && $majorLevel_test[$i]['acc_z'][$sign_key] == 0 ){
-							$isGoodMove[$i]['acce'][$sign_key] = 1;
-						}
-					}
-				}
-			}
-			else{ //Improve:若template模糊，則判斷失準
-				for ($i=0; $i < $this->test_repeat_time; $i++) { 
-					if( $majorLevel_test[$i]['acc_y'][$sign_key] == 0 && $majorLevel_test[$i]['acc_z'][$sign_key] == 0 && $majorLevel_test[$i]['acc_z'][$sign_key] == 0 ){
-							$isGoodMove[$i]['acce'][$sign_key] = 1;
-					}
-				}
-			}
-		}
-		foreach ($majorLevel_sum['gyro'] as $sign_key => $v1) {
-			if($v1>=6){
-				if( $majorLevel['roll'][$sign_key] > $majorLevel_sum['gyro'][$sign_key]/2 ||
-					($majorLevel['roll'][$sign_key] == 4 && $majorLevel['yaw'][$sign_key] == 2 && $majorLevel['pitch'][$sign_key] == 2) )
-				{
-					for ($i=0; $i < $this->test_repeat_time; $i++) { 
-						if ($majorLevel_test[$i]['roll'][$sign_key] == 2) //Improve:這裡可以設計若等於1則給部分分數
-						{
-							$isGoodMove[$i]['gyro'][$sign_key] = 1;
-						}
-					}
-				}	//回來加玩[$sign_key]
-				elseif( $majorLevel['yaw'][$sign_key] > $majorLevel_sum['gyro'][$sign_key]/2 ||
-						($majorLevel['yaw'][$sign_key] == 4 && $majorLevel['roll'][$sign_key] == 2 && $majorLevel['pitch'][$sign_key] == 2) )
-				{
-					for ($i=0; $i < $this->test_repeat_time; $i++) { 
-						if ($majorLevel_test[$i]['yaw'][$sign_key] == 2) //Improve:這裡可以設計若等於1則給部分分數
-						{
-							$isGoodMove[$i]['gyro'][$sign_key] = 1;
-						}
-					}
-				}
-				elseif( $majorLevel['pitch'][$sign_key] > $majorLevel_sum['gyro'][$sign_key]/2 ||
-						($majorLevel['pitch'][$sign_key] == 4 && $majorLevel['roll'][$sign_key] == 2 && $majorLevel['yaw'][$sign_key] == 2) )
-				{
-					for ($i=0; $i < $this->test_repeat_time; $i++) { 
-						if ($majorLevel_test[$i]['pitch'][$sign_key] == 2) //Improve:這裡可以設計若等於1則給部分分數
-						{
-							$isGoodMove[$i]['gyro'][$sign_key] = 1;
-						}
-					}
-				}
-				elseif( $majorLevel['roll'][$sign_key] > $majorLevel_sum['gyro'][$sign_key]/3 &&
-						$majorLevel['yaw'][$sign_key] > $majorLevel_sum['gyro'][$sign_key]/3 )
-				{
-					for ($i=0; $i < $this->test_repeat_time; $i++) { 
-						if ( $majorLevel_test[$i]['roll'][$sign_key] == 1 && $majorLevel_test[$i]['yaw'][$sign_key] == 1 ) //Improve:這裡可以設計若等於2則給部分分數
-						{
-							$isGoodMove[$i]['gyro'][$sign_key] = 1;
-						}
-					}
-				}
-				elseif( $majorLevel['roll'][$sign_key] > $majorLevel_sum['gyro'][$sign_key]/3 &&
-						$majorLevel['pitch'][$sign_key] > $majorLevel_sum['gyro'][$sign_key]/3 )
-				{
-					for ($i=0; $i < $this->test_repeat_time; $i++) { 
-						if ( $majorLevel_test[$i]['roll'][$sign_key] == 1 && $majorLevel_test[$i]['pitch'][$sign_key] == 1 ) //Improve:這裡可以設計若等於2則給部分分數
-						{
-							$isGoodMove[$i]['gyro'][$sign_key] = 1;
-						}
-					}
-				}
-				elseif( $majorLevel['yaw'][$sign_key] > $majorLevel_sum['gyro'][$sign_key]/3 &&
-						$majorLevel['pitch'][$sign_key] > $majorLevel_sum['gyro'][$sign_key]/3 )
-				{
-					for ($i=0; $i < $this->test_repeat_time; $i++) { 
-						if ( $majorLevel_test[$i]['yaw'][$sign_key] == 1 && $majorLevel_test[$i]['pitch'][$sign_key] == 1 ) //Improve:這裡可以設計若等於2則給部分分數
-						{
-							$isGoodMove[$i]['gyro'][$sign_key] = 1;
-						}
-					}
-				}
-				else{
-					for ($i=0; $i < $this->test_repeat_time; $i++) { 
-						if( $majorLevel_test[$i]['roll'][$sign_key] == 0 && $majorLevel_test[$i]['yaw'][$sign_key] == 0 && $majorLevel_test[$i]['pitch'][$sign_key] == 0 ){
-							$isGoodMove[$i]['acce'][$sign_key] = 1;
-						}
-					}
-				}
-			}
-			else{
-				for ($i=0; $i < $this->test_repeat_time; $i++) { 
-					if( $majorLevel_test[$i]['roll'][$sign_key] == 0 && $majorLevel_test[$i]['yaw'][$sign_key] == 0 && $majorLevel_test[$i]['pitch'][$sign_key] == 0 ){
-						$isGoodMove[$i]['acce'][$sign_key] = 1;
-					}
-				}
-			}
-		}
-		*/
-		return $isGoodMove;
+		return [$isGoodMove,$printGoodMove];
 	}	
 
 	protected function templateMax($template_1session_1axis)
@@ -909,7 +697,9 @@ class RepeatMultiDirectionAIv3_1 extends AI{
 				'gyro_goodMove' => ['pos'=>0, 'neg'=>0]
 			];
 
-			$isGoodMove = $this->validateMove($this->testData[$i]);
+			$tmp = $this->validateMove($this->testData[$i]);
+			$isGoodMove = $tmp[0];
+			$printGoodMove = $tmp[1];
 			
 			//template的max,min用平均
 			//test用for
@@ -1093,13 +883,13 @@ class RepeatMultiDirectionAIv3_1 extends AI{
 			for ($j=0; $j < $this->test_repeat_time; $j++) { 
 				Log::debug('AI session: '.strval($i).' repeat: '.$j.'  $isGoodMove["acce"]["pos"]: '.strval($isGoodMove[$j]["acce"]["pos"]));
 				//$isGoodMove[$key]['acce'][$sign_key][0]
-				Log::debug('												   : '.strval($isGoodMove[$j]['acce']['pos'][0]).' '.strval($isGoodMove[$j]['acce']['pos'][1]).' '.strval($isGoodMove[$j]['acce']['pos'][2]));
+				Log::debug(strval($printGoodMove[$j]['acce']['pos'][0]).' '.strval($printGoodMove[$j]['acce']['pos'][1]).' '.strval($printGoodMove[$j]['acce']['pos'][2]));
 				Log::debug('AI session: '.strval($i).' repeat: '.$j.'  $isGoodMove["acce"]["neg"]: '.strval($isGoodMove[$j]["acce"]["neg"]));
-				Log::debug('												   : '.strval($isGoodMove[$j]['acce']['neg'][0]).' '.strval($isGoodMove[$j]['acce']['neg'][1]).' '.strval($isGoodMove[$j]['acce']['neg'][2]));
+				Log::debug(strval($printGoodMove[$j]['acce']['neg'][0]).' '.strval($printGoodMove[$j]['acce']['neg'][1]).' '.strval($printGoodMove[$j]['acce']['neg'][2]));
 				Log::debug('AI session: '.strval($i).' repeat: '.$j.'  $isGoodMove["gyro"]["pos"]: '.strval($isGoodMove[$j]["gyro"]["pos"]));
-				Log::debug('												   : '.strval($isGoodMove[$j]['gyro']['pos'][0]).' '.strval($isGoodMove[$j]['gyro']['pos'][1]).' '.strval($isGoodMove[$j]['gyro']['pos'][2]));
+				Log::debug(strval($printGoodMove[$j]['gyro']['pos'][0]).' '.strval($printGoodMove[$j]['gyro']['pos'][1]).' '.strval($printGoodMove[$j]['gyro']['pos'][2]));
 				Log::debug('AI session: '.strval($i).' repeat: '.$j.'  $isGoodMove["gyro"]["neg"]: '.strval($isGoodMove[$j]["gyro"]["neg"]));
-				Log::debug('												   : '.strval($isGoodMove[$j]['gyro']['neg'][0]).' '.strval($isGoodMove[$j]['gyro']['neg'][1]).' '.strval($isGoodMove[$j]['gyro']['neg'][2]));
+				Log::debug(strval($printGoodMove[$j]['gyro']['neg'][0]).' '.strval($printGoodMove[$j]['gyro']['neg'][1]).' '.strval($printGoodMove[$j]['gyro']['neg'][2]));
 			}
 			Log::debug('');
 
@@ -1130,6 +920,19 @@ class RepeatMultiDirectionAIv3_1 extends AI{
 		
 		}
 		return $score;
+	}
+	public function printFeature()
+	{
+		$tmp = [
+				'test'=>[],
+				'template'=>[]
+				];
+		$majorLevel = $this->calMajorLevelForTemplate();
+		for ($i=0; $i < $this->session; $i++) { 
+			$tmp['test'][] = $this->calFeatureForTest($this->testData[$i]);
+			$tmp['template'] = $this->calFeatureForTemplate();
+		}
+		return $tmp;
 	}
 }
 

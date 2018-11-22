@@ -2,12 +2,21 @@
 <header class="main-header">
 
     <!-- Logo -->
-    <a href="<?php echo e(route('dashboard')); ?>" class="logo">
-        <!-- mini logo for sidebar mini 50x50 pixels -->
-        <span class="logo-mini"><b>Hi</b></span>
-        <!-- logo for regular state and mobile devices -->
-        <span class="logo-lg"><b>Hi</b> - Health</span>
-    </a>
+    <?php if(Auth::guard('admin')->check()): ?>
+        <a href="<?php echo e(route('dashboard')); ?>" class="logo">
+            <!-- mini logo for sidebar mini 50x50 pixels -->
+            <span class="logo-mini"><b>Hi</b></span>
+            <!-- logo for regular state and mobile devices -->
+            <span class="logo-lg"><b>Hi</b> - Health</span>
+        </a>
+    <?php elseif(Auth::guard('manager')->check()): ?>
+        <a href="<?php echo e(route('admin-doctors-add-form')); ?>" class="logo">
+            <!-- mini logo for sidebar mini 50x50 pixels -->
+            <span class="logo-mini"><b>Hi</b></span>
+            <!-- logo for regular state and mobile devices -->
+            <span class="logo-lg"><b>Hi</b> - Health</span>
+        </a>
+    <?php endif; ?>
 
     <!-- Header Navbar -->
     <nav class="navbar navbar-static-top" role="navigation">

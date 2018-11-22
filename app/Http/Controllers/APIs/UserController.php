@@ -263,7 +263,72 @@ class UserController extends Controller
         return response()->json(null, 400);
     }
 
+// 　　↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓重設密碼↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+
+    public function InputPhoneView()
+    {
+        return view('password.input_phone');
+    }
+
+    public function ResetPassword_SmsCode(Request $request)
+    {
+        $this->validate($request, [
+            'phone' => ['required'],
+        ]);
+        $phone = $request->input('phone');
+        $user = User::where('account', $phone)
+                ->first();
+        $user_id = $user->id;
+        if($user) {
+            $code = rand(100000, 999999);
+            $message = '您的驗證碼為：'.$code;
+            $sended = MitakeSmexpress::send($phone, $phone, $message);
+            if ($sended) {
+                return view('password.sms_input', compact('phone', 'code', 'user_id'));
+            } else {
+                return back()->withErrors(['驗證碼發送失敗']);
+            }
+        } else {
+            return back()->withErrors(['尚未註冊']);
+        }
+    }
+
+    public function ResetPassword_SmsCodeCheck(Request $request, $user_id, $code)
+    {
+        //檢驗手機驗證碼
+        $this->validate($request, [
+            'sms_code' => ['required'],
+        ]);
+        
+        $input_code = $request->input('sms_code');
+        
+        if($input_code == $code){
+            return view('password.reset_password', compact('user_id'));
+        } else {
+            return back()->withErrors(['驗證碼驗證失敗']);
+        }
+    }
+
     public function ResetPassword(Request $request, $user_id)
+    {
+        $this->validate($request, [
+            'new_password' => ['required', 'string'],
+            'check_new_password' => ['required', 'string'],
+        ]);
+
+        $user = User::where('id', $user_id)
+                ->first();
+
+        if ($user) {
+            $user->password = $request->input('new_password');
+            $user->save();
+            return response()->json($user->password);
+        } else {
+            return '此帳號尚未註冊';
+        }
+    }
+
+    public function ModifyPassword(Request $request, $user_id)
     {
         $this->validate($request, [
             'old_password' => ['required', 'string'],
@@ -280,12 +345,5 @@ class UserController extends Controller
         } else {
             return 'failed';
         }
-    }
-
-    public function CreateNewPassword()
-    {
-        echo password_hash("123456", PASSWORD_DEFAULT); //在" "內輸入新密碼
-        echo '<br><br>';
-        return 'Copy it to password column';
     }
 }

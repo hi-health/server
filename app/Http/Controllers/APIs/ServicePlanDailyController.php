@@ -317,7 +317,7 @@ class ServicePlanDailyController extends Controller
         ];
 
         Log::debug('AI optimization: '.strval($servicePlanVideo_id));
-        $ai = new RepeatMultiDirectionAIv3_1($template, $test, $param);
+        $ai = new RepeatMultiDirectionAI($template, $test, $param);
         $score = $ai->calScore();
         return $score;
     }
@@ -372,7 +372,7 @@ class ServicePlanDailyController extends Controller
             'point_threshold' => 5
         ];
 
-        $ai = new RepeatMultiDirectionAIv3_1($template, $test, $param);
+        $ai = new RepeatMultiDirectionAI($template, $test, $param);
         $feature = $ai->printFeature();
 
         return response()->json($feature);

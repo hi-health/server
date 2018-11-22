@@ -82,7 +82,7 @@ class Pay2GoMPG extends Pay2Go
             'CREDIT' => '1',
             'OrderComment' => $this->order_comment,
             'CheckValue' => $check_value,
-            'UNIONPAY' => 1, //正式版才能用（商店後台也需要啟用）
+            'UNIONPAY' => 0, //正式版才能用（商店後台也需要啟用）
         ]);
 
         return view('purchase_form', [

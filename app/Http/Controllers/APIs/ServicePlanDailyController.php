@@ -347,4 +347,35 @@ class ServicePlanDailyController extends Controller
 
         return $per_daily_point_get;
     }
+
+    public function AIDevelop(Request $request, $video_id, $daily_id){
+        $service_plan_video = ServicePlanVideo::where('id', $video_id)->first();
+        if (!$service_plan_video) {
+            error_log('NOOOOO service plan video');
+            return response()->json('3', 404);
+        }
+
+        $service_plan_daily = ServicePlanDaily::where('id', $daily_id)->first();
+        if (!$service_plan_daily) {
+            error_log('NOOOOO service plan video');
+            return response()->json('3', 404);
+        }
+
+
+        $template = json_decode($service_plan_video->movement_template_data);
+        $test = json_decode($service_plan_daily->movement_test_data)->data;
+        $param = [
+            'session' => $service_plan_video->session,
+            'repeat_time' => $service_plan_video->repeat_time,
+            'major_threshold' => 1.5,
+            'error_threshold' => 0.4,
+            'point_threshold' => 5
+        ];
+
+        $ai = new RepeatMultiDirectionAIv3_1($template, $test, $param);
+        $feature = $ai->printFeature();
+
+        return response()->json($feature);
+
+    }
 }

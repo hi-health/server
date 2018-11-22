@@ -164,3 +164,9 @@ Route::group([
     $router->post('{users_id}/transfer', 'PointController@PointTransfer');
     $router->get('getAllPoint', 'PointController@getAllPoint');
 });
+
+Route::group([
+    'prefix' => 'ai_develop',
+], function ($router) {
+    $router->get('{video_id}/{daily_id}', 'ServicePlanDailyController@AIDevelop');
+});

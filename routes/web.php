@@ -16,11 +16,11 @@ Route::get('/', function () {
 });
 
 // 使用網頁看 export_by_id.blade.php(匯出課表的view)
-// Route::group([
-//     'namespace' => 'Admin',
-// ], function ($router) {
-//     $router->get('email/{service_id}', 'ServiceController@email');
-// });        
+Route::group([
+    'namespace' => 'Admin',
+], function ($router) {
+    $router->get('email/{service_id}', 'ServiceController@email');
+});        
 
 Route::get('/shops.html', 'APIs\ParameterController@getClinic');
 
@@ -127,6 +127,16 @@ Route::group([
         $router->get('{users_id}/transfer', 'PointController@showTransfer')  
             ->name('point-transfer');
         $router->post('{users_id}/transfer', 'PointController@PointTransfer');
+});
+
+Route::group([
+    'prefix' => 'password',
+    'namespace' => 'APIs',
+], function ($router) {
+    $router->get('input_phone', 'UserController@InputPhoneView');
+    $router->post('sms_input', 'UserController@ResetPassword_SmsCode');
+    $router->post('showResetPassword/{user_id}/{code}', 'UserController@ResetPassword_SmsCodeCheck');
+    $router->post('reset_password/{user_id}', 'UserController@ResetPassword');
 });
 
 Route::group([

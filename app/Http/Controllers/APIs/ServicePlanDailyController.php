@@ -336,7 +336,7 @@ class ServicePlanDailyController extends Controller
         }
         $Service_Plan_Daily = ServicePlanDaily::where('id', $daily_id)->first();
         $session = $Service_Plan_Daily->video->session;
-        if($total_daily_count = 0){
+        if($total_daily_count != 0){
             $per_daily_point_most = $perday_point_given/$total_daily_count;
         } else {
             return 'false';

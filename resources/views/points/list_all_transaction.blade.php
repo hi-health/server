@@ -1,13 +1,32 @@
+@extends('points.master')
+@section('content')
+
 
 <style type="text/css">
 	em{
 		padding: 0px;
 		margin: 0px;
 	}
+	li{
+		border:none !important;
+	}
+	#record{
+		background: #ffffff url('{{asset('HiPoint/bg_record.png')}}') no-repeat center;
+		background-size: cover;
+		width: 100%;
+	}
+	#title{
+		padding-top: 20%;
+		color: white;
+		text-align: center;
+	}
 </style>
-@extends('points.master')
-@section('content')
-	<ul class="w3-ul w3-card-4">
+
+<div id="record">
+	<div id="title">
+		<em style="font-size: 25px;">歷史紀錄</em>
+	</div>
+	<ul class="w3-ul">
 		@foreach($Transaction as $Transactions)
 		<li class="w3-bar" style="padding-top: 0px; padding-bottom: 0px">
 			<div class="w3-bar-block w3-bar-item" style="padding-top: 15px; padding-bottom: 0px">
@@ -53,5 +72,7 @@
 		@endforeach
 
 	</ul>
+</div>
+
 @endsection
   

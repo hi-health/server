@@ -9,67 +9,52 @@
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
 		<style>
-			.w3-row-padding img {margin-bottom: 12px}
-			.point-tab {
-				background-color: #eceff4;
+			html,body{
+				height: 100%;
 			}
-			@media only screen and (max-width:620px) {
-  				.w3-third {
-  					width:calc(100%  /3);;
-  				}
+			.one-third {
+  				width:calc(100% * 0.33333);
+  				height: 25vw;
+  				z-index: 100;
+  				display: inline-block;
+  				vertical-align:middle;
+  				position: relative;
+  			}
+			#nav img{
+				width: 45%;
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%,-50%);
 			}
-			img{
-				width: 60%;
-
+			#nav{
+				background: #ffffff url('{{asset('HiPoint/bg_nav.png')}}') no-repeat center;
+				background-size: cover;
+				width: 100%;
+				position: fixed;
+				bottom: 0px;
+				right: 0px;
 			}
 		</style>
 	</head>
 	<body>
-		<div class="w3-row point-tab" style="padding-top: 15px">
-			<div class="w3-third w3-center">
-				<a href="{{ route('point-transfer', ['users_id' => $users_id]) }}">
-					<img src="{{asset('ico_pay.png')}}" >
-				</a>
-			</div>
-			<div class="w3-third w3-center">
-				<a href="{{ route('point-index', ['users_id' => $users_id]) }}">
-					<img src="{{asset('ico_HiPoint.png')}}" >
-				</a>
-			</div>
-			<div class="w3-third w3-center">
-				<a href="{{ route('point-list-all-transaction', ['users_id' => $users_id]) }}">
-					<img src="{{asset('ico_record.png')}}" >
-				</a>
-			</div>
-		</div>
-		<div class="w3-row point-tab w3-center">
-			<div class="w3-third w3-center" style="margin-top: 10px">
-				<a href="{{ route('point-transfer', ['users_id' => $users_id]) }}">
-					<img src="{{asset('ico_pay_word.png')}}" >
-				</a>
-			</div>
-			<div class="w3-third w3-center" style="margin-top: 10px">
-				<a href="{{ route('point-index', ['users_id' => $users_id]) }}">
-					<img src="{{asset('ico_HiPoint_word.png')}}" style="width: 65%">
-				</a>
-			</div>
-			<div class="w3-third w3-center" style="margin-top: 10px">
-				<a href="{{ route('point-list-all-transaction', ['users_id' => $users_id]) }}">
-					<img src="{{asset('ico_record_word.png')}}" >
-				</a>
-			</div>
-		</div>
-		<div class="w3-row point-tab" style="padding-bottom: 10px">
-			<div class="w3-third w3-center">
-				&nbsp;
-			</div>
-			<div class="w3-third w3-center">
-				{{ $RemainedPoint }}
-			</div>
-			<div class="w3-third w3-center">
-				&nbsp;
-			</div>
-		</div>
 		@yield('content')
+		<div id='nav'>
+			<span class="one-third">
+				<a href="{{ route('point-transfer', ['users_id' => $users_id]) }}">
+					<img src="{{asset('HiPoint/ico_pay.png')}}" >
+				</a>
+			</span><span class="one-third">
+				<a href="{{ route('point-index', ['users_id' => $users_id]) }}">
+					<img src="{{asset('HiPoint/ico_HiPoint.png')}}" >
+				</a>
+			</span><span class="one-third">
+				<a href="{{ route('point-list-all-transaction', ['users_id' => $users_id]) }}">
+					<img src="{{asset('HiPoint/ico_record.png')}}" >
+				</a>
+			</span>
+		</div>
+
+		
 	</body>
 </html>

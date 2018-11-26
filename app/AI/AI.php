@@ -70,11 +70,14 @@ abstract class AI
     protected function seperateEachRepeat($arr, $index)
     {
         $arr_seperated = [];
+
         $arr_seperated[] = $this->cutOffArr(array_slice($arr,0,$index[0]),-0.1,0.1);
-        for ($i=1; $i < count($index); $i++) { 
-            $arr_seperated[] = $this->cutOffArr(array_slice($arr,$index[$i-1],$index[$i]-$index[$i-1]),-0.1,0.1);
+        if(count($index)>1){
+            for ($i=1; $i < count($index); $i++) { 
+                $arr_seperated[] = $this->cutOffArr(array_slice($arr,$index[$i-1],$index[$i]-$index[$i-1]),-0.1,0.1);
+            }
+            $arr_seperated[] = $this->cutOffArr(array_slice($arr,$index[count($index)-1]),-0.1,0.1);
         }
-        $arr_seperated[] = $this->cutOffArr(array_slice($arr,$index[count($index)-1]),-0.1,0.1);
 
         return $arr_seperated;
     }
@@ -276,7 +279,7 @@ abstract class AI
                 $tmp[] = 0;
             }
         }
-        return $tmp;
+        return $a;//$tmp;
     }
 
     protected function cutOffNum($n , $min, $max){

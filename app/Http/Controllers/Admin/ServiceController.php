@@ -101,19 +101,19 @@ class ServiceController extends Controller
     }
 
     // 使用網頁看 export_by_id.blade.php(匯出課表的view)
-    // public function email($service_id)
-    // {
-    //     $service = Service
-    //         ::where('id', $service_id)
-    //         ->first();
-    //     if (!$service) {
-    //         return response()->json(null, 404);
-    //     }
-    //     if ($service->daily->isEmpty()) {
-    //         return response()->json(null, 404);
-    //     }
-    //     return view('mails.services.plans.exported_by_id', [
-    //         'service' => $service
-    //     ]);
-    // }
+    public function email($service_id)
+    {
+        $service = Service
+            ::where('id', $service_id)
+            ->first();
+        if (!$service) {
+            return response()->json(null, 404);
+        }
+        if ($service->daily->isEmpty()) {
+            return response()->json(null, 404);
+        }
+        return view('mails.services.plans.exported_by_id', [
+            'service' => $service
+        ]);
+    }
 }

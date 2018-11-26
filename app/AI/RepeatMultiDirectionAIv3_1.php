@@ -44,284 +44,27 @@ class RepeatMultiDirectionAIv3_1 extends AI{
 
 		foreach (['pos','neg'] as $sign_key) {
 			foreach (['acc_x','acc_y','acc_z'] as $axis_key) {
-				if(abs($feature_template['acc'][$sign_key]['avg']) != 0){
-					if(abs($feature_template[$axis_key][$sign_key]['avg'])/abs($feature_template['acc'][$sign_key]['avg']) > 1/sqrt(2)){
+				if(abs($feature_template['acc']['pos']['avg']) != 0){
+					if(abs($feature_template[$axis_key][$sign_key]['avg'])/abs($feature_template['acc']['pos']['avg']) > 1/sqrt(2)){
 						$majorLevel_6axis[$axis_key][$sign_key] += 2;
 					}
-					elseif(abs($feature_template[$axis_key][$sign_key]['avg'])/abs($feature_template['acc'][$sign_key]['avg']) > 1/sqrt(3)){
+					elseif(abs($feature_template[$axis_key][$sign_key]['avg'])/abs($feature_template['acc']['pos']['avg']) > 1/sqrt(3)){
 						$majorLevel_6axis[$axis_key][$sign_key] += 1;
 					}
 				}
 			}
 			foreach (['roll','yaw','pitch'] as $axis_key) {
-				if(abs($feature_template['gyro'][$sign_key]['avg']) != 0){
-					if(abs($feature_template[$axis_key][$sign_key]['avg'])/abs($feature_template['gyro'][$sign_key]['avg']) > 1/sqrt(2)){
+				if(abs($feature_template['gyro']['pos']['avg']) != 0){
+					if(abs($feature_template[$axis_key][$sign_key]['avg'])/abs($feature_template['gyro']['pos']['avg']) > 1/sqrt(2)){
 						$majorLevel_6axis[$axis_key][$sign_key] += 2;
 					}
-					elseif(abs($feature_template[$axis_key][$sign_key]['avg'])/abs($feature_template['gyro'][$sign_key]['avg']) > 1/sqrt(3)){
+					elseif(abs($feature_template[$axis_key][$sign_key]['avg'])/abs($feature_template['gyro']['pos']['avg']) > 1/sqrt(3)){
 						$majorLevel_6axis[$axis_key][$sign_key] += 1;
 					}
 				}
 			}
 		}
-
-		/*
-		foreach ($this->templateData as $axis_key => $value) {
-			foreach ($value as $key1 => $v1) {
-				$posArr = array_filter($v1, array($this, '_pos'));
-				$negArr = array_filter($v1, array($this, '_neg'));
-
-				$sum_6axis[$key1][$axis_key]['pos'] = array_sum($posArr);
-				$sum_6axis[$key1][$axis_key]['neg'] = array_sum($negArr);
-			}
-		}
-
-		$majorLevel_6axis = [   'acc_x' => $filler,
-								'acc_y' => $filler,
-								'acc_z' => $filler,
-								'roll' => $filler,
-								'yaw' => $filler,
-								'pitch' => $filler,
-							];
-		
-		foreach (['pos','neg'] as $sign_key) {
-			for ($i=0; $i < $this->template_repeat_time; $i++) { 
-				//acce
-				if(	$sum_6axis[$i]['acc_x'][$sign_key] >= $sum_6axis[$i]['acc_y'][$sign_key]*$this->major_threshold &&
-					$sum_6axis[$i]['acc_x'][$sign_key] >= $sum_6axis[$i]['acc_z'][$sign_key]*$this->major_threshold)
-				{
-					$majorLevel_6axis['acc_x'][$sign_key] += 2;
-				}
-				elseif(	$sum_6axis[$i]['acc_y'][$sign_key] >= $sum_6axis[$i]['acc_x'][$sign_key]*$this->major_threshold &&
-					$sum_6axis[$i]['acc_y'][$sign_key] >= $sum_6axis[$i]['acc_z'][$sign_key]*$this->major_threshold)
-				{
-					$majorLevel_6axis['acc_y'][$sign_key] += 2;
-				}
-				elseif(	$sum_6axis[$i]['acc_z'][$sign_key] >= $sum_6axis[$i]['acc_x'][$sign_key]*$this->major_threshold &&
-					$sum_6axis[$i]['acc_z'][$sign_key] >= $sum_6axis[$i]['acc_y'][$sign_key]*$this->major_threshold)
-				{
-					$majorLevel_6axis['acc_z'][$sign_key] += 2;
-				}
-				elseif(	$sum_6axis[$i]['acc_x'][$sign_key] <= $sum_6axis[$i]['acc_y'][$sign_key]/$this->major_threshold &&
-					$sum_6axis[$i]['acc_x'][$sign_key] <= $sum_6axis[$i]['acc_z'][$sign_key]/$this->major_threshold)
-				{
-					$majorLevel_6axis['acc_y'][$sign_key] += 1;
-					$majorLevel_6axis['acc_z'][$sign_key] += 1;
-				}
-				elseif(	$sum_6axis[$i]['acc_y'][$sign_key] <= $sum_6axis[$i]['acc_x'][$sign_key]/$this->major_threshold &&
-					$sum_6axis[$i]['acc_y'][$sign_key] <= $sum_6axis[$i]['acc_z'][$sign_key]/$this->major_threshold)
-				{
-					$majorLevel_6axis['acc_x'][$sign_key] += 1;
-					$majorLevel_6axis['acc_z'][$sign_key] += 1;
-				}
-				elseif(	$sum_6axis[$i]['acc_z'][$sign_key] <= $sum_6axis[$i]['acc_x'][$sign_key]/$this->major_threshold &&
-					$sum_6axis[$i]['acc_z'][$sign_key] <= $sum_6axis[$i]['acc_y'][$sign_key]/$this->major_threshold)
-				{
-					$majorLevel_6axis['acc_x'][$sign_key] += 1;
-					$majorLevel_6axis['acc_y'][$sign_key] += 1;
-				}
-
-				//gyro
-				if(	$sum_6axis[$i]['roll'][$sign_key] >= $sum_6axis[$i]['yaw'][$sign_key]*$this->major_threshold &&
-					$sum_6axis[$i]['roll'][$sign_key] >= $sum_6axis[$i]['pitch'][$sign_key]*$this->major_threshold)
-				{
-					$majorLevel_6axis['roll'][$sign_key] += 2;
-				}
-				elseif(	$sum_6axis[$i]['yaw'][$sign_key] >= $sum_6axis[$i]['roll'][$sign_key]*$this->major_threshold &&
-					$sum_6axis[$i]['yaw'][$sign_key] >= $sum_6axis[$i]['pitch'][$sign_key]*$this->major_threshold)
-				{
-					$majorLevel_6axis['yaw'][$sign_key] += 2;
-				}
-				elseif(	$sum_6axis[$i]['pitch'][$sign_key] >= $sum_6axis[$i]['roll'][$sign_key]*$this->major_threshold &&
-					$sum_6axis[$i]['pitch'][$sign_key] >= $sum_6axis[$i]['yaw'][$sign_key]*$this->major_threshold)
-				{
-					$majorLevel_6axis['pitch'][$sign_key] += 2;
-				}
-				elseif(	$sum_6axis[$i]['roll'][$sign_key] <= $sum_6axis[$i]['yaw'][$sign_key]/$this->major_threshold &&
-					$sum_6axis[$i]['roll'][$sign_key] <= $sum_6axis[$i]['pitch'][$sign_key]/$this->major_threshold)
-				{
-					$majorLevel_6axis['yaw'][$sign_key] += 1;
-					$majorLevel_6axis['pitch'][$sign_key] += 1;
-				}
-				elseif(	$sum_6axis[$i]['yaw'][$sign_key] <= $sum_6axis[$i]['roll'][$sign_key]/$this->major_threshold &&
-					$sum_6axis[$i]['yaw'][$sign_key] <= $sum_6axis[$i]['pitch'][$sign_key]/$this->major_threshold)
-				{
-					$majorLevel_6axis['roll'][$sign_key] += 1;
-					$majorLevel_6axis['pitch'][$sign_key] += 1;
-				}
-				elseif(	$sum_6axis[$i]['pitch'][$sign_key] <= $sum_6axis[$i]['roll'][$sign_key]/$this->major_threshold &&
-					$sum_6axis[$i]['pitch'][$sign_key] <= $sum_6axis[$i]['yaw'][$sign_key]/$this->major_threshold)
-				{
-					$majorLevel_6axis['roll'][$sign_key] += 1;
-					$majorLevel_6axis['yaw'][$sign_key] += 1;
-				}
-
-			}
-		}
-		*/
 		return $majorLevel_6axis;
-	}
-
-	protected function calMajorLevelForTest($test_1session)
-	{
-		$filler = [
-			'pos' => 0,
-			'neg' => 0,
-		];
-		$sum_6axis = array_fill(   0,
-									$this->test_repeat_time,
-									[   'acc_x' => $filler,
-										'acc_y' => $filler,
-										'acc_z' => $filler,
-										'acc' => $filler,
-										'roll' => $filler,
-										'yaw' => $filler,
-										'pitch' => $filler,
-										'gyro' => $filler
-									]
-								);
-
-		foreach ($test_1session as $axis_key => $value) {
-			foreach ($value as $key1 => $v1) {
-				$posArr = array_filter($v1, array($this, '_pos'));
-				$negArr = array_filter($v1, array($this, '_neg'));
-
-				$sum_6axis[$key1][$axis_key]['pos'] = array_sum($posArr);
-				$sum_6axis[$key1][$axis_key]['neg'] = array_sum($negArr);
-			}
-		}
-
-		$majorLevel_6axis = array_fill( 0,
-										$this->test_repeat_time,
-										[   'acc_x' => $filler,
-											'acc_y' => $filler,
-											'acc_z' => $filler,
-											'roll' => $filler,
-											'yaw' => $filler,
-											'pitch' => $filler,
-										]
-									);
-
-		foreach (['pos','neg'] as $sign_key) {
-			for ($i=0; $i < $this->test_repeat_time; $i++) { 
-				//acce
-				if( $sum_6axis[$i]['acc_x'][$sign_key] >= $sum_6axis[$i]['acc_y'][$sign_key]*$this->major_threshold &&
-					$sum_6axis[$i]['acc_x'][$sign_key] >= $sum_6axis[$i]['acc_z'][$sign_key]*$this->major_threshold)
-				{
-					$majorLevel_6axis[$i]['acc_x'][$sign_key] += 2;
-				}
-				elseif( $sum_6axis[$i]['acc_y'][$sign_key] >= $sum_6axis[$i]['acc_x'][$sign_key]*$this->major_threshold &&
-					$sum_6axis[$i]['acc_y'][$sign_key] >= $sum_6axis[$i]['acc_z'][$sign_key]*$this->major_threshold)
-				{
-					$majorLevel_6axis[$i]['acc_y'][$sign_key] += 2;
-				}
-				elseif( $sum_6axis[$i]['acc_z'][$sign_key] >= $sum_6axis[$i]['acc_x'][$sign_key]*$this->major_threshold &&
-					$sum_6axis[$i]['acc_z'][$sign_key] >= $sum_6axis[$i]['acc_y'][$sign_key]*$this->major_threshold)
-				{
-					$majorLevel_6axis[$i]['acc_z'][$sign_key] += 2;
-				}
-				elseif( $sum_6axis[$i]['acc_x'][$sign_key] <= $sum_6axis[$i]['acc_y'][$sign_key]/$this->major_threshold &&
-					$sum_6axis[$i]['acc_x'][$sign_key] <= $sum_6axis[$i]['acc_z'][$sign_key]/$this->major_threshold)
-				{
-					$majorLevel_6axis[$i]['acc_y'][$sign_key] += 1;
-					$majorLevel_6axis[$i]['acc_z'][$sign_key] += 1;
-				}
-				elseif( $sum_6axis[$i]['acc_y'][$sign_key] <= $sum_6axis[$i]['acc_x'][$sign_key]/$this->major_threshold &&
-					$sum_6axis[$i]['acc_y'][$sign_key] <= $sum_6axis[$i]['acc_z'][$sign_key]/$this->major_threshold)
-				{
-					$majorLevel_6axis[$i]['acc_x'][$sign_key] += 1;
-					$majorLevel_6axis[$i]['acc_z'][$sign_key] += 1;
-				}
-				elseif( $sum_6axis[$i]['acc_z'][$sign_key] <= $sum_6axis[$i]['acc_x'][$sign_key]/$this->major_threshold &&
-					$sum_6axis[$i]['acc_z'][$sign_key] <= $sum_6axis[$i]['acc_y'][$sign_key]/$this->major_threshold)
-				{
-					$majorLevel_6axis[$i]['acc_x'][$sign_key] += 1;
-					$majorLevel_6axis[$i]['acc_y'][$sign_key] += 1;
-				}
-
-				//gyro
-				if( $sum_6axis[$i]['roll'][$sign_key] >= $sum_6axis[$i]['yaw'][$sign_key]*$this->major_threshold &&
-					$sum_6axis[$i]['roll'][$sign_key] >= $sum_6axis[$i]['pitch'][$sign_key]*$this->major_threshold)
-				{
-					$majorLevel_6axis[$i]['roll'][$sign_key] += 2;
-				}
-				elseif( $sum_6axis[$i]['yaw'][$sign_key] >= $sum_6axis[$i]['roll'][$sign_key]*$this->major_threshold &&
-					$sum_6axis[$i]['yaw'][$sign_key] >= $sum_6axis[$i]['pitch'][$sign_key]*$this->major_threshold)
-				{
-					$majorLevel_6axis[$i]['yaw'][$sign_key] += 2;
-				}
-				elseif( $sum_6axis[$i]['pitch'][$sign_key] >= $sum_6axis[$i]['roll'][$sign_key]*$this->major_threshold &&
-					$sum_6axis[$i]['pitch'][$sign_key] >= $sum_6axis[$i]['yaw'][$sign_key]*$this->major_threshold)
-				{
-					$majorLevel_6axis[$i]['pitch'][$sign_key] += 2;
-				}
-				elseif( $sum_6axis[$i]['roll'][$sign_key] <= $sum_6axis[$i]['yaw'][$sign_key]/$this->major_threshold &&
-					$sum_6axis[$i]['roll'][$sign_key] <= $sum_6axis[$i]['pitch'][$sign_key]/$this->major_threshold)
-				{
-					$majorLevel_6axis[$i]['yaw'][$sign_key] += 1;
-					$majorLevel_6axis[$i]['pitch'][$sign_key] += 1;
-				}
-				elseif( $sum_6axis[$i]['yaw'][$sign_key] <= $sum_6axis[$i]['roll'][$sign_key]/$this->major_threshold &&
-					$sum_6axis[$i]['yaw'][$sign_key] <= $sum_6axis[$i]['pitch'][$sign_key]/$this->major_threshold)
-				{
-					$majorLevel_6axis[$i]['roll'][$sign_key] += 1;
-					$majorLevel_6axis[$i]['pitch'][$sign_key] += 1;
-				}
-				elseif( $sum_6axis[$i]['pitch'][$sign_key] <= $sum_6axis[$i]['roll'][$sign_key]/$this->major_threshold &&
-					$sum_6axis[$i]['pitch'][$sign_key] <= $sum_6axis[$i]['yaw'][$sign_key]/$this->major_threshold)
-				{
-					$majorLevel_6axis[$i]['roll'][$sign_key] += 1;
-					$majorLevel_6axis[$i]['yaw'][$sign_key] += 1;
-				}
-
-			}
-		}
-		return $majorLevel_6axis;
-	}
- 
-	protected function calPeakScale($template_1repeat_1axis,$test_1repeat_1axis)
-	{
-
-		$template_pos = array_filter($template_1repeat_1axis, array($this, '_pos'));
-		$template_neg = array_filter($template_1repeat_1axis, array($this, '_neg'));
-		$test_pos = array_filter($test_1repeat_1axis, array($this, '_pos'));
-		$test_neg = array_filter($test_1repeat_1axis, array($this, '_neg'));
-		if(!empty($template_pos)){
-			$template_pos_max = max($template_pos);
-		}
-		else{
-			$template_pos_max = 0;
-		}
-		if(!empty($template_neg)){
-			$template_neg_min = min($template_neg);
-		}
-		else{
-			$template_neg_min = 0;
-		}
-		if(!empty($test_pos)){
-			$test_pos_max = max($test_pos);
-		}
-		else{
-			$test_pos_max = 0;
-		}
-		if(!empty($test_neg)){
-			$test_neg_min = min($test_neg);
-		}
-		else{
-			$test_neg_min = 0;
-		}
-
-		$max = abs($template_pos_max - $test_pos_max) / max(abs($template_pos_max),10e-5);
-		$min = abs($template_neg_min - $test_neg_min) / max(abs($template_neg_min),10e-5);
-
-			
-		if ($max<$this->error_threshold && $min<$this->error_threshold){
-			return 2;
-		}
-		elseif($max<$this->error_threshold || $min<$this->error_threshold){
-			return 1;
-		}
-		else return 0;
 	}
 
 	protected function calFeatureForTest($test_1session)
@@ -369,10 +112,10 @@ class RepeatMultiDirectionAIv3_1 extends AI{
 					$feature_6axis[$key1][$axis_key]['neg']['avg'] = 0;
 					$feature_6axis[$key1][$axis_key]['neg']['std'] = 0;
 				}
-				$feature_6axis[$key1][$axis_key]['pos']['avg'] = $this->cutOffNum($feature_6axis[$key1][$axis_key]['pos']['avg'], -0.1, 0.1);
-				$feature_6axis[$key1][$axis_key]['pos']['std'] = $this->cutOffNum($feature_6axis[$key1][$axis_key]['pos']['std'], -0.1, 0.1);
-				$feature_6axis[$key1][$axis_key]['neg']['avg'] = $this->cutOffNum($feature_6axis[$key1][$axis_key]['neg']['avg'], -0.1, 0.1);
-				$feature_6axis[$key1][$axis_key]['neg']['std'] = $this->cutOffNum($feature_6axis[$key1][$axis_key]['neg']['std'], -0.1, 0.1);	   
+				//$feature_6axis[$key1][$axis_key]['pos']['avg'] = $this->cutOffNum($feature_6axis[$key1][$axis_key]['pos']['avg'], -0.05, 0.05);
+				//$feature_6axis[$key1][$axis_key]['pos']['std'] = $this->cutOffNum($feature_6axis[$key1][$axis_key]['pos']['std'], -0.05, 0.05);
+				//$feature_6axis[$key1][$axis_key]['neg']['avg'] = $this->cutOffNum($feature_6axis[$key1][$axis_key]['neg']['avg'], -0.05, 0.05);
+				//$feature_6axis[$key1][$axis_key]['neg']['std'] = $this->cutOffNum($feature_6axis[$key1][$axis_key]['neg']['std'], -0.05, 0.05);	   
 				Log::debug('test repeat: '.$key1.'  $feature_6axis['.$axis_key.']["pos"]["avg"]: '.strval(round($feature_6axis[$key1][$axis_key]['pos']['avg'],3)));
 				Log::debug('test repeat: '.$key1.'  $feature_6axis['.$axis_key.']["pos"]["std"]: '.strval(round($feature_6axis[$key1][$axis_key]['pos']['std'],3)));
 				Log::debug('test repeat: '.$key1.'  $feature_6axis['.$axis_key.']["neg"]["avg"]: '.strval(round($feature_6axis[$key1][$axis_key]['neg']['avg'],3)));
@@ -435,10 +178,10 @@ class RepeatMultiDirectionAIv3_1 extends AI{
 					$feature_6axis[$axis_key]['neg']['std'] += $negStd/$this->template_repeat_time;
 				}
 			}
-			$feature_6axis[$axis_key]['pos']['avg'] = $this->cutOffNum($feature_6axis[$axis_key]['pos']['avg'], -0.1, 0.1);
-			$feature_6axis[$axis_key]['pos']['std'] = $this->cutOffNum($feature_6axis[$axis_key]['pos']['std'], -0.1, 0.1);
-			$feature_6axis[$axis_key]['neg']['avg'] = $this->cutOffNum($feature_6axis[$axis_key]['neg']['avg'], -0.1, 0.1);
-			$feature_6axis[$axis_key]['neg']['std'] = $this->cutOffNum($feature_6axis[$axis_key]['neg']['std'], -0.1, 0.1);
+			//$feature_6axis[$axis_key]['pos']['avg'] = $this->cutOffNum($feature_6axis[$axis_key]['pos']['avg'], -0.05, 0.05);
+			//$feature_6axis[$axis_key]['pos']['std'] = $this->cutOffNum($feature_6axis[$axis_key]['pos']['std'], -0.05, 0.05);
+			//$feature_6axis[$axis_key]['neg']['avg'] = $this->cutOffNum($feature_6axis[$axis_key]['neg']['avg'], -0.05, 0.05);
+			//$feature_6axis[$axis_key]['neg']['std'] = $this->cutOffNum($feature_6axis[$axis_key]['neg']['std'], -0.05, 0.05);
 			Log::debug('template: $feature_6axis['.$axis_key.']["pos"]["avg"]: '.strval(round($feature_6axis[$axis_key]['pos']['avg'],3)));
 			Log::debug('template: $feature_6axis['.$axis_key.']["pos"]["std"]: '.strval(round($feature_6axis[$axis_key]['pos']['std'],3)));
 			Log::debug('template: $feature_6axis['.$axis_key.']["neg"]["avg"]: '.strval(round($feature_6axis[$axis_key]['neg']['avg'],3)));
@@ -451,10 +194,10 @@ class RepeatMultiDirectionAIv3_1 extends AI{
 		if($f_template['avg'] == 0){
 			if($f_template['std'] == 0){
 				Log::debug('1');
-				if(	$f_test['avg'] < 0.2 &&
-					$f_test['avg'] > -0.2 &&
-					$f_test['std'] < 0.2 &&
-					$f_test['std'] > -0.2
+				if(	$f_test['avg'] < 0.1 &&
+					$f_test['avg'] > -0.1 &&
+					$f_test['std'] < 0.1 &&
+					$f_test['std'] > -0.1
 				){
 					return true;
 				}
@@ -464,8 +207,8 @@ class RepeatMultiDirectionAIv3_1 extends AI{
 				Log::debug('2');
 				if(	$f_test['std']/$f_template['std'] > $threshold &&
 					$f_test['std']/$f_template['std'] < 1/$threshold &&
-					$f_test['avg'] < 0.2 &&
-					$f_test['avg'] > -0.2
+					$f_test['avg'] < 0.1 &&
+					$f_test['avg'] > -0.1
 				){
 					return true;
 				}
@@ -477,8 +220,8 @@ class RepeatMultiDirectionAIv3_1 extends AI{
 				Log::debug('3');
 				if(	$f_test['avg']/$f_template['avg'] > $threshold &&
 				$f_test['avg']/$f_template['avg'] < 1/$threshold &&
-					$f_test['std'] < 0.2 &&
-					$f_test['std'] > -0.2
+					$f_test['std'] < 0.1 &&
+					$f_test['std'] > -0.1
 				){
 					return true;
 				}
@@ -486,10 +229,16 @@ class RepeatMultiDirectionAIv3_1 extends AI{
 			}
 			else{
 				Log::debug('4');
-				if(	$f_test['avg']/$f_template['avg'] > $threshold &&
-					$f_test['avg']/$f_template['avg'] < 1/$threshold &&
-					$f_test['std']/$f_template['std'] > $threshold &&
-					$f_test['std']/$f_template['std'] < 1/$threshold 
+				if(	
+					(
+						($f_test['avg']/$f_template['avg'] > $threshold && $f_test['avg']/$f_template['avg'] < 1/$threshold) ||
+						abs($f_test['avg']-$f_template['avg']) < 0.15
+					) 
+					&&
+					(
+						($f_test['std']/$f_template['std'] > $threshold && $f_test['std']/$f_template['std'] < 1/$threshold) ||
+						abs($f_test['std']-$f_template['std']) < 0.15
+					) 
 				){
 					return true;
 				}
@@ -525,27 +274,7 @@ class RepeatMultiDirectionAIv3_1 extends AI{
 										'gyro' => ['pos'=>[0,0,0], 'neg'=>[0,0,0]],
 									]
 								);
-		/*
-		for ($i=0; $i < $this->test_repeat_time; $i++) { //test
-			$peakScale_1test_6axis = [
-				'acc_x' => 0,
-				'acc_y' => 0,
-				'acc_z' => 0,
-				'roll' => 0,
-				'yaw' => 0,
-				'pitch' => 0
-			];
-			for ($j=0; $j < $this->template_repeat_time; $j++){ //template
-				$peakScale_1test_6axis['acc_x'] += $this->calPeakScale($this->templateData['acc_x'][$j], $test_1session['acc_x'][$i]);
-				$peakScale_1test_6axis['acc_y'] += $this->calPeakScale($this->templateData['acc_y'][$j], $test_1session['acc_y'][$i]);
-				$peakScale_1test_6axis['acc_z'] += $this->calPeakScale($this->templateData['acc_z'][$j], $test_1session['acc_z'][$i]);
-				$peakScale_1test_6axis['roll'] += $this->calPeakScale($this->templateData['roll'][$j], $test_1session['roll'][$i]);
-				$peakScale_1test_6axis['yaw'] += $this->calPeakScale($this->templateData['yaw'][$j], $test_1session['yaw'][$i]);
-				$peakScale_1test_6axis['pitch'] += $this->calPeakScale($this->templateData['pitch'][$j], $test_1session['pitch'][$i]);
-			}
-			$peakScale_6axis[] = $peakScale_1test_6axis;
-		}
-		*/
+
 		
 		$feature_test = $this->calFeatureForTest($test_1session);
 		$feature_template = $this->calFeatureForTemplate();
@@ -555,7 +284,7 @@ class RepeatMultiDirectionAIv3_1 extends AI{
 				//compare
 					//$test_1repeat[$axis_key][$sign_key]
 					//$feature_template[$axis_key][$sign_key]
-				$threshold = 0.7;
+				$threshold = 0.5;
 
 				if($this->checkGoodMove($feature_template['acc_x'][$sign_key], $test_1repeat['acc_x'][$sign_key], $threshold)){
 					$isGoodMove[$key]['acce'][$sign_key] += 0.34;
@@ -644,6 +373,8 @@ class RepeatMultiDirectionAIv3_1 extends AI{
 
 	public function calScore()
 	{
+		$goodMove_Point = 65;
+		$ratio_Point = 100-$goodMove_Point;
 
 		$score = array_fill(	0,
 								$this->session,
@@ -801,27 +532,25 @@ class RepeatMultiDirectionAIv3_1 extends AI{
 					$min_pitch_test = 0;
 				}
 				
-				
-				$acc_x_max_ratio = abs($max_acc_x_test-$this->templateMax($this->templateData['acc_x']))/abs($this->templateMax($this->templateData['acc_x']));
-				$acc_x_min_ratio = abs($min_acc_x_test-$this->templateMin($this->templateData['acc_x']))/abs($this->templateMin($this->templateData['acc_x']));
+				//$this->cutOffNum($feature_6axis[$axis_key]['pos']['avg'], -0.05, 0.05);
+				$error_threshold = 0.3;
+				$acc_x_max_ratio = $this->cutOffNum( abs($max_acc_x_test-$this->templateMax($this->templateData['acc_x']))/abs($this->templateMax($this->templateData['acc_x'])), 0, $error_threshold);
+				$acc_x_min_ratio = $this->cutOffNum( abs($min_acc_x_test-$this->templateMin($this->templateData['acc_x']))/abs($this->templateMin($this->templateData['acc_x'])), 0, $error_threshold);
 
-				$acc_y_max_ratio = abs($max_acc_y_test-$this->templateMax($this->templateData['acc_y']))/abs($this->templateMax($this->templateData['acc_y']));
-				$acc_y_min_ratio = abs($min_acc_y_test-$this->templateMin($this->templateData['acc_y']))/abs($this->templateMin($this->templateData['acc_y']));
+				$acc_y_max_ratio = $this->cutOffNum( abs($max_acc_y_test-$this->templateMax($this->templateData['acc_y']))/abs($this->templateMax($this->templateData['acc_y'])), 0, $error_threshold);
+				$acc_y_min_ratio = $this->cutOffNum( abs($min_acc_y_test-$this->templateMin($this->templateData['acc_y']))/abs($this->templateMin($this->templateData['acc_y'])), 0, $error_threshold);
 
-				$acc_z_max_ratio = abs($max_acc_z_test-$this->templateMax($this->templateData['acc_z']))/abs($this->templateMax($this->templateData['acc_z']));
-				$acc_z_min_ratio = abs($min_acc_z_test-$this->templateMin($this->templateData['acc_z']))/abs($this->templateMin($this->templateData['acc_z']));
+				$acc_z_max_ratio = $this->cutOffNum( abs($max_acc_z_test-$this->templateMax($this->templateData['acc_z']))/abs($this->templateMax($this->templateData['acc_z'])), 0, $error_threshold);
+				$acc_z_min_ratio = $this->cutOffNum( abs($min_acc_z_test-$this->templateMin($this->templateData['acc_z']))/abs($this->templateMin($this->templateData['acc_z'])), 0, $error_threshold);
 
-				$roll_max_ratio = abs($max_roll_test-$this->templateMax($this->templateData['roll']))/abs($this->templateMax($this->templateData['roll']));
-				$roll_min_ratio = abs($min_roll_test-$this->templateMin($this->templateData['roll']))/abs($this->templateMin($this->templateData['roll']));
+				$roll_max_ratio = $this->cutOffNum( abs($max_roll_test-$this->templateMax($this->templateData['roll']))/abs($this->templateMax($this->templateData['roll'])), 0, $error_threshold);
+				$roll_min_ratio = $this->cutOffNum( abs($min_roll_test-$this->templateMin($this->templateData['roll']))/abs($this->templateMin($this->templateData['roll'])), 0, $error_threshold);
 
-				$yaw_max_ratio = abs($max_yaw_test-$this->templateMax($this->templateData['yaw']))/abs($this->templateMax($this->templateData['yaw']));
-				$yaw_min_ratio = abs($min_yaw_test-$this->templateMin($this->templateData['yaw']))/abs($this->templateMin($this->templateData['yaw']));
+				$yaw_max_ratio = $this->cutOffNum( abs($max_yaw_test-$this->templateMax($this->templateData['yaw']))/abs($this->templateMax($this->templateData['yaw'])), 0, $error_threshold);
+				$yaw_min_ratio = $this->cutOffNum( abs($min_yaw_test-$this->templateMin($this->templateData['yaw']))/abs($this->templateMin($this->templateData['yaw'])), 0, $error_threshold);
 
-				$pitch_max_ratio = abs($max_pitch_test-$this->templateMax($this->templateData['pitch']))/abs($this->templateMax($this->templateData['pitch']));
-				$pitch_min_ratio = abs($min_pitch_test-$this->templateMin($this->templateData['pitch']))/abs($this->templateMin($this->templateData['pitch']));
-
-				$goodMove_Point = 65;
-				$ratio_Point = 100-$goodMove_Point;
+				$pitch_max_ratio = $this->cutOffNum( abs($max_pitch_test-$this->templateMax($this->templateData['pitch']))/abs($this->templateMax($this->templateData['pitch'])), 0, $error_threshold);
+				$pitch_min_ratio = $this->cutOffNum( abs($min_pitch_test-$this->templateMin($this->templateData['pitch']))/abs($this->templateMin($this->templateData['pitch'])), 0, $error_threshold);
 
 			
 				$score_1session['acce_goodMove']['pos'] += $goodMove_Point/2/2*$isGoodMove[$j]['acce']['pos']/$this->test_repeat_time;
@@ -830,24 +559,24 @@ class RepeatMultiDirectionAIv3_1 extends AI{
 				$score_1session['gyro_goodMove']['neg'] += $goodMove_Point/2/2*$isGoodMove[$j]['gyro']['neg']/$this->test_repeat_time;
 
 				if($isGoodMove[$j]['acce']['pos']!=0){
-					$score_1session['acc_x']['pos']+= max($ratio_Point * $acc_x_weight['pos'] * (1-$acc_x_max_ratio)/2 /$this->test_repeat_time, 0);
-					$score_1session['acc_y']['pos']+= max($ratio_Point * $acc_y_weight['pos'] * (1-$acc_y_max_ratio)/2 /$this->test_repeat_time, 0);
-					$score_1session['acc_z']['pos']+= max($ratio_Point * $acc_z_weight['pos'] * (1-$acc_z_max_ratio)/2 /$this->test_repeat_time, 0);
+					$score_1session['acc_x']['pos']+= max($ratio_Point * $acc_x_weight['pos'] * (1-$acc_x_max_ratio)/4 /$this->test_repeat_time, 0);
+					$score_1session['acc_y']['pos']+= max($ratio_Point * $acc_y_weight['pos'] * (1-$acc_y_max_ratio)/4 /$this->test_repeat_time, 0);
+					$score_1session['acc_z']['pos']+= max($ratio_Point * $acc_z_weight['pos'] * (1-$acc_z_max_ratio)/4 /$this->test_repeat_time, 0);
 				}
 				if($isGoodMove[$j]['acce']['neg']!=0){
-					$score_1session['acc_x']['neg']+= max($ratio_Point * $acc_x_weight['neg'] * (1-$acc_x_min_ratio)/2 /$this->test_repeat_time, 0);
-					$score_1session['acc_y']['neg']+= max($ratio_Point * $acc_y_weight['neg'] * (1-$acc_y_min_ratio)/2 /$this->test_repeat_time, 0);
-					$score_1session['acc_z']['neg']+= max($ratio_Point * $acc_z_weight['neg'] * (1-$acc_z_min_ratio)/2 /$this->test_repeat_time, 0);
+					$score_1session['acc_x']['neg']+= max($ratio_Point * $acc_x_weight['neg'] * (1-$acc_x_min_ratio)/4 /$this->test_repeat_time, 0);
+					$score_1session['acc_y']['neg']+= max($ratio_Point * $acc_y_weight['neg'] * (1-$acc_y_min_ratio)/4 /$this->test_repeat_time, 0);
+					$score_1session['acc_z']['neg']+= max($ratio_Point * $acc_z_weight['neg'] * (1-$acc_z_min_ratio)/4 /$this->test_repeat_time, 0);
 				}
 				if($isGoodMove[$j]['gyro']['pos']!=0){
-					$score_1session['roll']['pos']+= max($ratio_Point * $roll_weight['pos'] * (1-$roll_max_ratio)/2 /$this->test_repeat_time, 0);
-					$score_1session['yaw']['pos']+= max($ratio_Point * $yaw_weight['pos'] * (1-$yaw_max_ratio)/2 /$this->test_repeat_time, 0);
-					$score_1session['pitch']['pos']+= max($ratio_Point * $pitch_weight['pos'] * (1-$pitch_max_ratio)/2 /$this->test_repeat_time, 0);
+					$score_1session['roll']['pos']+= max($ratio_Point * $roll_weight['pos'] * (1-$roll_max_ratio)/4 /$this->test_repeat_time, 0);
+					$score_1session['yaw']['pos']+= max($ratio_Point * $yaw_weight['pos'] * (1-$yaw_max_ratio)/4 /$this->test_repeat_time, 0);
+					$score_1session['pitch']['pos']+= max($ratio_Point * $pitch_weight['pos'] * (1-$pitch_max_ratio)/4 /$this->test_repeat_time, 0);
 				}
 				if($isGoodMove[$j]['gyro']['neg']!=0){
-					$score_1session['roll']['neg']+= max($ratio_Point * $roll_weight['neg'] * (1-$roll_min_ratio)/2 /$this->test_repeat_time, 0);
-					$score_1session['yaw']['neg']+= max($ratio_Point * $yaw_weight['neg'] * (1-$yaw_min_ratio)/2 /$this->test_repeat_time, 0);
-					$score_1session['pitch']['neg']+= max($ratio_Point * $pitch_weight['neg'] * (1-$pitch_min_ratio)/2 /$this->test_repeat_time, 0);
+					$score_1session['roll']['neg']+= max($ratio_Point * $roll_weight['neg'] * (1-$roll_min_ratio)/4 /$this->test_repeat_time, 0);
+					$score_1session['yaw']['neg']+= max($ratio_Point * $yaw_weight['neg'] * (1-$yaw_min_ratio)/4 /$this->test_repeat_time, 0);
+					$score_1session['pitch']['neg']+= max($ratio_Point * $pitch_weight['neg'] * (1-$pitch_min_ratio)/4 /$this->test_repeat_time, 0);
 				}
 
 				Log::debug('AI session: '.strval($i).' repeat: '.$j.'  $acc_x_max_ratio: '.strval(round($acc_x_max_ratio,3)));
@@ -915,8 +644,14 @@ class RepeatMultiDirectionAIv3_1 extends AI{
 				$score[$i] += array_sum($value);
 			}
 			Log::debug('AI session: '.strval($i).'  $score_1session: '.strval(round($score[$i])));
+
+			/*
+			$validatedMove = ($score_1session['acce_goodMove']['pos']+$score_1session['acce_goodMove']['neg']+$score_1session['gyro_goodMove']['pos']+$score_1session['gyro_goodMove']['neg'])/$goodMove_Point*4*$this->test_repeat_time;
 			
-			$score[$i] = round($score[$i]);
+			$inlinearMove_bonus = 72*(1-exp(-0.1*$validatedMove)) - ($score_1session['acce_goodMove']['pos']+$score_1session['acce_goodMove']['neg']+$score_1session['gyro_goodMove']['pos']+$score_1session['gyro_goodMove']['neg']);
+			
+			$score[$i] = round($score[$i]+$inlinearMove_bonus);
+			*/
 		
 		}
 		return $score;

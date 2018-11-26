@@ -317,7 +317,9 @@ class ServicePlanDailyController extends Controller
         ];
 
         Log::debug('AI optimization: '.strval($servicePlanVideo_id));
-        $ai = new RepeatMultiDirectionAIv3($template, $test, $param);
+
+        $ai = new RepeatMultiDirectionAI($template, $test, $param);
+
         $score = $ai->calScore();
         return $score;
     }
@@ -336,7 +338,7 @@ class ServicePlanDailyController extends Controller
         }
         $Service_Plan_Daily = ServicePlanDaily::where('id', $daily_id)->first();
         $session = $Service_Plan_Daily->video->session;
-        if($total_daily_count = 0){
+        if($total_daily_count != 0){
             $per_daily_point_most = $perday_point_given/$total_daily_count;
         } else {
             return 'false';
@@ -372,7 +374,9 @@ class ServicePlanDailyController extends Controller
             'point_threshold' => 5
         ];
 
-        $ai = new RepeatMultiDirectionAIv3($template, $test, $param);
+
+        $ai = new RepeatMultiDirectionAI($template, $test, $param);
+
         $feature = $ai->printFeature();
 
         return response()->json($feature);

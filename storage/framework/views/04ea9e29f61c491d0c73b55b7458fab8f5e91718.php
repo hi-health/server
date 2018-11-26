@@ -45,6 +45,12 @@
                     </a>
                 </li>
                 <li>
+                    <a href="<?php echo e(route('admin-managers-list')); ?>">
+                        <i class="fa fa-video-camera"></i>
+                        <span>業務管理</span>
+                    </a>
+                </li>
+                <li>
                     <a href="<?php echo e(route('admin-settins-form')); ?>">
                         <i class="fa fa-cog"></i>
                         <span>系統管理</span>
@@ -66,9 +72,9 @@
         <?php else: ?>
             <ul class="sidebar-menu">
                 <li>
-                    <a href="<?php echo e(route('admin-doctors-list')); ?>">
+                    <a href="<?php echo e(route('admin-doctors-add-form')); ?>">
                         <i class="fa fa-plus-square"></i>
-                        <span>員工管理</span>
+                        <span>新增員工</span>
                     </a>
                 </li>
             </ul>

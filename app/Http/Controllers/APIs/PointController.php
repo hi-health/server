@@ -87,15 +87,18 @@ class PointController extends Controller
 
         $collection = collect([$PointProduce,$PointConsume]);
 
-        $Transaction = $collection
+        $Transactions = $collection
                         ->collapse()
                         ->sortByDESC('created_at')
+//                        ->groupBy('created_at')
                         ->values()
-                        ->all();
+                        ->mapToGroups(function ($item, $key) {
+                            return [$item['created_at']->format('Y-m-d') => $item];
+                        });
 
         // $PointConsume_id = PointConsume::where('users_id')->transaction()->where('pointconsume_id')->get();
 
-        return view('points.list_all_transaction', compact('users_id', 'Transaction', 'RemainedPoint'));
+        return view('points.list_all_transaction', compact('users_id', 'Transactions', 'RemainedPoint'));
     }
 
     public function showTransfer($users_id)
@@ -173,7 +176,7 @@ class PointController extends Controller
             }
         }
 
-        return view('points.point_transfer', compact('RemainedPoint','users_id'));
+        return response()->json('OK', 200);//view('points.point_transfer', compact('RemainedPoint','users_id'));
     }
 
 	public function CreateDailyPoint($daily_result)

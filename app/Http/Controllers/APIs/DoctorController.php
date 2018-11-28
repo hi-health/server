@@ -262,6 +262,8 @@ class DoctorController extends Controller
             // ->where('district_id', $member->district_id)
             ->where('login_type', '2')
             ->where('online', true)
+            ->whereNotIn('id',[29])
+            // yuhsueh 2018.11.27 讓客戶不要搜尋到中國醫師
             ->orderBy('online_at', 'DESC')
             ->get()
             ->map(function ($user) use ($members_id) {

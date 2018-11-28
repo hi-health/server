@@ -11,11 +11,9 @@
 		height: 100%;
 	}
 	#title{
-		position: absolute;
-		top: 20%;
-		left: 50%;
-		transform: translate(-50%,-50%);
+		padding-top: 20%;
 		color: white;
+		text-align: center;
 	}
 	#circle{
 		background: rgba(255,255,255,0) url('{{asset('HiPoint/circle_HiPoint.png')}}') no-repeat center;

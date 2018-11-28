@@ -8,6 +8,11 @@
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+
+		<!--SWEET ALERT-->
+		<script src="{{asset('js/sweetalert2.all.min.js')}}"></script>
+		<link rel="stylesheet" href="{{asset('css/sweetalert2.min.css')}}">
+
 		<style>
 			html,body{
 				height: 100%;

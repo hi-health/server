@@ -342,7 +342,7 @@ class UserController extends Controller
         if ($user && password_verify($request->input('old_password'), $user->password)) {
             $user->password = $request->input('new_password');
             $user->save();
-            return response()->json($user->password);
+            return response()->json('OK',200);
         } else {
             return 'failed';
         }

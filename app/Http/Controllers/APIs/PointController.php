@@ -119,7 +119,7 @@ class PointController extends Controller
         \Log::INFO("sucess");
         $this->validate($request, [
             'receiver_account' => 'required', 
-            'transferred_point' => 'required|integer',
+            'transferred_point' => 'required|float',
             'password' => ['required', 'string'],
         ]);
         $user = User::where('id', $users_id)

@@ -323,7 +323,7 @@ class UserController extends Controller
         if ($user) {
             $user->password = $request->input('new_password');
             $user->save();
-            return response()->json($user->password);
+            return response()->json('OK',200);
         } else {
             return '此帳號尚未註冊';
         }

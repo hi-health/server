@@ -325,7 +325,13 @@ class ServicePlanDailyController extends Controller
     public function claculatePoint($service_id, $plan_id, $daily_id, $score)
     {
         $Service_charge = Service::where('id',$service_id)->first()->charge_amount;
-        $Service_day = 30;
+
+        if(Service::where('id',$service_id)->first()->treatment_type=1) {
+            $Service_day = 15;
+        } else {
+            $Service_day = 30;
+        }  
+
         $perday_point_given = $Service_charge/$Service_day *0.15;
 
         $total_daily_count = 0;

@@ -644,13 +644,14 @@ class RepeatMultiDirectionAIv3_1 extends AI{
 				$score[$i] += array_sum($value);
 			}
 			Log::debug('AI session: '.strval($i).'  $score_1session: '.strval(round($score[$i])));
-			
-			
+
+			/*
 			$validatedMove = ($score_1session['acce_goodMove']['pos']+$score_1session['acce_goodMove']['neg']+$score_1session['gyro_goodMove']['pos']+$score_1session['gyro_goodMove']['neg'])/$goodMove_Point*4*$this->test_repeat_time;
 			
 			$inlinearMove_bonus = 72*(1-exp(-0.1*$validatedMove)) - ($score_1session['acce_goodMove']['pos']+$score_1session['acce_goodMove']['neg']+$score_1session['gyro_goodMove']['pos']+$score_1session['gyro_goodMove']['neg']);
 			
 			$score[$i] = round($score[$i]+$inlinearMove_bonus);
+			*/
 		
 		}
 		return $score;

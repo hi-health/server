@@ -262,6 +262,8 @@ class DoctorController extends Controller
             // ->where('district_id', $member->district_id)
             ->where('login_type', '2')
             ->where('online', true)
+            ->whereNotIn('id',[29])
+            // yuhsueh 2018.11.27 讓客戶不要搜尋到中國醫師
             ->orderBy('online_at', 'DESC')
             ->get()
             ->map(function ($user) use ($members_id) {
@@ -396,10 +398,9 @@ class DoctorController extends Controller
             'name' => ['required', 'string'],
             'male' => ['required', 'in:0,1'],
             'birthday' => ['required'],
-            'avatar' => ['nullable', 'image', 'max:10240'],
+            'avatar' => ['nullable', 'image','mimes:jpeg,bmp,png,gif', 'max:5120'],
             'city_id' => ['required'],
             'district_id' => ['required'],
-            'avatar' => ['nullable', 'mimes:jpeg,bmp,png,gif', 'max:1024'],
             'status' => ['in:0,1'],
             // 'online' => ['in:0,1'],
             'title' => ['required', 'string'],

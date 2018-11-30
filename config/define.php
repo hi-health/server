@@ -5,11 +5,11 @@ return [
         '0' => '未啟用',
         '1' => '已啟用',
     ],
-    'treatment_types' => [
+    'treatment_type' => [
         '1' => '一般服務',
         '2' => '高級服務',
     ],
-    'payment_methods' => [
+    'payment_method' => [
         '1' => '現金',
         '2' => '信用卡',
     ],

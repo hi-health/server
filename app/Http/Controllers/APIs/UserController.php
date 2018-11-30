@@ -263,7 +263,7 @@ class UserController extends Controller
         return response()->json(null, 400);
     }
 
-// 　　↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓重設密碼↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+// 　↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓重設密碼↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 
     public function InputPhoneView()
     {
@@ -276,10 +276,10 @@ class UserController extends Controller
             'phone' => ['required'],
         ]);
         $phone = $request->input('phone');
-        $user = User::where('account', $phone)
-                ->first();
-        $user_id = $user->id;
-        if($user) {
+
+        $user = User::where('account', $phone)->first();
+        if($user){
+            $user_id = $user->id;
             $code = rand(100000, 999999);
             $message = '您的驗證碼為：'.$code;
             $sended = MitakeSmexpress::send($phone, $phone, $message);
@@ -296,6 +296,7 @@ class UserController extends Controller
     public function ResetPassword_SmsCodeCheck(Request $request, $user_id, $code)
     {
         //檢驗手機驗證碼
+        Log::info('sucess');
         $this->validate($request, [
             'sms_code' => ['required'],
         ]);

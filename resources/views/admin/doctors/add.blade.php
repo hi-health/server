@@ -225,6 +225,11 @@
         },
         methods: {
             processAvatar: function(event) {
+                if(event.target.files[0].size > 5000000){ //5MB
+                    alert("您的頭像檔案過大\nfile size should be smaller than 5MB");
+                    event.target.value = '';
+                    console.log('file too large');
+                }
                 this.$data.form.avatar = event.target.files[0];
             },
             selectCity: function(event) {

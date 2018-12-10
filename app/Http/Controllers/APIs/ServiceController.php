@@ -271,7 +271,7 @@ class ServiceController extends Controller
         $pagination['total_amount'] = $total_amount;
         $pagination['income_percentage'] = floatval($this->getSetting('income_percentage', 0.7));
         $pagination['income_amount'] = round($total_amount * $pagination['income_percentage']);
-        $pagination['membership_fee'] = intval($this->getSetting('membership_fee', 1500));
+        $pagination['membership_fee'] = intval($this->getSetting('membership_fee', 1000));
 
         return response()->json($pagination);
     }
@@ -321,6 +321,25 @@ class ServiceController extends Controller
             'charge_amount' => ['required', 'integer', 'min:1'],
             'treatment_type' => ['nullable', 'in:1,2'],
         ]);
+        $doctors_id = $request->input('doctors_id');
+        $treatment_type = $request->input('treatment_type');
+        $charge_amount = $request->input('charge_amount');
+        $membership_fee_1 = intval($this->getSetting('membership_fee_1', 1000));
+        $membership_fee_2 = intval($this->getSetting('membership_fee_2', 1000));
+        if($treatment_type == 1){
+            if($membership_fee_1>$charge_amount){
+                Log::debug(sprintf('醫師編號:%d  一般服務收費過低，最低收費為%d$',$doctors_id,$membership_fee_1));
+                return response()->json(['reason'=>['wrong price'=>[sprintf('一般服務收費過低，最低收費為%d$',$membership_fee_1)]]],422);
+            }
+        }
+        else if($treatment_type == 2){
+            if($membership_fee_2>$charge_amount){
+                Log::debug(sprintf('醫師編號:%d  高級服務收費過低，最低收費為%d$',$doctors_id,$membership_fee_2));
+                return response()->json(['reason'=>['wrong price'=>[sprintf('高級服務收費過低，最低收費為%d$',$membership_fee_2)]]],422);
+            }
+        }
+        
+
         try {
             DB::beginTransaction();
             $service = new Service($request->input());

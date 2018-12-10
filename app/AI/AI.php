@@ -31,6 +31,8 @@ abstract class AI
         $this->test_repeat_time = $param['repeat_time'];
         $this->templateData = $this->parseTemplateData($template);
         $this->testData = $this->parseTestData($test);
+        $this->templateTime = $this->getTemplateTime($template);
+        $this->testTime = $this->getTestTime($test);
         
         $this->major_threshold = $param['major_threshold'];
         $this->error_threshold = $param['error_threshold'];
@@ -107,9 +109,9 @@ abstract class AI
                 //$testData[$key1]['rot_y'][$key2] = round(floatval($sample[7]),5);
                 //$testData[$key1]['rot_z'][$key2] = round(floatval($sample[8]),5);
             }
-            Log::alert(strval($t1));
-            Log::alert(strval($t2));
-            Log::alert(strval(count($this->autocorrelation($testData[$key1]['acc_x']))));
+            Log::alert('t1: '.strval($t1));
+            Log::alert('t2: '.strval($t2));
+            Log::alert('total: '.strval(count($this->autocorrelation($testData[$key1]['acc_x']))));
             $testData_eachRepeat[$key1]['acc_x'] = 
                 $this->seperateEachRepeat(  $testData[$key1]['acc_x'], 
                                             $this->findMaxIndexOfAutocorrelation(
@@ -197,6 +199,18 @@ abstract class AI
         return $testData_eachRepeat;
     }
 
+    protected function getTestTime($test)
+    {
+        $testTime = [];
+
+        foreach ($test as $key1 => $session) {
+            $testTime[] = count($session[0]);   
+            Log::alert('testTime '.strval($key1).': '.strval(count($session[0])));  
+        }
+
+        return $testTime;
+    }
+
     protected function parseTemplateData($template)
     {
         $templateData = [];
@@ -239,6 +253,16 @@ abstract class AI
         Log::debug('template min pitch: '.min($templateData['pitch'][0]));
         */
         return $templateData;
+    }
+
+    protected function getTemplateTime($template)
+    {
+        $templateTime = [];
+        foreach ($template as $key1 => $repeat) {
+            $templateTime[] = count($repeat);
+        }
+        Log::alert('templateTime: '.strval(array_sum($templateTime)));  
+        return array_sum($templateTime);
     }
 
     protected function exception($message)

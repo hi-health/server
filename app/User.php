@@ -66,6 +66,14 @@ class User extends Authenticatable
     {
         return $this->hasOne(Manager::class, 'users_id', 'id');
     }
+    public function pointconsume()
+    {
+        return $this->hasMany(PointConsume::class, 'users_id', 'id');
+    }
+    public function pointproduce()
+    {
+        return $this->hasMany(PointProduce::class, 'users_id', 'id');
+    }
     
     public function deviceToken()
     {

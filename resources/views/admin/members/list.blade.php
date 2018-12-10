@@ -17,12 +17,15 @@
                 <th>服務開始</th>
                 <th>剩餘天數</th>
                 <th>狀態</th>
+                <th>獲得點數</th>
+                <th>消費點數</th>
+                <th>總點數</th>
                 <th>功能</th>
             </tr>
         </thead>
         <tfoot>
             <tr>
-                <td class="text-right" colspan="7">{{ $users }}</td>
+                <td class="text-right" colspan="7">{{ $users->links() }}</td>
             </tr>
         </tfoot>
         <tbody>
@@ -38,6 +41,9 @@
                     <td>{{ $user->service->started_at??'---'}}</td>
                     <td>{{ $user->service && $user->service->leave_days > 0 ? $user->service->leave_days:'0'}}</td>
                     <td>{{ $user->status ? '啟用' : '停用' }}</td>
+                    <td>{{$user->pointproduce}}</td>
+                    <td>{{$user->pointconsume}}</td>
+                    <td>{{$user->pointproduce+$user->pointconsume}}</td>
                     <td>
                         <a href="{{ route('admin-members-detail', ['member_id' => $user->id]) }}">查看</a>
                     </td>

@@ -32,9 +32,9 @@ return [
     'arns' => [
         // 正式new by Jeff
         'member-gcm' => 'arn:aws:sns:us-west-2:573411361750:app/GCM/GCM_com.hi.health',
-        'member-apn' => 'arn:aws:sns:us-west-2:573411361750:app/APNS/ApplePushService_com.hihealth.client',
+        'member-apn' => 'arn:aws:sns:us-west-2:573411361750:app/APNS/ApplePushService_com.hihealth.client.dev',
         'doctor-gcm' => 'arn:aws:sns:us-west-2:573411361750:app/GCM/GCM_com.hi.health',
-        'doctor-apn' => 'arn:aws:sns:us-west-2:573411361750:app/APNS/ApplePushService_com.hihealth.doctor',
+        'doctor-apn' => 'arn:aws:sns:us-west-2:573411361750:app/APNS/ApplePushService_com.hihealth.doctor.dev',
 
         // 測試 by aleiku
         //'member-gcm' => 'arn:aws:sns:us-west-2:912431903284:app/GCM/hi-health-client-android',

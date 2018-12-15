@@ -14,6 +14,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Log;
+use DB;
 class UserController extends Controller
 {
     use AWSSNS,
@@ -233,12 +234,20 @@ class UserController extends Controller
         $device_token = $request->input('device_token');
         $app_arn = config('aws.arns.'.$arn);
         try {
+            Log::info('message1');
             $device_arn = $this->addToSNS($app_arn, $device_token);
+            Log::info('message2');
             $user_device_token = new UserDeviceToken([
                 'device_arn' => $device_arn,
                 'device_token' => $device_token,
             ]);
+            Log::info($user_device_token);
             $user->deviceToken()->save($user_device_token);
+            DB::connection()->enableQueryLog();
+            Log::info(DB::getQueryLog());
+            Log::info('message3');
+            Log::info($user->deviceToken()->save($user_device_token));
+            Log::info('message4');
         } catch (Exception $exception) {
             return response()->json($exception->getMessage(), 400);
         }

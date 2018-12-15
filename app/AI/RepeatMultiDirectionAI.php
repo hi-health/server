@@ -398,7 +398,7 @@ class RepeatMultiDirectionAI extends AI{
         for ($i=0; $i < $this->session; $i++) { 
 
             //workout time too short
-            if($this->testTime[$i]/$this->test_repeat_time < $this->templateTime/5/2){
+            if($this->testTime[$i]/$this->test_repeat_time < $this->templateTime/5/3){
                 $score[] = 0;
             }
             else{

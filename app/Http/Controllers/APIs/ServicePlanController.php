@@ -22,12 +22,38 @@ class ServicePlanController extends Controller
     {
         $service = Service
             ::where('id', $service_id)
-            ->first();\Log::info($service_id);
+            ->first()
+            ->plans
+            ->map(function ($item, $key) {
+                $tmp1 = $item->videos->map(function ($item1, $key1) {
+                    //Log::info(collect($item1)->forget("movement_template_data")->keys());
+                    //$tmp2 = collect($item1)->forget("movement_template_data")->toArray();
+                    $item1->movement_template_data = null;
+                    $item1->score->map(function($item2, $key2){
+                        $item2->movement_test_data = null;
+                        return $item2;
+                    });
+                    return $item1;
+                });
+                return $item;
+                        // [    "id"=> $item["id"],
+                        //     "services_id"=> $item["services_id"],
+                        //     "started_at"=> $item["started_at"],
+                        //     "stopped_at"=> $item["stopped_at"],
+                        //     "weight"=> $item["weight"],
+                        //     "created_at"=> $item["created_at"],
+                        //     "updated_at"=> $item["updated_at"],
+                        //     "deleted_at"=> $item["deleted_at"],
+                        //     "videos"=>$tmp1
+                        // ];
+            });
+
         if (!$service) {
             return response()->json(null, 404);
         }
 
-        return response()->json($service->plans);
+
+        return response()->json($service);
     }
 
     public function getActivationFlag(Request $request, $service_id, $plan_id, $video_id)

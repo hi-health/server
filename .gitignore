@@ -3,6 +3,7 @@
 /public/storage
 /public/services
 /public/ipa/*.ipa
+/public/ipa/*.mobileprovision
 /storage/*.key
 /storage/debugbar
 /storage/framework/cache

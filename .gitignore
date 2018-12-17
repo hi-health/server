@@ -2,6 +2,7 @@
 /public/hot
 /public/storage
 /public/services
+/public/ipa/*.ipa
 /storage/*.key
 /storage/debugbar
 /storage/framework/cache

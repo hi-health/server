@@ -10,6 +10,8 @@
         <a href="{{ route('admin-doctors-add-form') }}" class="pull-right"><i class="fa fa-plus"></i> 新增員工</a>
     </div>
 </div>
+
+@if($users)
 <div id="doctors-table" class="table-responsive">
     <table class="table table-bordered table-striped table-hover">
         <thead>
@@ -35,7 +37,11 @@
                 <tr>
                     <td>{{ $user->doctor->id }}</td>
                     <td>
-                        <a href="{{ route('admin-services-list-by-doctor', ['doctor_id' => $user->id]) }}">{{ $user->name }}</a>
+                        @if(Auth::user() -> manager)
+                            {{ $user->name }}
+                        @else
+                             <a href="{{ route('admin-services-list-by-doctor', ['doctor_id' => $user->id]) }}">{{ $user->name }}</a>
+                        @endif
                     </td>
                     <td>{{ $user->doctor->title }}</td>
                     <td>{{ $user->account }}</td>
@@ -65,6 +71,13 @@
         </tbody>
     </table>
 </div>
+
+@else
+<div style="text-align:center; width:100%">
+    <pre>尚未有註冊員工</pre>
+</div>
+@endif
+
 @endsection
 @push('scripts')
 

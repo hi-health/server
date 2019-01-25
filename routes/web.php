@@ -48,11 +48,11 @@ Route::group([
         'prefix' => 'doctors',
     ], function ($router) {
         $router->get('', 'DoctorController@showListPage')
-            ->name('admin-doctors-list')->middleware('auth:admin');
+            ->name('admin-doctors-list');//->middleware('auth:admin');
         $router->get('add', 'DoctorController@showAddForm')
             ->name('admin-doctors-add-form');
         $router->get('{doctor_id}', 'DoctorController@showEditForm')
-            ->name('admin-doctors-edit-form')->middleware('auth:admin');
+            ->name('admin-doctors-edit-form');//->middleware('auth:admin');
     });
 
     $router->group([

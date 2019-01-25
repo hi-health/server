@@ -26,8 +26,7 @@ class DoctorController extends Controller
 
     public function getById(Request $request, $doctor_id)
     {
-        $user = User
-            ::where('id', $doctor_id)
+        $user = User::where('id', $doctor_id)
             ->first();
         if (!$user or !$user->doctor) {
             return response()->json(null, 404);
@@ -43,8 +42,7 @@ class DoctorController extends Controller
 
     public function getByNumber(Request $request, $number)
     {
-        $doctor = Doctor
-            ::with('user')
+        $doctor = Doctor::with('user')
             ->where('number', $number)
             ->first();
         if (!$doctor or !$doctor->user) {
@@ -109,11 +107,9 @@ class DoctorController extends Controller
         $doctor = User
             ::withDoctor($doctor_id)
             ->first();
-        Log::alert('11111111');
         if (!$doctor) {
             return response()->json(null, 404);
         }
-        Log::alert('22222222');
         $is_paid = $request->get('is_paid', null);
         // 先取得該醫生有服務記錄的病人編號
         $members_id = Service::where('doctors_id', $doctor_id)

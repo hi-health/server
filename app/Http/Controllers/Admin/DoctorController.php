@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Auth;
 use App\Http\Controllers\Controller;
 use App\Parameter;
 use App\User;
@@ -11,16 +12,35 @@ class DoctorController extends Controller
 {
     public function showListPage(Request $request)
     {
-        $per_page = $request->get('per_page', 20);
-        $users = User
-            ::with('doctor')
-            ->where('login_type', 2)
-            ->orderBy('id', 'DESC')
-            ->paginate($per_page);
+        if(Auth::user()->role == 1){
+            $per_page = $request->get('per_page', 20);
+            $users = User
+                ::with('doctor')
+                ->where('login_type', 2)
+                ->orderBy('id', 'DESC')
+                ->paginate($per_page);
 
-        return view('admin.doctors.list', [
-            'users' => $users,
-        ]);
+            return view('admin.doctors.list', [
+                'users' => $users,
+            ]);
+        }
+        elseif(Auth::user()->manager->doctor){
+            $tmp = [];
+            foreach (Auth::user()->manager->doctor as $value) {
+                $tmp[] = $value->user->id;
+            }
+            
+            $per_page = $request->get('per_page', 20);
+            $users = User::with('doctor')
+                ->where('login_type', 2)
+                ->whereIn('id', $tmp)
+                ->orderBy('id', 'DESC')
+                ->paginate($per_page);
+
+            return view('admin.doctors.list', [
+                'users' => $users,
+            ]);
+        }
     }
 
     public function showAddForm()
@@ -43,8 +63,7 @@ class DoctorController extends Controller
 
     public function showEditForm($doctor_id)
     {
-        $user = User
-            ::with('doctor')
+        $user = User::with('doctor')
             ->where('id', $doctor_id)
             ->where('login_type', 2)
             ->first();
@@ -52,8 +71,7 @@ class DoctorController extends Controller
             return redirect()
                 ->route('admin-doctors-list');
         }
-        $cities = Parameter
-            ::where('type', 'city')
+        $cities = Parameter::where('type', 'city')
             ->get()
             ->map(function ($item) {
                 return (object) [

@@ -76,7 +76,7 @@
                     </a>
                 </li>
             </ul>
-        @else
+        @elseif(Auth::user() -> manager)
             <ul class="sidebar-menu">
                 <li>
                     <a href="{{ route('admin-doctors-add-form') }}">
@@ -84,7 +84,14 @@
                         <span>新增員工</span>
                     </a>
                 </li>
+                <li>
+                    <a href="{{ route('admin-doctors-list') }}">
+                        <i class="fa fa-plus-square"></i>
+                        <span>員工管理</span>
+                    </a>
+                </li>
             </ul>
+
         @endif
     </section>
 </aside>

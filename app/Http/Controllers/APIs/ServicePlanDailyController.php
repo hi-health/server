@@ -55,6 +55,10 @@ class ServicePlanDailyController extends Controller
                                                 ->pluck('score')
                                                 ->first(), true);
 
+                                        $reason = json_decode($daily->where('service_plan_videos_id', $video->id)
+                                                ->pluck('reason')
+                                                ->first(), true); 
+
                                         $ai_score = is_array($ai_score) ? $ai_score : []; 
 
                                         return [
@@ -68,6 +72,7 @@ class ServicePlanDailyController extends Controller
                                             ),
                                             'ai_score'     =>  $ai_score,
                                             'ai_score_avg' =>  count($ai_score) > 0 ? round(array_sum($ai_score)/count($ai_score)) : 0,
+                                            'reason' => $reason
                                         ];
                                     })->values(),
                             ];
@@ -121,6 +126,7 @@ class ServicePlanDailyController extends Controller
                             ->sortBy('weight')
                             ->map(function ($video) use ($daily) {
                                 $ai_score = json_decode($daily->where('service_plan_videos_id', $video->id) ->pluck('score')->first(), true);
+                                $reason = json_decode($daily->where('service_plan_videos_id', $video->id)->pluck('reason')->first(), true);
 
                                 $ai_score = is_array($ai_score) ? $ai_score : []; 
 
@@ -131,6 +137,7 @@ class ServicePlanDailyController extends Controller
                                     'score' => $daily->where('service_plan_videos_id', $video->id)->pluck('score')->first(),
                                     'ai_score'     =>  $ai_score,
                                     'ai_score_avg' =>  count($ai_score) > 0 ? array_sum($ai_score)/count($ai_score) : 0,
+                                    'reason' => $reason
                                 ];
                             })->values(),
                     ];
@@ -193,6 +200,7 @@ class ServicePlanDailyController extends Controller
                                                     ], 
                                                     [
                                                         'score' => json_encode($score),
+                                                        'reason' => json_encode($reason),
                                                         'movement_test_data' => json_encode($video['test_data'])
                                                     ]);
 

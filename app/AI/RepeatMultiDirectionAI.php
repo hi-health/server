@@ -492,36 +492,38 @@ class RepeatMultiDirectionAI extends AI{
                     $all_gyro = $score_1session['roll'] + $score_1session['yaw'] + $score_1session['pitch'];
                     $diff_acce = round((25-$all_acce)/25*100, 1);
                     $diff_gyro = round((25-$all_gyro)/25*100, 1);
-                    $reason_1session = ["您的速度跟標準相差了".strval($diff_acce)."度","您的角速度跟標準相差了".strval($diff_gyro)."度"];
+                    $reason_1session = ["您的速度跟標準相差了".strval($diff_acce)."%","您的角速度跟標準相差了".strval($diff_gyro)."%"];
                 }
                 else{
                     $arr_acce = [$majorLevel['acc_x'],$majorLevel['acc_y'],$majorLevel['acc_z']];
                     $arr_gyro = [$majorLevel['roll'],$majorLevel['yaw'],$majorLevel['pitch']];
-                    switch(array_keys($arr_acce,max($arr_acce))){
+                    Log::debug('reason max: '.strval(array_keys($arr_acce,max($arr_acce))[0]));
+                    switch(array_keys($arr_acce,max($arr_acce))[0]){
                         case 0:
-                            $diff_acce = (2-$acc_x_max_ratio-$acc_x_min_ratio)*50;
+                            $diff_acce = ($acc_x_max_ratio+$acc_x_min_ratio)*50;
                             break;
                         case 1:
-                            $diff_acce = (2-$acc_y_max_ratio-$acc_y_min_ratio)*50;
+                            $diff_acce = ($acc_y_max_ratio+$acc_y_min_ratio)*50;
                             break;
                         case 2:
-                            $diff_acce = (2-$acc_z_max_ratio-$acc_z_min_ratio)*50;
+                            $diff_acce = ($acc_z_max_ratio+$acc_z_min_ratio)*50;
                             break;
                     }
-                    switch(array_keys($arr_gyro,max($arr_gyro))){
+                    Log::debug('reason max: '.strval(array_keys($arr_gyro,max($arr_gyro))[0]));
+                    switch(array_keys($arr_gyro,max($arr_gyro))[0]){
                         case 0:
-                            $diff_gyro = (2-$roll_max_ratio-$roll_min_ratio)*50;
+                            $diff_gyro = ($roll_max_ratio+$roll_min_ratio)*50;
                             break;
                         case 1:
-                            $diff_gyro = (2-$yaw_max_ratio-$yaw_min_ratio)*50;
+                            $diff_gyro = ($yaw_max_ratio+$yaw_min_ratio)*50;
                             break;
                         case 2:
-                            $diff_gyro = (2-$pitch_max_ratio-$pitch_min_ratio)*50;
+                            $diff_gyro = ($pitch_max_ratio+$pitch_min_ratio)*50;
                             break;
                     }
                     $diff_acce = round($diff_acce, 1);
                     $diff_gyro = round($diff_gyro, 1);
-                    $reason_1session = ["您的速度跟標準相差了".strval($diff_acce)."度","您的角速度跟標準相差了".strval($diff_gyro)."度"];
+                    $reason_1session = ["您的速度跟標準相差了".strval($diff_acce)."%","您的角速度跟標準相差了".strval($diff_gyro)."%"];
                 }
                 
 
@@ -552,6 +554,17 @@ class RepeatMultiDirectionAI extends AI{
             'reason' => $reason
         ];
     }
+    public function printFeature()
+	{
+		$tmp = [
+				'test'=> $this->testData,
+                'template'=>$this->templateData,
+                'rawTest'=> $this->rawTestData,
+				'rawTemplate'=>$this->rawTemplateData
+                ];
+                
+		return $tmp;
+	}
 }
 
 ?>

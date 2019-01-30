@@ -1,5 +1,5 @@
 <?php
-namespace App\AI;
+//namespace App\AI;
 
 use Exception;
 use Log;

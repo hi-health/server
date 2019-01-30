@@ -20,14 +20,32 @@ class ServicePlanController extends Controller
 
     public function getAll(Request $request, $service_id)
     {
-        $service = Service
-            ::where('id', $service_id)
-            ->first();\Log::info($service_id);
-        if (!$service) {
-            return response()->json(null, 404);
-        }
+        // $service = Service
+        //     ::where('id', $service_id)
+        //     ->first();
+            // \Log::info($service_id);
+        // if (!$service) {
+        //     return response()->json(null, 404);
+        // }
+        $plans = Service::find($service_id)
+            ->plans
+            ->map(function ($item, $key) {
+                // $videos = $item->videos;
+                return $item;
+                // foreach ($videos as &$video) {
+                //     $video = collect($video)->except('movement_template_data');
+                // }
+            });
 
-        return response()->json($service->plans);
+        // $plans = Service::find($service_id)->plans;
+        // foreach ($plans as &$plan) {
+        //     $videos = $plan->videos->toArray();
+        //     foreach ($videos as &$video) {
+        //         $video = collect($video)->except('movement_template_data');
+        //     }
+        // }
+
+        return response()->json($plans);
     }
 
     public function getActivationFlag(Request $request, $service_id, $plan_id, $video_id)

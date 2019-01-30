@@ -27,8 +27,7 @@ class SendMemberCreateRequestNotification implements ShouldQueue
         //     ::where('treatment_type', $member_request->treatment_type)
         //     ->get()
         //     ->pluck('users_id');
-        $doctors = User
-            ::with('doctor')
+        $doctors = User::with('doctor')
             ->whereHas('doctor')
             // ->whereIn('id', $doctors_id)
             ->where('city_id', $member->city_id)

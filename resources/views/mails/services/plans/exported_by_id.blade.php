@@ -13,8 +13,8 @@
 
                 @foreach($plan->videos()->withTrashed()->get() as $video)
                     <h3 style="text-align:left">影片名稱：{{ $video->description }}</h3>
-                    <img src="{{ $message->embed(asset($video->thumbnail)) }}" width="100"><br><br>
-                    <!-- <img src="{{ asset($video->thumbnail) }}" width="100"><br><br> -->
+                    <!-- <img src="{{ $message->embed(asset($video->thumbnail)) }}" width="100"><br><br> -->
+                    <img src="{{ asset($video->thumbnail) }}" width="100"><br><br>
                     <table class="table table-sm" style="width:400px">
                         <thead bgcolor="#84c1ff">
                             <tr>

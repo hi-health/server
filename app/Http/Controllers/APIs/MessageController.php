@@ -18,14 +18,12 @@ class MessageController extends Controller
 
     public function getChunk(Request $request, $doctor_id, $member_id)
     {
-        $member = User
-            ::withMember($member_id)
+        $member = User::withMember($member_id)
             ->first();
         if (!$member) {
             return response()->json(null, 404);
         }
-        $doctor = User
-            ::withDoctor($doctor_id)
+        $doctor = User::withDoctor($doctor_id)
             ->first();
         if (!$doctor) {
             return response()->json(null, 404);
@@ -35,8 +33,7 @@ class MessageController extends Controller
         $member_request_id = $request->get('member_request_id', null);
         $per_page = $request->get('per_page', 20);
         $is_vip = $this->isVIPMember($member_id, $doctor_id);
-        $message_model = Message
-            ::with('member', 'doctor')
+        $message_model = Message::with('member', 'doctor')
             ->where('doctors_id', $doctor_id)
             ->where('members_id', $member_id)
             ->where('visible', true);
@@ -89,8 +86,7 @@ class MessageController extends Controller
             ];
         }
         if (!$is_vip) {
-            $first_message = Message
-                ::where('members_id', $member_id)
+            $first_message = Message::where('members_id', $member_id)
                 ->where('doctors_id', $doctor_id)
                 ->where('source', 'doctor')
                 ->whereNotNull('started_at')
@@ -111,16 +107,14 @@ class MessageController extends Controller
         }
         $source = $request->get('source');
         if ($source === 'doctor') {
-            $updated = Message
-                ::where('doctors_id', $doctor_id)
+            $updated = Message::where('doctors_id', $doctor_id)
                 ->where('members_id', $member_id)
                 ->whereNull('doctor_readed_at')
                 ->update([
                     'doctor_readed_at' => Carbon::now(),
                 ]);
         } else if ($source === 'member') {
-            $updated = Message
-                ::where('members_id', $member_id)
+            $updated = Message::where('members_id', $member_id)
                 ->where('doctors_id', $doctor_id)
                 ->whereNull('member_readed_at')
                 ->update([
@@ -148,8 +142,7 @@ class MessageController extends Controller
         $source = $request->input('source');
         $field_name = $source.'_readed_at';
         $visible = $request->input('visible', true);
-        $has_message = Message
-            ::where('members_id', $member_id)
+        $has_message = Message::where('members_id', $member_id)
             ->where('doctors_id', $doctor_id)
             ->where('source', 'doctor')
             ->whereNotNull('started_at')
@@ -161,16 +154,14 @@ class MessageController extends Controller
         }
         $message->$field_name = Carbon::now();
         $message->save();
-        $latest_messages = Message
-            ::with('member', 'doctor')
+        $latest_messages = Message::with('member', 'doctor')
             ->where('doctors_id', $doctor_id)
             ->where('members_id', $member_id)
             ->whereNull($field_name)
             ->where('visible', true)
             ->orderBy('id', 'ASC')
             ->get();
-        $updated = Message
-            ::whereIn('id', $latest_messages->pluck('id'))
+        $updated = Message::whereIn('id', $latest_messages->pluck('id'))
             ->update([
                 $field_name => Carbon::now(),
             ]);
@@ -209,11 +200,9 @@ class MessageController extends Controller
         }
         // 9/6 要求移除這項檢查
 //        if ($visible) {
-            $doctor = User
-                ::withDoctor($doctor_id)
+            $doctor = User::withDoctor($doctor_id)
                 ->first();
-            $member = User
-                ::withMember($member_id)
+            $member = User::withMember($member_id)
                 ->first();
             if ($source === 'doctor') {
                 event(

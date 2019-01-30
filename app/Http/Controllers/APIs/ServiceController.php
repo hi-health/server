@@ -422,8 +422,6 @@ class ServiceController extends Controller
             );
 
             //刪除Member的MemberRequest及對應的MemberRequestDoctor
-            $service = Service::where('id', $service_id)
-                ->first();
             $member_request = MemberRequest::where('members_id', $service->members_id)
                 ->first();
             MemberRequestDoctor::where('member_requests_id', $member_request->id)

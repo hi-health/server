@@ -20,32 +20,40 @@ class ServicePlanController extends Controller
 
     public function getAll(Request $request, $service_id)
     {
-        // $service = Service
-        //     ::where('id', $service_id)
-        //     ->first();
-            // \Log::info($service_id);
-        // if (!$service) {
-        //     return response()->json(null, 404);
-        // }
-        $plans = Service::find($service_id)
+        $service = Service
+            ::where('id', $service_id)
+            ->first()
             ->plans
             ->map(function ($item, $key) {
-                // $videos = $item->videos;
+                $tmp1 = $item->videos->map(function ($item1, $key1) {
+                    //Log::info(collect($item1)->forget("movement_template_data")->keys());
+                    //$tmp2 = collect($item1)->forget("movement_template_data")->toArray();
+                    $item1->movement_template_data = null;
+                    $item1->score->map(function($item2, $key2){
+                        $item2->movement_test_data = null;
+                        return $item2;
+                    });
+                    return $item1;
+                });
                 return $item;
-                // foreach ($videos as &$video) {
-                //     $video = collect($video)->except('movement_template_data');
-                // }
+                        // [    "id"=> $item["id"],
+                        //     "services_id"=> $item["services_id"],
+                        //     "started_at"=> $item["started_at"],
+                        //     "stopped_at"=> $item["stopped_at"],
+                        //     "weight"=> $item["weight"],
+                        //     "created_at"=> $item["created_at"],
+                        //     "updated_at"=> $item["updated_at"],
+                        //     "deleted_at"=> $item["deleted_at"],
+                        //     "videos"=>$tmp1
+                        // ];
             });
 
-        // $plans = Service::find($service_id)->plans;
-        // foreach ($plans as &$plan) {
-        //     $videos = $plan->videos->toArray();
-        //     foreach ($videos as &$video) {
-        //         $video = collect($video)->except('movement_template_data');
-        //     }
-        // }
+        if (!$service) {
+            return response()->json(null, 404);
+        }
 
-        return response()->json($plans);
+
+        return response()->json($service);
     }
 
     public function getActivationFlag(Request $request, $service_id, $plan_id, $video_id)
@@ -165,8 +173,7 @@ class ServicePlanController extends Controller
             'plans.*.videos.*.session'    => ['required', 'integer'],
             'plans.*.videos.*.video_path'=> ['nullable', 'string']
         ]);
-        $service = Service
-            ::where('id', $service_id)
+        $service = Service::where('id', $service_id)
             ->first();
         if (!$service) {
             return response()->json(null, 404);
@@ -178,8 +185,7 @@ class ServicePlanController extends Controller
             $plans_file = $request->file('plans');
             $service_plans = collect($plans)->map(function ($item) use ($service, &$plans_file) {
             if (isset($item['id'])) {
-                    $service_plan = ServicePlan
-                        ::where('id', $item['id'])
+                    $service_plan = ServicePlan::where('id', $item['id'])
                         ->first();
                 if ($service_plan) {
                     $service_plan->update([
@@ -265,8 +271,7 @@ class ServicePlanController extends Controller
 
                 }
                 if (isset($video['id'])) {
-                    $service_plan_video = ServicePlanVideo
-                        ::where('service_plans_id', $service_plan->id)
+                    $service_plan_video = ServicePlanVideo::where('service_plans_id', $service_plan->id)
                         ->where('id', $video['id'])
                         ->first();
                     if ($service_plan_video) {
@@ -294,8 +299,7 @@ class ServicePlanController extends Controller
             'plans' => ['required', 'array', 'min:1'],
             'plans.*.id' => ['required', 'integer'],
         ]);
-        $service = Service
-            ::where('id', $service_id)
+        $service = Service::where('id', $service_id)
             ->first();
         if (!$service) {
             return response()->json(null, 404);
@@ -305,8 +309,7 @@ class ServicePlanController extends Controller
         }
         $plans = $request->input('plans');
         $service_plans_delete = collect($plans)->map(function ($plan) {
-            $service_plan = ServicePlan
-                ::where('id', $plan['id'])
+            $service_plan = ServicePlan::where('id', $plan['id'])
                 ->first();
             if ($service_plan) {
                 $deleted = $service_plan->delete();
@@ -333,8 +336,7 @@ class ServicePlanController extends Controller
             'videos' => ['required', 'array', 'min:1'],
             'videos.*.id' => ['required', 'integer'],
         ]);
-        $service = Service
-            ::where('id', $service_id)
+        $service = Service::where('id', $service_id)
             ->first();
         if (!$service) {
             return response()->json(null, 404);

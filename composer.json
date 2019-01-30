@@ -19,7 +19,7 @@
         "aws/aws-sdk-php-laravel": "^3.1",
         "barryvdh/laravel-debugbar": "^2.3",
         "doctrine/dbal": "^2.8",
-        "guzzlehttp/guzzle": "^6.2",
+        "guzzlehttp/guzzle": "~6.2",
         "laravel/dusk": "^1.1",
         "laravel/framework": "5.4.*",
         "laravel/tinker": "~1.0",

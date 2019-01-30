@@ -45,12 +45,12 @@
 			</div>
 			<div class="w3-center" style="margin: 13px 0px">
 				<em style="font-size: 12px;">您目前共有</em><br>
-				<em style="font-size: 24px; color: #ffc888">{{ $RemainedPoint }}</em><em style="font-size: 12px;"> 點</em>
+				<em style="font-size: 24px; color: #ffc888">{{ round($RemainedPoint,1) }}</em><em style="font-size: 12px;"> 點</em>
 
 			</div>
 			<div class="w3-center" style="margin: 13px 0px">
 				<em style="font-size: 12px;">回購總價格</em><br>
-				<em style="font-size: 12px;">NT$ </em><em style="font-size: 24px; color: #ffc888">{{$RemainedPoint*$HiPointRate}}</em>
+				<em style="font-size: 12px;">NT$ </em><em style="font-size: 24px; color: #ffc888">{{round($RemainedPoint,1)*$HiPointRate}}</em>
 
 			</div>
 		</div>

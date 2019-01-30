@@ -55,6 +55,10 @@ class ServicePlanDailyController extends Controller
                                                 ->pluck('score')
                                                 ->first(), true);
 
+                                        $reason = json_decode($daily->where('service_plan_videos_id', $video->id)
+                                                ->pluck('reason')
+                                                ->first(), true); 
+
                                         $ai_score = is_array($ai_score) ? $ai_score : []; 
 
                                         return [
@@ -68,6 +72,7 @@ class ServicePlanDailyController extends Controller
                                             ),
                                             'ai_score'     =>  $ai_score,
                                             'ai_score_avg' =>  count($ai_score) > 0 ? round(array_sum($ai_score)/count($ai_score)) : 0,
+                                            'reason' => $reason
                                         ];
                                     })->values(),
                             ];
@@ -121,6 +126,7 @@ class ServicePlanDailyController extends Controller
                             ->sortBy('weight')
                             ->map(function ($video) use ($daily) {
                                 $ai_score = json_decode($daily->where('service_plan_videos_id', $video->id) ->pluck('score')->first(), true);
+                                $reason = json_decode($daily->where('service_plan_videos_id', $video->id)->pluck('reason')->first(), true);
 
                                 $ai_score = is_array($ai_score) ? $ai_score : []; 
 
@@ -131,6 +137,7 @@ class ServicePlanDailyController extends Controller
                                     'score' => $daily->where('service_plan_videos_id', $video->id)->pluck('score')->first(),
                                     'ai_score'     =>  $ai_score,
                                     'ai_score_avg' =>  count($ai_score) > 0 ? array_sum($ai_score)/count($ai_score) : 0,
+                                    'reason' => $reason
                                 ];
                             })->values(),
                     ];
@@ -181,7 +188,9 @@ class ServicePlanDailyController extends Controller
                                                     [
                                                         'movement_test_data' => json_encode($video['test_data'])
                                                     ]);
-            $score = $this->claculateScore($plan_id,$video['id'],$video['test_data']);
+            $tmp = $this->claculateScore($plan_id,$video['id'],$video['test_data']);
+            $score = $tmp['score'];
+            $reason = $tmp['reason'];
             $service_plan_daily = ServicePlanDaily::updateOrCreate(
                                                     [
                                                         'services_id' => $service->id,
@@ -191,6 +200,7 @@ class ServicePlanDailyController extends Controller
                                                     ], 
                                                     [
                                                         'score' => json_encode($score),
+                                                        'reason' => json_encode($reason),
                                                         'movement_test_data' => json_encode($video['test_data'])
                                                     ]);
 
@@ -210,7 +220,7 @@ class ServicePlanDailyController extends Controller
                     $score[$key] = 0;
                 }
             }
-            return response()->json(["ai_score"=>$score]);
+            return response()->json(["ai_score"=>$score,"reason"=>$reason]);
         //}
         //catch(Exception $exception){
         //    return response()->json($exception, 500);
@@ -288,22 +298,6 @@ class ServicePlanDailyController extends Controller
 
     public function claculateScore($servicePlan_id,$servicePlanVideo_id, $test_data)
     {   
-        /*
-        $array = [];
-        $service_plan_video = ServicePlanVideo::where('id', $servicePlanVideo_id)->where('service_plans_id', $servicePlan_id)->first();
-        for ($x = 0; $x < $service_plan_video->session; $x++) {
-            if($x%3 == 0){
-              array_push($array, rand(80,95));  
-            }
-            elseif($x%3 == 1){
-              array_push($array, 0);  
-            }
-            elseif($x%3 == 2){
-              array_push($array, rand(45,65));  
-            }
-            
-        } 
-        */
         
         $service_plan_video = ServicePlanVideo::where('id', $servicePlanVideo_id)->where('service_plans_id', $servicePlan_id)->first();
         $template = json_decode($service_plan_video->movement_template_data);
@@ -318,8 +312,8 @@ class ServicePlanDailyController extends Controller
 
         Log::debug('AI optimization: '.strval($servicePlanVideo_id));
         $ai = new RepeatMultiDirectionAI($template, $test, $param);
-        $score = $ai->calScore();
-        return $score;
+        $tmp = $ai->calScore();
+        return $tmp;
     }
 
     public function claculatePoint($service_id, $plan_id, $daily_id, $score)

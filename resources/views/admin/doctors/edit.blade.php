@@ -1,5 +1,10 @@
 @extends('layouts.admin')
 @section('contents')
+<style type="text/css">
+    img {
+        image-orientation: from-image;
+    }
+</style>
 <h3>
     <i class="fa fa-pencil"></i>
     員工管理 - 修改員工資料

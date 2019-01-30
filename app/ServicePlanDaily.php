@@ -21,6 +21,7 @@ class ServicePlanDaily extends Model
         'service_plan_videos_id',
         'movement_test_data',
         'score',
+        'reason',
         'scored_at',
     ];
 

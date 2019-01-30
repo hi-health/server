@@ -77,7 +77,7 @@ class MemberController extends Controller
             'last_service_id' => $last_service_id,
             'last_leave_days' => $last_leave_days,
             'online_status' => $user->online,
-            'points' => $RemainedPoint
+            'points' => intval($RemainedPoint)
         ]);
     }
 

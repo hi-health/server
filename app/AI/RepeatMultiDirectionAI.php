@@ -5,12 +5,32 @@ use Log;
 
 class RepeatMultiDirectionAI extends AI{
 
+    protected $test_score;
 
+    protected $test_reason;
+
+    protected $test_score_1session;
+
+    protected $test_all_acce;
+
+    protected $test_all_gyro;
+
+    protected $test_diff_acce;
+
+    protected $test_diff_gyro;
 
 	public function __construct($template, $test, $param)
     {
         parent::__construct($template, $test, $param);
         $this->template_repeat_time = count($this->templateData['acc_x']);
+        $calScore_result = $this->calScore();
+        $this->test_score = $calScore_result['score'];
+        $this->test_reason = $calScore_result['reason'];
+        $this->test_score_1session =  $calScore_result['score_1session'];
+        $this->test_all_acce =  $calScore_result['all_acce'];
+        $this->test_all_gyro =  $calScore_result['all_gyro'];
+        $this->test_diff_acce =  $calScore_result['diff_acce'];
+        $this->test_diff_gyro =  $calScore_result['diff_gyro'];
     }
 
     protected function calMajorLevel()
@@ -551,16 +571,31 @@ class RepeatMultiDirectionAI extends AI{
         }
         return [
             'score' => $score,
-            'reason' => $reason
+            'reason' => $reason,
+            'score_1session' => $score_1session,
+            'all_acce' => $all_acce,
+            'all_gyro' => $all_gyro,
+            'diff_acce' => $diff_acce,
+            'diff_gyro' => $diff_gyro
         ];
     }
     public function printFeature()
 	{
 		$tmp = [
 				'test'=> $this->testData,
-                'template'=>$this->templateData,
+                'template'=> $this->templateData,
                 'rawTest'=> $this->rawTestData,
-				'rawTemplate'=>$this->rawTemplateData
+				'rawTemplate'=> $this->rawTemplateData,
+                'testTime'=> $this->testTime,
+                'templateTime'=> $this->templateTime,
+                'session'=> $this->session,
+                'test_repeat_time'=> $this->test_repeat_time,
+                'all_acce'=> $this->$test_all_acce,
+                'all_gyro'=> $this->$test_all_gyro,
+                'diff_acce'=> $this->$test_diff_acce,
+                'diff_gyro'=> $this->$test_diff_gyro,
+                'score'=> $this->$test_score,
+                'score_1session'=> $this->$test_score_1session,
                 ];
                 
 		return $tmp;

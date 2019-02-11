@@ -101,8 +101,8 @@ abstract class AI
             foreach ($session[0] as $key2 => $sample) {
 
                 $ACC = calibrateByGravity(
-                    [0,1,0],
-                    [0,1,0],
+                    [floatval($sample[6]),floatval($sample[7]),floatval($sample[8])],
+                    [1,0,0],
                     [floatval($sample[0]),floatval($sample[1]),floatval($sample[2])]
                 );
                 $testData[$key1]['acc_x'][$key2] = round($ACC[0], 5);
@@ -113,8 +113,8 @@ abstract class AI
 
 
                 $GYRO = calibrateByGravity(
-                    [0,1,0],
-                    [0,1,0],
+                    [floatval($sample[6]),floatval($sample[7]),floatval($sample[8])],
+                    [1,0,0],
                     [floatval($sample[3]),floatval($sample[4]),floatval($sample[5])]
                 );
                 $testData[$key1]['roll'][$key2] = round($GYRO[0], 5);
@@ -331,8 +331,8 @@ abstract class AI
             foreach ($repeat as $key2 => $sample) {
 
                 $ACC = calibrateByGravity(
-                    [0,1,0],
-                    [0,1,0],
+                    [floatval($sample[6]),floatval($sample[7]),floatval($sample[8])],
+                    [1,0,0],
                     [floatval($sample[0]),floatval($sample[1]),floatval($sample[2])]
                 );
                 $templateData['acc_x'][$key1][$key2] = round($ACC[0], 5);
@@ -343,8 +343,8 @@ abstract class AI
 
 
                 $GYRO = calibrateByGravity(
-                    [0,1,0],
-                    [0,1,0],
+                    [floatval($sample[6]),floatval($sample[7]),floatval($sample[8])],
+                    [1,0,0],
                     [floatval($sample[3]),floatval($sample[4]),floatval($sample[5])]
                 );
                 $templateData['roll'][$key1][$key2] = round($GYRO[0], 5);

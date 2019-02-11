@@ -233,8 +233,15 @@ class ServiceController extends Controller
                 }
             }
             //0920應該補上刪除之前該member的所有service (無論doctor或是payment_status)
-            $member_services = Service::where('members_id',$service->members_id)->whereNotIn('id',[$service_id])->delete();
-            $member_service_plan = ServicePlan::whereNotIn('services_id',[$service_id])->delete();
+            $member_services = Service::where('members_id',$service->members_id)
+                ->whereNotIn('id',[$service_id])
+                ->delete();
+
+            $member_last_service_id = Service::where('members_id',61)
+                ->first()
+                ->id;
+
+            $member_service_plan = ServicePlan::where('services_id',$member_last_service_id)->delete();
 
             $isEmailSuccess = $this->updateOrCreateInvoice_private($service_id);
             return response()->json(["service"=>$service, "email"=>$isEmailSuccess, "confirm_status"=>$service->payment_status]);

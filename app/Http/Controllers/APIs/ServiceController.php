@@ -125,8 +125,7 @@ class ServiceController extends Controller
     private function updateOrCreateInvoice_private($service_id)
     {
         $pay2go_invoice_response = (new Pay2GoInvoice)->sendInvoiceRequest($service_id);
-        $service = Service
-            ::with('member', 'doctor')
+        $service = Service::with('member', 'doctor')
             ->where('id', $service_id)
             ->first();
         if (!$service) {

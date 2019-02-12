@@ -20,6 +20,7 @@ class DemoController extends Controller
             ->map(function ($item, $key) {
                 $tmp1 = $item->videos->map(function ($item1, $key1) {
                     $item1->movement_template_data = null;
+                    $item1['activation_flag'] = 1 ;
                     return $item1;
                 });
                 return $item;

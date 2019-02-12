@@ -25,8 +25,7 @@ class DemoPlan extends Model
 
     public function videos()
     {
-        return $this->hasMany(DemoPlanVideo::class, 'demo_plans_id', 'id')
-            ->with('score');
+        return $this->hasMany(DemoPlanVideo::class, 'demo_plans_id', 'id');
             //->orderBy('weight', 'ASC');
     }
 

@@ -24,7 +24,6 @@ class ServicePlanDailyController extends Controller
     use MemberUtility,
         SlackNotify;
 
-
     public function getAllDate(Request $request, $service_id)
     {
         $service = Service
@@ -188,7 +187,7 @@ class ServicePlanDailyController extends Controller
                                                     [
                                                         'movement_test_data' => json_encode($video['test_data'])
                                                     ]);
-            $tmp = $this->claculateScore($plan_id,$video['id'],$video['test_data']);
+            $tmp = $this->calculateScore($plan_id,$video['id'],$video['test_data']);
             $score = $tmp['score'];
             $reason = $tmp['reason'];
             $service_plan_daily = ServicePlanDaily::updateOrCreate(
@@ -204,7 +203,7 @@ class ServicePlanDailyController extends Controller
                                                         'movement_test_data' => json_encode($video['test_data'])
                                                     ]);
 
-            $point = $this->claculatePoint($service_id, $plan_id, $service_plan_daily->id , $score);
+            $point = $this->calculatePoint($service_id, $plan_id, $service_plan_daily->id , $score);
             $users_id = Service::where('id', $service_id)->first()->member->id;
             $PointProduce = PointProduce::updateOrCreate(
                 [
@@ -250,7 +249,7 @@ class ServicePlanDailyController extends Controller
         $plans = $request->input('plans');
         $service_plan_daily = collect($plans)->map(function ($plan) use ($service, $date) {
             return collect($plan['videos'])->map(function ($video) use ($service, $plan, $date) {
-                $score = $this->claculateScore($plan['id'],$video['test_data']);
+                $score = $this->calculateScore($plan['id'],$video['test_data']);
                 return ServicePlanDaily::updateOrCreate([
                     'services_id' => $service->id,
                     'service_plans_id' => $plan['id'],
@@ -296,7 +295,7 @@ class ServicePlanDailyController extends Controller
         return response()->json($result);
     }
 
-    public function claculateScore($servicePlan_id,$servicePlanVideo_id, $test_data)
+    public function calculateScore($servicePlan_id,$servicePlanVideo_id, $test_data)
     {   
         
         $service_plan_video = ServicePlanVideo::where('id', $servicePlanVideo_id)->where('service_plans_id', $servicePlan_id)->first();
@@ -316,7 +315,7 @@ class ServicePlanDailyController extends Controller
         return $tmp;
     }
 
-    public function claculatePoint($service_id, $plan_id, $daily_id, $score)
+    public function calculatePoint($service_id, $plan_id, $daily_id, $score)
     {
         $Service_charge = Service::where('id',$service_id)->first()->charge_amount;
 
@@ -424,7 +423,7 @@ class ServicePlanDailyController extends Controller
                                                     [
                                                         'movement_test_data' => json_encode($video['test_data'])
                                                     ]);
-            $tmp = $this->newTest_claculateScore($plan_id,$video['id'],$video['test_data']);
+            $tmp = $this->newTest_calculateScore($plan_id,$video['id'],$video['test_data']);
             $score = $tmp['score'];
             $reason = $tmp['reason'];
             $service_plan_daily = ServicePlanDaily::updateOrCreate(
@@ -440,7 +439,7 @@ class ServicePlanDailyController extends Controller
                                                         'movement_test_data' => json_encode($video['test_data'])
                                                     ]);
 
-            $point = $this->claculatePoint($service_id, $plan_id, $service_plan_daily->id , $score);
+            $point = $this->calculatePoint($service_id, $plan_id, $service_plan_daily->id , $score);
             $users_id = Service::where('id', $service_id)->first()->member->id;
             $PointProduce = PointProduce::updateOrCreate(
                 [
@@ -463,7 +462,7 @@ class ServicePlanDailyController extends Controller
         //}
     }
 
-    public function newTest_claculateScore($servicePlan_id,$servicePlanVideo_id, $test_data)
+    public function newTest_calculateScore($servicePlan_id,$servicePlanVideo_id, $test_data)
     {   
         
         $service_plan_video = ServicePlanVideo::where('id', $servicePlanVideo_id)->where('service_plans_id', $servicePlan_id)->first();

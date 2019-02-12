@@ -233,13 +233,14 @@ class ServiceController extends Controller
                 }
             }
             //0920應該補上刪除之前該member的所有service (無論doctor或是payment_status)
+            $member_last_service_id = Service::where('members_id',$service->members_id)
+                ->where('payment_status', 3)
+                ->first()
+                ->id;
+
             $member_services = Service::where('members_id',$service->members_id)
                 ->whereNotIn('id',[$service_id])
                 ->delete();
-
-            $member_last_service_id = Service::where('members_id',61)
-                ->first()
-                ->id;
 
             $member_service_plan = ServicePlan::where('services_id',$member_last_service_id)->delete();
 

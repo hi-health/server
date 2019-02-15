@@ -347,15 +347,21 @@ abstract class AI
 
                 $templateData['acc'][$key1][$key2] = round(floatval(sqrt($sample[0]**2 + $sample[1]**2 + $sample[2]**2)),5);
 
+                // 會差正負號
+                // $GYRO = calibrateByGravity(
+                //     [floatval($sample[6]),floatval($sample[7]),floatval($sample[8])],
+                //     [1,0,0],
+                //     [floatval($sample[3]),floatval($sample[4]),floatval($sample[5])]
+                // );
+                // $templateData['roll'][$key1][$key2] = round($GYRO[0], 5);
+                // $templateData['yaw'][$key1][$key2] = round($GYRO[1], 5);
+                // $templateData['pitch'][$key1][$key2] = round($GYRO[2], 5);
 
-                $GYRO = calibrateByGravity(
-                    [floatval($sample[6]),floatval($sample[7]),floatval($sample[8])],
-                    [1,0,0],
-                    [floatval($sample[3]),floatval($sample[4]),floatval($sample[5])]
-                );
-                $templateData['roll'][$key1][$key2] = round($GYRO[0], 5);
-                $templateData['yaw'][$key1][$key2] = round($GYRO[1], 5);
-                $templateData['pitch'][$key1][$key2] = round($GYRO[2], 5);
+                // 絕對值版本
+                $templateData['roll'][$key1][$key2] = round(abs(floatval($sample[3])), 5);
+                $templateData['yaw'][$key1][$key2] = round(abs(floatval($sample[4])), 5);
+                $templateData['pitch'][$key1][$key2] = round(abs(floatval($sample[5])), 5);
+                //
 
                 $templateData['gyro'][$key1][$key2] = round(floatval(sqrt($sample[3]**2 + $sample[4]**2 + $sample[5]**2)),5);
                 

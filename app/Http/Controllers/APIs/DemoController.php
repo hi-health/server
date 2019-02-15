@@ -19,8 +19,15 @@ class DemoController extends Controller
         $demo_plan = DemoPlan::get()
             ->map(function ($item, $key) {
                 $tmp1 = $item->videos->map(function ($item1, $key1) {
+                    
+                    if($item1->movement_template_data == null){
+                        $item1['activation_flag'] = -1 ;
+                    }
+                    else{
+                        $item1['activation_flag'] = 1 ;
+                    }
+                    
                     $item1->movement_template_data = null;
-                    $item1['activation_flag'] = 1 ;
                     return $item1;
                 });
                 return $item;

@@ -41,4 +41,24 @@ function euclidean_distance($a){
     }
     return sqrt($b);
 }
+
+// function stddev(array $a, $is_sample = false)
+// {
+//     if (count($a) < 2) {
+//         trigger_error("The array has too few elements", E_USER_NOTICE);
+//         return false;
+//     }
+//     return stats_standard_deviation($a, $is_sample);
+// }
+
+function stddev ($arr)
+{
+    $arr_size = count($arr);
+    $mu = array_sum ($arr) / $arr_size;
+    $ans = 0;
+    foreach ($arr as $elem) {
+        $ans += pow(($elem - $mu), 2);
+    }
+    return sqrt($ans / $arr_size);
+}
 ?>

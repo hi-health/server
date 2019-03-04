@@ -99,6 +99,9 @@ abstract class AI
             $t1 = round(count($session[0])/$this->test_repeat_time);
             $t2 = round(count($session[0])/$this->test_repeat_time *2/3);
             foreach ($session[0] as $key2 => $sample) {
+                foreach ($sample as $value) {
+                    Log::alert(gettype($value));
+                }
 
                 $ACC = calibrateByGravity(
                     [floatval($sample[6]),floatval($sample[7]),floatval($sample[8])],
@@ -122,9 +125,24 @@ abstract class AI
                 // $testData[$key1]['pitch'][$key2] = round($GYRO[2], 5);
 
                 //絕對值版本
-                $testData[$key1]['roll'][$key2] = round(abs(floatval($sample[3])), 5);
-                $testData[$key1]['yaw'][$key2] = round(abs(floatval($sample[4])), 5);
-                $testData[$key1]['pitch'][$key2] = round(abs(floatval($sample[5])), 5);
+                if(abs(floatval($sample[3])) > 2.6){
+                    $testData[$key1]['roll'][$key2] = round(abs(floatval($sample[3])), 5);
+                }
+                else{
+                    $testData[$key1]['roll'][$key2] = round(floatval($sample[3]), 5);
+                }
+                if(abs(floatval($sample[4])) > 2.6){
+                    $testData[$key1]['yaw'][$key2] = round(abs(floatval($sample[4])), 5);
+                }
+                else{
+                    $testData[$key1]['yaw'][$key2] = round(floatval($sample[4]), 5);
+                }
+                if(abs(floatval($sample[5])) > 2.6){
+                    $testData[$key1]['pitch'][$key2] = round(abs(floatval($sample[5])), 5);
+                }
+                else{
+                    $testData[$key1]['pitch'][$key2] = round(floatval($sample[5]), 5);
+                }
                 //
 
                 $testData[$key1]['gyro'][$key2] = round(floatval(sqrt($sample[3]**2 + $sample[4]**2 + $sample[5]**2)),5);
@@ -358,9 +376,24 @@ abstract class AI
                 // $templateData['pitch'][$key1][$key2] = round($GYRO[2], 5);
 
                 // 絕對值版本
-                $templateData['roll'][$key1][$key2] = round(abs(floatval($sample[3])), 5);
-                $templateData['yaw'][$key1][$key2] = round(abs(floatval($sample[4])), 5);
-                $templateData['pitch'][$key1][$key2] = round(abs(floatval($sample[5])), 5);
+                if(abs(floatval($sample[3])) > 2.6){
+                    $templateData['roll'][$key1][$key2] = round(abs(floatval($sample[3])), 5);
+                }
+                else{
+                    $templateData['roll'][$key1][$key2] = round(floatval($sample[3]), 5);
+                }
+                if(abs(floatval($sample[4])) > 2.6){
+                    $templateData['yaw'][$key1][$key2] = round(abs(floatval($sample[4])), 5);
+                }
+                else{
+                    $templateData['yaw'][$key1][$key2] = round(floatval($sample[4]), 5);
+                }
+                if(abs(floatval($sample[5])) > 2.6){
+                    $templateData['pitch'][$key1][$key2] = round(abs(floatval($sample[5])), 5);
+                }
+                else{
+                    $templateData['pitch'][$key1][$key2] = round(floatval($sample[5]), 5);
+                }
                 //
 
                 $templateData['gyro'][$key1][$key2] = round(floatval(sqrt($sample[3]**2 + $sample[4]**2 + $sample[5]**2)),5);

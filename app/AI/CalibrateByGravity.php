@@ -9,6 +9,7 @@ include 'Rodrigues.php';
 
 function calibrateByGravity($g0, $g1, $a0){ //g0 -> g1
 
+    //Log::alert(strval(euclidean_distance($g0))."(".strval($g0[0])." ".strval($g0[1])." ".strval($g0[2])."  ".strval(euclidean_distance($g1)));
     $theta = acos( dot_product($g0,$g1)/(euclidean_distance($g0)*euclidean_distance($g1)) );
     $axis = [
         $g0[1]*$g1[2] - $g0[2]*$g1[1],

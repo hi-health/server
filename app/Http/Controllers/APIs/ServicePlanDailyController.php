@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Log;
 use App\AI\RepeatMultiDirectionAI;
+use App\AI\RepeatMultiDirectionAIv1;
 use App\AI\RepeatMultiDirectionAIv3;
 use App\AI\RepeatMultiDirectionAIv3_1;
 
@@ -310,7 +311,19 @@ class ServicePlanDailyController extends Controller
         ];
 
         Log::debug('AI optimization: '.strval($servicePlanVideo_id));
-        $ai = new RepeatMultiDirectionAI($template, $test, $param);
+        try {
+            $ai = new RepeatMultiDirectionAIv1($template, $test, $param);
+        } catch (Exception $e) {
+            $tmp = [
+                'score' => array_fill(0, $service_plan_video->session, 0),
+                'reason' => array_fill(0, $service_plan_video->session, [$e->getMessage(),$e->getMessage()]),
+                'score_detail' => null,
+                'good_move' => null,
+                'good_speed' => null
+            ];
+            return $tmp;
+        }
+        
         $tmp = $ai->calScore();
         return $tmp;
     }
@@ -371,7 +384,18 @@ class ServicePlanDailyController extends Controller
             'point_threshold' => 5
         ];
 
-        $ai = new RepeatMultiDirectionAI($template, $test, $param);
+        try {
+            $ai = new RepeatMultiDirectionAIv1($template, $test, $param);
+        } catch (Exception $e) {
+            $tmp = [
+                'score' => array_fill(0, $service_plan_video->session, 0),
+                'reason' => array_fill(0, $service_plan_video->session, [$e,$e]),
+                'score_detail' => null,
+                'good_move' => null,
+                'good_speed' => null
+            ];
+            return response()->json(['error'=>$e->getMessage()]);
+        }
         $feature = $ai->printFeature();
 
         return response()->json($feature);
@@ -387,7 +411,7 @@ class ServicePlanDailyController extends Controller
             'date' => ['required', 'date_format:Y-m-d'],
             'video' => ['required'],
             'video.id' => ['required','integer'],
-            'video.test_data.start_at' => ['required','date_format:Y-m-d H:i:s'],
+            'video.e.start_at' => ['required','date_format:Y-m-d H:i:s'],
             'video.test_data.stop_at' => ['required','date_format:Y-m-d H:i:s'],
             'video.test_data.data' => ['required','array'],
         ]);

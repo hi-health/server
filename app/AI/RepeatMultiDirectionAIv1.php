@@ -87,7 +87,7 @@ class RepeatMultiDirectionAIv1 extends AI{
                 $this->session,
                 array_fill( 0,
                             $this->test_repeat_time,
-                            [  
+                            [
                                 "roll" => [0, 0],
                                 "yaw" => [0, 0],
                                 "pitch" => [0, 0]
@@ -203,6 +203,7 @@ class RepeatMultiDirectionAIv1 extends AI{
                 $roll_amp_sign = 0;
                 $yaw_amp_sign = 0;
                 $pitch_amp_sign = 0;
+
                 //template的max,min用平均
                 //test用for
                 for ($j=0; $j < $this->test_repeat_time; $j++) { 

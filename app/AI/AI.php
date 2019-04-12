@@ -140,6 +140,9 @@ abstract class AI
 
             $isShouldAbs = [false, false, false, false, false, false, false, false, false];
             foreach ($session[0] as $key2 => $sample) {
+                foreach ($sample as $value) {
+                    Log::alert(gettype($value));
+                }
 
                 $ACC = calibrateByGravity(
                     [floatval($sample[6]),floatval($sample[7]),floatval($sample[8])],

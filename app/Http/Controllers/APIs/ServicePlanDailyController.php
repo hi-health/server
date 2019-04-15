@@ -220,7 +220,7 @@ class ServicePlanDailyController extends Controller
                     $score[$key] = 0;
                 }
             }
-            return response()->json(["ai_score"=>$score,"reason"=>$reason]);
+            return response()->json(["ai_score"=>$score,"reason"=>$reason,"start_at"=>json_encode($video['test_data']["start_at"])]);
         //}
         //catch(Exception $exception){
         //    return response()->json($exception, 500);

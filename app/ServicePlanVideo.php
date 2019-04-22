@@ -6,6 +6,7 @@ use App\Traits\HiHealthDate;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+
 class ServicePlanVideo extends Model
 {
     use HiHealthDate,

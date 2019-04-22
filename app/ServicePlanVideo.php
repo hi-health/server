@@ -20,6 +20,7 @@ class ServicePlanVideo extends Model
         'description',
         'weight',
         'movement_template_data',
+        'hyperparams',
         'repeat_time',
         'session',
         'activation_flag'

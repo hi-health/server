@@ -178,27 +178,15 @@ class ServicePlanDailyController extends Controller
             return response()->json('3', 404);
         }
        //try{
-            $service_plan_daily = ServicePlanDaily::updateOrCreate(
-                                                    [
-                                                        'services_id' => $service->id,
-                                                        'service_plans_id' => $plan_id,
-                                                        'service_plan_videos_id' => $video['id'],
-                                                        'scored_at' => $date,
-                                                    ], 
-                                                    [
-                                                        'movement_test_data' => json_encode($video['test_data'])
-                                                    ]);
             $tmp = $this->calculateScore($plan_id,$video['id'],$video['test_data']);
             $score = $tmp['score'];
             $reason = $tmp['reason'];
-            $service_plan_daily = ServicePlanDaily::updateOrCreate(
+            $service_plan_daily = ServicePlanDaily::create(
                                                     [
                                                         'services_id' => $service->id,
                                                         'service_plans_id' => $plan_id,
                                                         'service_plan_videos_id' => $video['id'],
                                                         'scored_at' => $date,
-                                                    ], 
-                                                    [
                                                         'score' => json_encode($score),
                                                         'reason' => json_encode($reason),
                                                         'movement_test_data' => json_encode($video['test_data'])
@@ -301,6 +289,7 @@ class ServicePlanDailyController extends Controller
         
         $service_plan_video = ServicePlanVideo::where('id', $servicePlanVideo_id)->where('service_plans_id', $servicePlan_id)->first();
         $template = json_decode($service_plan_video->movement_template_data);
+
         $test = $test_data['data'];
         $param = [
             'session' => $service_plan_video->session,
@@ -310,9 +299,15 @@ class ServicePlanDailyController extends Controller
             'point_threshold' => 5
         ];
 
+        $tmp = json_decode($service_plan_video->hyperparams);
+        $hyperparams = [
+
+        ];
+
         Log::debug('AI optimization: '.strval($servicePlanVideo_id));
         try {
             $ai = new RepeatMultiDirectionAIv1($template, $test, $param);
+            //$ai = new RepeatMultiDirectionAIv1($template, $test, $param, $hyperparams);
         } catch (Exception $e) {
             $tmp = [
                 'score' => array_fill(0, $service_plan_video->session, 0),
@@ -411,7 +406,7 @@ class ServicePlanDailyController extends Controller
             'date' => ['required', 'date_format:Y-m-d'],
             'video' => ['required'],
             'video.id' => ['required','integer'],
-            'video.e.start_at' => ['required','date_format:Y-m-d H:i:s'],
+            'video.test.start_at' => ['required','date_format:Y-m-d H:i:s'],
             'video.test_data.stop_at' => ['required','date_format:Y-m-d H:i:s'],
             'video.test_data.data' => ['required','array'],
         ]);

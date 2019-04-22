@@ -170,3 +170,30 @@ Route::group([
 ], function ($router) {
     $router->get('{video_id}/{daily_id}', 'ServicePlanDailyController@AIDevelop');
 });
+
+// ------------------------------------- 新AI測試版 api -------------------------------------//
+
+Route::group([
+    'prefix' => 'newtest_ai_develop',
+], function ($router) {
+    $router->get('{video_id}/{daily_id}', 'ServicePlanDailyController@newTest_AIDevelop');
+});
+
+Route::group([
+    'prefix' => 'services/{service_id}/plans',
+], function ($router) {
+    $router->post('{plan_id}/newtest_daily', 'ServicePlanDailyController@newTest_updateOrCreate');
+    $router->post('{plan_id}/daily/newtest_update', 'ServicePlanDailyController@newTest_updateOrCreate');
+    $router->put('{plan_id}/newtest_daily', 'ServicePlanDailyController@newTest_updateOrCreate');
+});
+
+// ------------------------------------- Demo課表 api -------------------------------------//
+
+Route::group([
+    'prefix' => 'demo',
+], function ($router) {
+    $router->get('plans', 'DemoController@getAllDemoPlan');
+    $router->post('{demo_plan_id}/calculate', 'DemoController@updateOrCreate');
+    $router->post('{demo_plan_video_id}/createTemplate', 'DemoController@addMovementTemplateData');
+});
+

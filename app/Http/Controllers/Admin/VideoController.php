@@ -21,6 +21,7 @@ class VideoController extends Controller
             ->whereIn('services_id', $service_plans_group->pluck('services_id'))
             ->orderBy('updated_at', 'DESC')
             ->get();
+        //return response()->json($service_plans_group);
         return view('admin.videos.list', [
             'service_plans_group' => $service_plans_group,
             'service_plans' => $service_plans,

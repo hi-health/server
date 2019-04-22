@@ -395,10 +395,13 @@ class RepeatMultiDirectionAI extends AI{
     {
 
         $score = [];
+        $reason = [];
         for ($i=0; $i < $this->session; $i++) { 
+            $noMajorLevel = true;
             //workout time too short
             if($this->testTime[$i]/$this->test_repeat_time < $this->templateTime/5/3){
                 $score[] = 0;
+                $reason[] = ["您的動作做得太快，請將每次動作確實做好"];
             }
             else{
                 $score_1session = [
@@ -423,6 +426,7 @@ class RepeatMultiDirectionAI extends AI{
                     $roll_weight = 1/6;
                     $yaw_weight = 1/6;
                     $pitch_weight = 1/6;
+                    $noMajorLevel = true;
                 }
                 else{
                     $acc_x_weight = $majorLevel['acc_x']/$majorLevel_sum;
@@ -431,6 +435,7 @@ class RepeatMultiDirectionAI extends AI{
                     $roll_weight = $majorLevel['roll']/$majorLevel_sum;
                     $yaw_weight = $majorLevel['yaw']/$majorLevel_sum;
                     $pitch_weight = $majorLevel['pitch']/$majorLevel_sum;
+                    $noMajorLevel = false;
                 }
         
                 //template的max,min用平均
@@ -481,6 +486,45 @@ class RepeatMultiDirectionAI extends AI{
                     Log::debug('AI session: '.strval($i).' repeat: '.$j.'  $pitch_min_ratio: '.strval(round($pitch_min_ratio,3)));
 
                 }
+                if($noMajorLevel){
+                    $all_acce = $score_1session['acc_x'] + $score_1session['acc_y'] + $score_1session['acc_z'];
+                    $all_gyro = $score_1session['roll'] + $score_1session['yaw'] + $score_1session['pitch'];
+                    $diff_acce = round((25-$all_acce)/25*100, 1);
+                    $diff_gyro = round((25-$all_gyro)/25*100, 1);
+                    $reason_1session = ["您的速度跟標準相差了".strval($diff_acce)."%","您的角速度跟標準相差了".strval($diff_gyro)."%"];
+                }
+                else{
+                    $arr_acce = [$majorLevel['acc_x'],$majorLevel['acc_y'],$majorLevel['acc_z']];
+                    $arr_gyro = [$majorLevel['roll'],$majorLevel['yaw'],$majorLevel['pitch']];
+                    Log::debug('reason max: '.strval(array_keys($arr_acce,max($arr_acce))[0]));
+                    switch(array_keys($arr_acce,max($arr_acce))[0]){
+                        case 0:
+                            $diff_acce = ($acc_x_max_ratio+$acc_x_min_ratio)*50;
+                            break;
+                        case 1:
+                            $diff_acce = ($acc_y_max_ratio+$acc_y_min_ratio)*50;
+                            break;
+                        case 2:
+                            $diff_acce = ($acc_z_max_ratio+$acc_z_min_ratio)*50;
+                            break;
+                    }
+                    Log::debug('reason max: '.strval(array_keys($arr_gyro,max($arr_gyro))[0]));
+                    switch(array_keys($arr_gyro,max($arr_gyro))[0]){
+                        case 0:
+                            $diff_gyro = ($roll_max_ratio+$roll_min_ratio)*50;
+                            break;
+                        case 1:
+                            $diff_gyro = ($yaw_max_ratio+$yaw_min_ratio)*50;
+                            break;
+                        case 2:
+                            $diff_gyro = ($pitch_max_ratio+$pitch_min_ratio)*50;
+                            break;
+                    }
+                    $diff_acce = round($diff_acce, 1);
+                    $diff_gyro = round($diff_gyro, 1);
+                    $reason_1session = ["您的速度跟標準相差了".strval($diff_acce)."%","您的角速度跟標準相差了".strval($diff_gyro)."%"];
+                }
+                
 
                 Log::debug('AI session: '.strval($i).'  $acc_x_weight: '.strval(round($acc_x_weight,3)));
                 Log::debug('AI session: '.strval($i).'  $acc_y_weight: '.strval(round($acc_y_weight,3)));
@@ -500,11 +544,26 @@ class RepeatMultiDirectionAI extends AI{
                 Log::debug('AI session: '.strval($i).'  $score_1session[\'gyro_goodMove\']: '.strval(round($score_1session['gyro_goodMove'])));
                 Log::debug('AI session: '.strval($i).'  $score_1session: '.strval(round(array_sum($score_1session))));
                 $score[] = round(array_sum($score_1session));
+                $reason[] = $reason_1session;
             }       
         
         }
-        return $score;
+        return [
+            'score' => $score,
+            'reason' => $reason
+        ];
     }
+    public function printFeature()
+	{
+		$tmp = [
+				'test'=> $this->testData,
+                'template'=>$this->templateData,
+                'rawTest'=> $this->rawTestData,
+				'rawTemplate'=>$this->rawTemplateData
+                ];
+                
+		return $tmp;
+	}
 }
 
 ?>

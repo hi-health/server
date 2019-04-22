@@ -24,4 +24,8 @@ class Manager extends Model
         'deleted_at',
     ];
     //
+    public function doctor()
+    {
+        return $this->hasMany(Doctor::class, 'managers_id', 'users_id');
+    }
 }

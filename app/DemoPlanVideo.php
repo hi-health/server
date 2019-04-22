@@ -6,25 +6,21 @@ use App\Traits\HiHealthDate;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-
-class ServicePlanVideo extends Model
+class DemoPlanVideo extends Model
 {
     use HiHealthDate,
         SoftDeletes;
 
-    public $table = 'service_plan_videos';
+    public $table = 'demo_plan_videos';
 
     protected $fillable = [
-        'service_plans_id',
+        'demo_plans_id',
         'video',
         'thumbnail',
         'description',
-        'weight',
         'movement_template_data',
-        'hyperparams',
         'repeat_time',
-        'session',
-        'activation_flag'
+        'session'
     ];
 
     protected $appends = [
@@ -38,10 +34,10 @@ class ServicePlanVideo extends Model
         'deleted_at',
     ];
 
-    public function score()
-    {
-        return $this->hasMany(ServicePlanDaily::class, 'service_plan_videos_id', 'id');
-    }
+    // public function score()
+    // {
+    //     return $this->hasMany(ServicePlanDaily::class, 'demo_plan_videos_id', 'id');
+    // }
 
     public function getVideoUrlAttribute()
     {

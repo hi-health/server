@@ -173,8 +173,7 @@ class ServicePlanController extends Controller
             'plans.*.videos.*.session'    => ['required', 'integer'],
             'plans.*.videos.*.video_path'=> ['nullable', 'string']
         ]);
-        $service = Service
-            ::where('id', $service_id)
+        $service = Service::where('id', $service_id)
             ->first();
         if (!$service) {
             return response()->json(null, 404);
@@ -186,8 +185,7 @@ class ServicePlanController extends Controller
             $plans_file = $request->file('plans');
             $service_plans = collect($plans)->map(function ($item) use ($service, &$plans_file) {
             if (isset($item['id'])) {
-                    $service_plan = ServicePlan
-                        ::where('id', $item['id'])
+                    $service_plan = ServicePlan::where('id', $item['id'])
                         ->first();
                 if ($service_plan) {
                     $service_plan->update([
@@ -273,8 +271,7 @@ class ServicePlanController extends Controller
 
                 }
                 if (isset($video['id'])) {
-                    $service_plan_video = ServicePlanVideo
-                        ::where('service_plans_id', $service_plan->id)
+                    $service_plan_video = ServicePlanVideo::where('service_plans_id', $service_plan->id)
                         ->where('id', $video['id'])
                         ->first();
                     if ($service_plan_video) {
@@ -302,8 +299,7 @@ class ServicePlanController extends Controller
             'plans' => ['required', 'array', 'min:1'],
             'plans.*.id' => ['required', 'integer'],
         ]);
-        $service = Service
-            ::where('id', $service_id)
+        $service = Service::where('id', $service_id)
             ->first();
         if (!$service) {
             return response()->json(null, 404);
@@ -313,8 +309,7 @@ class ServicePlanController extends Controller
         }
         $plans = $request->input('plans');
         $service_plans_delete = collect($plans)->map(function ($plan) {
-            $service_plan = ServicePlan
-                ::where('id', $plan['id'])
+            $service_plan = ServicePlan::where('id', $plan['id'])
                 ->first();
             if ($service_plan) {
                 $deleted = $service_plan->delete();
@@ -341,8 +336,7 @@ class ServicePlanController extends Controller
             'videos' => ['required', 'array', 'min:1'],
             'videos.*.id' => ['required', 'integer'],
         ]);
-        $service = Service
-            ::where('id', $service_id)
+        $service = Service::where('id', $service_id)
             ->first();
         if (!$service) {
             return response()->json(null, 404);

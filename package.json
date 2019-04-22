@@ -20,8 +20,28 @@
     "vue": "^2.1.10"
   },
   "dependencies": {
+    "@tensorflow-models/posenet": "^0.2.3",
+    "@tensorflow/tfjs": "^0.14.1",
     "admin-lte": "^2.3.11",
+    "installed-check": "^2.2.0",
     "jquery-ui-bundle": "^1.12.1",
     "vuejs-datepicker": "^0.7.14"
-  }
+  },
+  "name": "hihealth.com",
+  "description": "**API Host: http://hi-health.myu6.com**",
+  "version": "1.0.0",
+  "main": "webpack.mix.js",
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chun5212021202/hihealth.com.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chun5212021202/hihealth.com/issues"
+  },
+  "homepage": "https://github.com/chun5212021202/hihealth.com#readme"
 }

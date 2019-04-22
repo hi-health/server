@@ -133,6 +133,17 @@
             </div>
         </div>
     </div>
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="small-box bg-purple">
+            <div class="inner">
+                <h3>{{ $message->count() }}</h3>
+                <p>未回應人數</p>
+            </div>
+            <div class="icon">
+                <i class="fa fa-user-plus"></i>
+            </div>
+        </div>
+    </div>
 </div>
 <div class="row">
     <div class="col-md-12 table-responsive">
@@ -180,7 +191,20 @@
         </table>
     </div>
 </div>
+<div>
+    {{$message}}
+</div>
+<div>
+    {{$message->count()}}
+</div>
 @endsection
 @push('scripts')
+<script type='text/javascript'>
+    console.log(1);
 
+    // console.log({{ $no_service_member->count() }});
+    // console.log({{ count($service_member) }});
+    // console.log({{ $service_member[0] }});
+    // console.log({{ $service_member[1] }});
+</script>
 @endpush

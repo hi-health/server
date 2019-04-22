@@ -8,6 +8,7 @@ use App\Mail\ServiceExportedByDoctor;
 use App\Mail\InvoiceExportedByPayment;
 use App\Mail\ServicePlanExportedById;
 use App\MemberRequest;
+use App\MemberRequestDoctor;
 use App\PaymentHistory;
 use App\Service;
 use App\ServicePlan;
@@ -124,8 +125,7 @@ class ServiceController extends Controller
     private function updateOrCreateInvoice_private($service_id)
     {
         $pay2go_invoice_response = (new Pay2GoInvoice)->sendInvoiceRequest($service_id);
-        $service = Service
-            ::with('member', 'doctor')
+        $service = Service::with('member', 'doctor')
             ->where('id', $service_id)
             ->first();
         if (!$service) {
@@ -232,7 +232,16 @@ class ServiceController extends Controller
                 }
             }
             //0920應該補上刪除之前該member的所有service (無論doctor或是payment_status)
-            $member_services = Service::where('members_id',$service->members_id)->whereNotIn('id',[$service_id])->delete();
+            $member_last_service_id = Service::where('members_id',$service->members_id)
+                ->where('payment_status', 3)
+                ->first()
+                ->id;
+
+            $member_services = Service::where('members_id',$service->members_id)
+                ->whereNotIn('id',[$service_id])
+                ->delete();
+
+            $member_service_plan = ServicePlan::where('services_id',$member_last_service_id)->delete();
 
             $isEmailSuccess = $this->updateOrCreateInvoice_private($service_id);
             return response()->json(["service"=>$service, "email"=>$isEmailSuccess, "confirm_status"=>$service->payment_status]);
@@ -438,9 +447,14 @@ class ServiceController extends Controller
             event(
                 new MemberServiceCompletedEvent($service)
             );
-            $member_request_model = MemberRequest::where('members_id', $service->members_id);
-            $member_requests = $member_request_model->get();
-            $member_request_model->forceDelete();
+
+            //刪除Member的MemberRequest及對應的MemberRequestDoctor
+            $member_request = MemberRequest::where('members_id', $service->members_id)
+                ->first();
+            MemberRequestDoctor::where('member_requests_id', $member_request->id)
+                ->forceDelete();
+            $member_request->forceDelete();
+
             $this->slackNotify('服務完成，清除會員('.$service->members_id.')的需求接單，共'.$member_requests->count().'筆');
         }
 
@@ -504,4 +518,4 @@ class ServiceController extends Controller
 
         return response()->json($result);
     }
-}
+} 

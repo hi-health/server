@@ -8,6 +8,7 @@ use App\Service;
 use App\ServicePlan;
 use App\User;
 use App\PointProduce;
+use App\Message;
 
 class DashboardController extends Controller
 {
@@ -32,6 +33,9 @@ class DashboardController extends Controller
         $sum_points = PointProduce::whereNotNull('service_plan_daily_id')
             ->sum('point');
 
+        $service_member = Service::whereNotNull('members_id')->select('members_id')->get()->pluck('members_id');
+        $no_service_member = User::where('login_type', 1)->whereNotIn('id',$service_member)->get();
+        $message = Message::with('member', 'doctor')->whereIn('members_id',$no_Deservice_member)->where('visible', true)->orderBy('updated_at', 'DESC')->get();
         return view('admin.dashboard', [
             'doctors' => $doctors,
             'members' => $members,
@@ -39,6 +43,10 @@ class DashboardController extends Controller
             'services' => $services,
             'service_plans' => $service_plans,
             'sum_points' => $sum_points,
+            'no_service_member' =>$no_service_member,
+            'service_member' =>$service_member,
+            'message'=>$message
+
         ]);
     }
 }

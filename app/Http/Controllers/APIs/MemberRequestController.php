@@ -14,8 +14,7 @@ class MemberRequestController extends Controller
 {
     public function getById(Request $request, $request_id)
     {
-        $member_request = MemberRequest
-            ::with('member', 'doctor', 'messages')
+        $member_request = MemberRequest::with('member', 'doctor', 'messages')
             ->where('id', $request_id)
             ->first();
         if ($member_request) {
@@ -35,14 +34,12 @@ class MemberRequestController extends Controller
 
     public function getCollectionByMember(Request $request, $member_id)
     {
-        $member = Member
-            ::where('id', $member_id)
+        $member = Member::where('id', $member_id)
             ->first();
         if (!$member) {
             return response()->json(null, 404);
         }
-        $member_requests = MemberRequest
-            ::where('members_id', $member_id)
+        $member_requests = MemberRequest::where('members_id', $member_id)
             ->get();
 
         return response()->json($member_requests);
@@ -58,8 +55,7 @@ class MemberRequestController extends Controller
 //        $longitude = (float) $request->get('longitude');
 //        $latitude = (float) $request->get('latitude');
         $distance = $request->get('distance', 10);
-        $member_request_model = MemberRequest
-            ::with('member')
+        $member_request_model = MemberRequest::with('member')
             ->orderBy('updated_at', 'DESC')
             ->groupBy('members_id', 'treatment_type');
         if ($treatment_type) {
@@ -82,8 +78,7 @@ class MemberRequestController extends Controller
         $member_requests = $member_request_model->paginate($per_page);
         $doctor_id = $request->get('doctor_id');
         if ($doctor_id) {
-            $member_requests_id = MemberRequestDoctor
-                ::where('doctors_id', $doctor_id)
+            $member_requests_id = MemberRequestDoctor::where('doctors_id', $doctor_id)
                 ->whereIn('member_requests_id', $member_requests->pluck('id'))
                 ->get()
                 ->pluck('member_requests_id');
@@ -112,8 +107,7 @@ class MemberRequestController extends Controller
             'city_id' => [],
             'district_id' => [],
         ]);
-        $member = Member
-            ::where('id', $member_id)
+        $member = Member::where('id', $member_id)
             ->first();
         if (!$member) {
             return response()->json(null, 404);
@@ -127,8 +121,7 @@ class MemberRequestController extends Controller
         $member_request = MemberRequest::updateOrCreate([
             'members_id'  => $member_id,
         ], $data);
-        MemberRequestDoctor
-            ::where('member_requests_id', $member_request->id)
+        MemberRequestDoctor::where('member_requests_id', $member_request->id)
             ->delete();
         event(
             new MemberCreateRequestEvent($member, $member_request)

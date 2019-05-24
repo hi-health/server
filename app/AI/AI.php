@@ -6,6 +6,7 @@ use Exception;
 use App\ServicePlanVideo;
 use Log;
 include 'CalibrateByGravity.php';
+include 'Madgwick.php';
 
 abstract class AI
 {
@@ -27,18 +28,21 @@ abstract class AI
 
     public function __construct($template, $test, $param)
     {
-        
         $this->session = $param['session'];
         $this->test_repeat_time = $param['repeat_time'];
-        $this->templateData = $this->parseTemplateData($template);
-        $this->testData = $this->parseTestData($test)['each_repeat'];
+
+        $parseTest = $this->parseTestData($test);
+        $parseTemplate = $this->parseTemplateData($template);
+
+        $this->templateData = $parseTemplate['template'];
+        $this->testData = $parseTest['each_repeat'];
         $this->templateTime = $this->getTemplateTime($template);
         $this->testTime = $this->getTestTime($test);
-        $this->rawTemplateData = $this->parseRawTemplateData($template);
-        $this->rawTestData = $this->parseRawTestData($test)['each_repeat'];
+        $this->rawTemplateData = $parseTemplate['template_raw'];
+        $this->rawTestData = $parseTest['each_repeat_raw'];
 
-        $this->testDataAC = $this->parseTestData($test)['auto_correlation'];
-        $this->rawTestDataAC = $this->parseRawTestData($test)['auto_correlation'];
+        $this->testDataAC = $parseTest['auto_correlation'];
+        $this->rawTestDataAC = $parseTest['auto_correlation_raw'];
         
         $this->major_threshold = $param['major_threshold'];
         $this->error_threshold = $param['error_threshold'];
@@ -131,6 +135,10 @@ abstract class AI
         $testData_eachRepeat = [];
         $testData_autoCorrelation = [];
 
+        $rawTestData = [];
+        $rawTestData_eachRepeat = [];
+        $rawTestData_autoCorrelation = [];
+
         foreach ($test as $key1 => $session) {
             Log::alert('session: '.strval(count($session)));
             Log::alert('session: '.strval(count($session[0])));
@@ -138,12 +146,13 @@ abstract class AI
             $t1 = round(count($session[0])/$this->test_repeat_time);
             $t2 = round(count($session[0])/$this->test_repeat_time *2/3);
 
+            $session_madgwick = Madgwick($session[0]);
             $isShouldAbs = [false, false, false, false, false, false, false, false, false];
             foreach ($session[0] as $key2 => $sample) {
                 foreach ($sample as $value) {
                     Log::alert(gettype($value));
                 }
-
+                
                 $ACC = calibrateByGravity(
                     [floatval($sample[6]),floatval($sample[7]),floatval($sample[8])],
                     [1,0,0],
@@ -152,20 +161,24 @@ abstract class AI
                 $testData[$key1]['acc_x'][$key2] = round($ACC[0], 5);
                 $testData[$key1]['acc_y'][$key2] = round($ACC[1], 5);
                 $testData[$key1]['acc_z'][$key2] = round($ACC[2], 5);
-
                 $testData[$key1]['acc'][$key2] = round(floatval(sqrt($sample[0]**2 + $sample[1]**2 + $sample[2]**2)),5);
 
-                // 會差正負號
-                // $GYRO = calibrateByGravity(
-                //     [floatval($sample[6]),floatval($sample[7]),floatval($sample[8])],
-                //     [1,0,0],
-                //     [floatval($sample[3]),floatval($sample[4]),floatval($sample[5])]
-                // );
-                // $testData[$key1]['roll'][$key2] = round($GYRO[0], 5);
-                // $testData[$key1]['yaw'][$key2] = round($GYRO[1], 5);
-                // $testData[$key1]['pitch'][$key2] = round($GYRO[2], 5);
+                $testData[$key1]['gyro_x'][$key2] = round(floatval($sample[3]),5);
+                $testData[$key1]['gyro_y'][$key2] = round(floatval($sample[4]),5);
+                $testData[$key1]['gyro_z'][$key2] = round(floatval($sample[5]),5);
+                $testData[$key1]['gyro'][$key2] = round(floatval(sqrt($sample[3]**2 + $sample[4]**2 + $sample[5]**2)),5);
+
+                $testData[$key1]['roll_madgwick'][$key2] = round(floatval($session_madgwick[$key2][0]),5);
+                $testData[$key1]['yaw_madgwick'][$key2] = round(floatval($session_madgwick[$key2][1]),5);
+                $testData[$key1]['pitch_madgwick'][$key2] = round(floatval($session_madgwick[$key2][2]),5);
 
                 //絕對值版本
+                /*
+                $testData[$key1]["roll"][$key2]
+                $testData[$key1]["yaw"][$key2]
+                $testData[$key1]["pitch"][$key2]
+                */
+
                 if($key2 > 0){
                     $last_sample = $session[0][$key2-1];
                 }
@@ -173,70 +186,72 @@ abstract class AI
                     $last_sample = [0,0,0,0,0,0,0,0,0];
                 }
                 
-                if(abs(floatval($sample[3]) - floatval($last_sample[3])) > 5){
-                    if(floatval($sample[3]) < 0){
-                        $isShouldAbs[3] = true;
+                if(abs(floatval($sample[6]) - floatval($last_sample[6])) > 5){
+                    if(floatval($sample[6]) < 0){
+                        $isShouldAbs[6] = true;
                     }
                     else{
-                        $isShouldAbs[3] = false;
+                        $isShouldAbs[6] = false;
                     }
                 }
-                if(abs(floatval($sample[4]) - floatval($last_sample[4])) > 5){
-                    if(floatval($sample[4]) < 0){
-                        $isShouldAbs[4] = true;
+                if(abs(floatval($sample[7]) - floatval($last_sample[7])) > 5){
+                    if(floatval($sample[7]) < 0){
+                        $isShouldAbs[7] = true;
                     }
                     else{
-                        $isShouldAbs[4] = false;
+                        $isShouldAbs[7] = false;
                     }
                 }
-                if(abs(floatval($sample[5]) - floatval($last_sample[5])) > 5){
-                    if(floatval($sample[5]) < 0){
-                        $isShouldAbs[5] = true;
+                if(abs(floatval($sample[8]) - floatval($last_sample[8])) > 5){
+                    if(floatval($sample[8]) < 0){
+                        $isShouldAbs[8] = true;
                     }
                     else{
-                        $isShouldAbs[5] = false;
+                        $isShouldAbs[8] = false;
                     }
                 }
 
-                if($isShouldAbs[3]){
-                    $testData[$key1]['roll'][$key2] = round(abs(floatval($sample[3])), 5);
+                if($isShouldAbs[6]){
+                    $testData[$key1]['roll'][$key2] = round(abs(floatval($sample[6])), 5);
                 }
                 else{
-                    $testData[$key1]['roll'][$key2] = round(floatval($sample[3]), 5);
+                    $testData[$key1]['roll'][$key2] = round(floatval($sample[6]), 5);
                 }
-                if($isShouldAbs[4]){
-                    $testData[$key1]['yaw'][$key2] = round(abs(floatval($sample[4])), 5);
-                }
-                else{
-                    $testData[$key1]['yaw'][$key2] = round(floatval($sample[4]), 5);
-                }
-                if($isShouldAbs[5]){
-                    $testData[$key1]['pitch'][$key2] = round(abs(floatval($sample[5])), 5);
+                if($isShouldAbs[7]){
+                    $testData[$key1]['yaw'][$key2] = round(abs(floatval($sample[7])), 5);
                 }
                 else{
-                    $testData[$key1]['pitch'][$key2] = round(floatval($sample[5]), 5);
+                    $testData[$key1]['yaw'][$key2] = round(floatval($sample[7]), 5);
                 }
-                //
-
-                $testData[$key1]['gyro'][$key2] = round(floatval(sqrt($sample[3]**2 + $sample[4]**2 + $sample[5]**2)),5);
+                if($isShouldAbs[8]){
+                    $testData[$key1]['pitch'][$key2] = round(abs(floatval($sample[8])), 5);
+                }
+                else{
+                    $testData[$key1]['pitch'][$key2] = round(floatval($sample[8]), 5);
+                }
+                //絕對值版本end
                 
                 $rawTestData[$key1]['acc_x'][$key2] = round(floatval($sample[0]),5);
                 $rawTestData[$key1]['acc_y'][$key2] = round(floatval($sample[1]),5);
                 $rawTestData[$key1]['acc_z'][$key2] = round(floatval($sample[2]),5);
-                $rawTestData[$key1]['roll'][$key2] = round(floatval($sample[3]),5);
-                $rawTestData[$key1]['yaw'][$key2] = round(floatval($sample[4]),5);
-                $rawTestData[$key1]['pitch'][$key2] = round(floatval($sample[5]),5);
-                $rawTestData[$key1]['rot_x'][$key2] = round(floatval($sample[6]),5);
-                $rawTestData[$key1]['rot_y'][$key2] = round(floatval($sample[7]),5);
-                $rawTestData[$key1]['rot_z'][$key2] = round(floatval($sample[8]),5);
+                $rawTestData[$key1]['gyro_x'][$key2] = round(floatval($sample[3]),5);
+                $rawTestData[$key1]['gyro_y'][$key2] = round(floatval($sample[4]),5);
+                $rawTestData[$key1]['gyro_z'][$key2] = round(floatval($sample[5]),5);
+                $rawTestData[$key1]['roll'][$key2] = round(floatval($sample[6]),5);
+                $rawTestData[$key1]['yaw'][$key2] = round(floatval($sample[7]),5);
+                $rawTestData[$key1]['pitch'][$key2] = round(floatval($sample[8]),5);
+                $rawTestData[$key1]['roll_madgwick'][$key2] = round(floatval($session_madgwick[$key2][0]),5);
+                $rawTestData[$key1]['yaw_madgwick'][$key2] = round(floatval($session_madgwick[$key2][1]),5);
+                $rawTestData[$key1]['pitch_madgwick'][$key2] = round(floatval($session_madgwick[$key2][2]),5);
             }
-            //LPF on gyro
-            $rawTestData[$key1]['acc_x'] = $this->movingAverageLPF($testData[$key1]['acc_x'], 5);
-            $rawTestData[$key1]['acc_y'] = $this->movingAverageLPF($testData[$key1]['acc_y'], 5);
-            $rawTestData[$key1]['acc_z'] = $this->movingAverageLPF($testData[$key1]['acc_z'], 5);
-            $rawTestData[$key1]['roll'] = $this->movingAverageLPF($testData[$key1]['roll'], 5);
-            $rawTestData[$key1]['yaw'] = $this->movingAverageLPF($testData[$key1]['yaw'], 5);
-            $rawTestData[$key1]['pitch'] = $this->movingAverageLPF($testData[$key1]['pitch'], 5);
+            //LPF
+            // $testData[$key1]['acc_x'] = $this->movingAverageLPF($testData[$key1]['acc_x'], 5);
+            // $testData[$key1]['acc_y'] = $this->movingAverageLPF($testData[$key1]['acc_y'], 5);
+            // $testData[$key1]['acc_z'] = $this->movingAverageLPF($testData[$key1]['acc_z'], 5);
+            // $testData[$key1]['roll'] = $this->movingAverageLPF($testData[$key1]['roll'], 5);
+            // $testData[$key1]['yaw'] = $this->movingAverageLPF($testData[$key1]['yaw'], 5);
+            // $testData[$key1]['pitch'] = $this->movingAverageLPF($testData[$key1]['pitch'], 5);
+
 
             Log::alert('t1: '.strval($t1));
             Log::alert('t2: '.strval($t2));
@@ -265,117 +280,28 @@ abstract class AI
                                                 $this->autocorrelation($testData[$key1]['acc']), $t1, $t2
                                             )
                 );
-            $testData_eachRepeat[$key1]['roll'] = 
-                $this->seperateEachRepeat(  $testData[$key1]['roll'], 
+            $testData_eachRepeat[$key1]['gyro_x'] = 
+                $this->seperateEachRepeat(  $testData[$key1]['gyro_x'], 
                                             $this->findMaxIndexOfAutocorrelation(
-                                                $this->autocorrelation($testData[$key1]['roll']), $t1, $t2
+                                                $this->autocorrelation($testData[$key1]['gyro_x']), $t1, $t2
                                             )
                 );
-            $testData_eachRepeat[$key1]['yaw'] = 
-                $this->seperateEachRepeat(  $testData[$key1]['yaw'], 
+            $testData_eachRepeat[$key1]['gyro_y'] = 
+                $this->seperateEachRepeat(  $testData[$key1]['gyro_y'], 
                                             $this->findMaxIndexOfAutocorrelation(
-                                                $this->autocorrelation($testData[$key1]['yaw']), $t1, $t2
+                                                $this->autocorrelation($testData[$key1]['gyro_y']), $t1, $t2
                                             )
                 );
-            $testData_eachRepeat[$key1]['pitch'] = 
-                $this->seperateEachRepeat(  $testData[$key1]['pitch'], 
+            $testData_eachRepeat[$key1]['gyro_z'] = 
+                $this->seperateEachRepeat(  $testData[$key1]['gyro_z'], 
                                             $this->findMaxIndexOfAutocorrelation(
-                                                $this->autocorrelation($testData[$key1]['pitch']), $t1, $t2
+                                                $this->autocorrelation($testData[$key1]['gyro_z']), $t1, $t2
                                             )
                 );
             $testData_eachRepeat[$key1]['gyro'] = 
                 $this->seperateEachRepeat(  $testData[$key1]['gyro'], 
                                             $this->findMaxIndexOfAutocorrelation(
                                                 $this->autocorrelation($testData[$key1]['gyro']), $t1, $t2
-                                            )
-                );
-            /*
-            $testData_eachRepeat[$key1]['rot_x'] = 
-                $this->seperateEachRepeat(  $testData[$key1]['rot_x'], 
-                                            $this->findMaxIndexOfAutocorrelation(
-                                                $this->autocorrelation($testData[$key1]['rot_x']), $t1, $t2
-                                            )
-                );
-            $testData_eachRepeat[$key1]['rot_y'] = 
-                $this->seperateEachRepeat(  $testData[$key1]['rot_y'], 
-                                            $this->findMaxIndexOfAutocorrelation(
-                                                $this->autocorrelation($testData[$key1]['rot_y']), $t1, $t2
-                                            )
-                );
-            $testData_eachRepeat[$key1]['rot_z'] = 
-                $this->seperateEachRepeat(  $testData[$key1]['rot_z'], 
-                                            $this->findMaxIndexOfAutocorrelation(
-                                                $this->autocorrelation($testData[$key1]['rot_z']), $t1, $t2
-                                            )
-                );
-            */
-            $testData_autoCorrelation[$key1]['acc_x'] = $this->autocorrelation($testData[$key1]['acc_x']);
-            $testData_autoCorrelation[$key1]['acc_y'] = $this->autocorrelation($testData[$key1]['acc_y']);
-            $testData_autoCorrelation[$key1]['acc_z'] = $this->autocorrelation($testData[$key1]['acc_z']);
-            $testData_autoCorrelation[$key1]['roll'] = $this->autocorrelation($testData[$key1]['roll']);
-            $testData_autoCorrelation[$key1]['yaw'] = $this->autocorrelation($testData[$key1]['yaw']);
-            $testData_autoCorrelation[$key1]['pitch'] = $this->autocorrelation($testData[$key1]['pitch']);
-        }
-        return [
-            "each_repeat" => $testData_eachRepeat,
-            "auto_correlation" => $testData_autoCorrelation
-        ];
-    }
-
-    protected function parseRawTestData($test)
-    {
-        $testData = [];
-        $testData_eachRepeat = [];
-        $testData_autoCorrelation = [];
-
-        foreach ($test as $key1 => $session) {
-            Log::alert('session: '.strval(count($session)));
-            Log::alert('session: '.strval(count($session[0])));
-            Log::alert('session: '.strval(count($session[0][0])));
-            $t1 = round(count($session[0])/$this->test_repeat_time);
-            $t2 = round(count($session[0])/$this->test_repeat_time *2/3);
-            foreach ($session[0] as $key2 => $sample) {
-
-                $testData[$key1]['acc'][$key2] = round(floatval(sqrt($sample[0]**2 + $sample[1]**2 + $sample[2]**2)),5);
-
-                $testData[$key1]['gyro'][$key2] = round(floatval(sqrt($sample[3]**2 + $sample[4]**2 + $sample[5]**2)),5);
-                
-                $testData[$key1]['acc_x'][$key2] = round(floatval($sample[0]),5);
-                $testData[$key1]['acc_y'][$key2] = round(floatval($sample[1]),5);
-                $testData[$key1]['acc_z'][$key2] = round(floatval($sample[2]),5);
-                $testData[$key1]['roll'][$key2] = round(floatval($sample[3]),5);
-                $testData[$key1]['yaw'][$key2] = round(floatval($sample[4]),5);
-                $testData[$key1]['pitch'][$key2] = round(floatval($sample[5]),5);
-                $testData[$key1]['rot_x'][$key2] = round(floatval($sample[6]),5);
-                $testData[$key1]['rot_y'][$key2] = round(floatval($sample[7]),5);
-                $testData[$key1]['rot_z'][$key2] = round(floatval($sample[8]),5);
-            }
-            Log::alert('t1: '.strval($t1));
-            Log::alert('t2: '.strval($t2));
-            Log::alert('total: '.strval(count($this->autocorrelation($testData[$key1]['acc_x']))));
-            $testData_eachRepeat[$key1]['acc_x'] = 
-                $this->seperateEachRepeat(  $testData[$key1]['acc_x'], 
-                                            $this->findMaxIndexOfAutocorrelation(
-                                                $this->autocorrelation($testData[$key1]['acc_x']), $t1, $t2
-                                            )
-                );
-
-            $testData_eachRepeat[$key1]['acc_y'] = 
-                $this->seperateEachRepeat(  $testData[$key1]['acc_y'], 
-                                            $this->findMaxIndexOfAutocorrelation(
-                                                $this->autocorrelation($testData[$key1]['acc_y']), $t1, $t2
-                                            )
-                );
-            $testData_eachRepeat[$key1]['acc_z'] = 
-                $this->seperateEachRepeat(  $testData[$key1]['acc_z'], 
-                                            $this->findMaxIndexOfAutocorrelation(
-                                                $this->autocorrelation($testData[$key1]['acc_z']), $t1, $t2
-                                            )
-                );
-            $testData_eachRepeat[$key1]['acc'] = 
-                $this->seperateEachRepeat(  $testData[$key1]['acc'], 
-                                            $this->findMaxIndexOfAutocorrelation(
-                                                $this->autocorrelation($testData[$key1]['acc']), $t1, $t2
                                             )
                 );
             $testData_eachRepeat[$key1]['roll'] = 
@@ -396,42 +322,115 @@ abstract class AI
                                                 $this->autocorrelation($testData[$key1]['pitch']), $t1, $t2
                                             )
                 );
-            $testData_eachRepeat[$key1]['gyro'] = 
-                $this->seperateEachRepeat(  $testData[$key1]['gyro'], 
+            $testData_eachRepeat[$key1]['roll_madgwick'] = 
+                $this->seperateEachRepeat(  $testData[$key1]['roll_madgwick'], 
                                             $this->findMaxIndexOfAutocorrelation(
-                                                $this->autocorrelation($testData[$key1]['gyro']), $t1, $t2
+                                                $this->autocorrelation($testData[$key1]['roll_madgwick']), $t1, $t2
                                             )
                 );
-            /*
-            $testData_eachRepeat[$key1]['rot_x'] = 
-                $this->seperateEachRepeat(  $testData[$key1]['rot_x'], 
+            $testData_eachRepeat[$key1]['yaw_madgwick'] = 
+                $this->seperateEachRepeat(  $testData[$key1]['yaw_madgwick'], 
                                             $this->findMaxIndexOfAutocorrelation(
-                                                $this->autocorrelation($testData[$key1]['rot_x']), $t1, $t2
+                                                $this->autocorrelation($testData[$key1]['yaw_madgwick']), $t1, $t2
                                             )
                 );
-            $testData_eachRepeat[$key1]['rot_y'] = 
-                $this->seperateEachRepeat(  $testData[$key1]['rot_y'], 
+            $testData_eachRepeat[$key1]['pitch_madgwick'] = 
+                $this->seperateEachRepeat(  $testData[$key1]['pitch_madgwick'], 
                                             $this->findMaxIndexOfAutocorrelation(
-                                                $this->autocorrelation($testData[$key1]['rot_y']), $t1, $t2
+                                                $this->autocorrelation($testData[$key1]['pitch_madgwick']), $t1, $t2
                                             )
                 );
-            $testData_eachRepeat[$key1]['rot_z'] = 
-                $this->seperateEachRepeat(  $testData[$key1]['rot_z'], 
-                                            $this->findMaxIndexOfAutocorrelation(
-                                                $this->autocorrelation($testData[$key1]['rot_z']), $t1, $t2
-                                            )
-                );
-            */
             $testData_autoCorrelation[$key1]['acc_x'] = $this->autocorrelation($testData[$key1]['acc_x']);
             $testData_autoCorrelation[$key1]['acc_y'] = $this->autocorrelation($testData[$key1]['acc_y']);
             $testData_autoCorrelation[$key1]['acc_z'] = $this->autocorrelation($testData[$key1]['acc_z']);
             $testData_autoCorrelation[$key1]['roll'] = $this->autocorrelation($testData[$key1]['roll']);
             $testData_autoCorrelation[$key1]['yaw'] = $this->autocorrelation($testData[$key1]['yaw']);
             $testData_autoCorrelation[$key1]['pitch'] = $this->autocorrelation($testData[$key1]['pitch']);
+
+            $rawTestData_eachRepeat[$key1]['acc_x'] = 
+                $this->seperateEachRepeat(  $rawTestData[$key1]['acc_x'], 
+                                            $this->findMaxIndexOfAutocorrelation(
+                                                $this->autocorrelation($rawTestData[$key1]['acc_x']), $t1, $t2
+                                            )
+                );
+            $rawTestData_eachRepeat[$key1]['acc_y'] = 
+                $this->seperateEachRepeat(  $rawTestData[$key1]['acc_y'], 
+                                            $this->findMaxIndexOfAutocorrelation(
+                                                $this->autocorrelation($rawTestData[$key1]['acc_y']), $t1, $t2
+                                            )
+                );
+            $rawTestData_eachRepeat[$key1]['acc_z'] = 
+                $this->seperateEachRepeat(  $rawTestData[$key1]['acc_z'], 
+                                            $this->findMaxIndexOfAutocorrelation(
+                                                $this->autocorrelation($rawTestData[$key1]['acc_z']), $t1, $t2
+                                            )
+                );
+            $rawTestData_eachRepeat[$key1]['gyro_x'] = 
+                $this->seperateEachRepeat(  $rawTestData[$key1]['gyro_x'], 
+                                            $this->findMaxIndexOfAutocorrelation(
+                                                $this->autocorrelation($rawTestData[$key1]['gyro_x']), $t1, $t2
+                                            )
+                );
+            $rawTestData_eachRepeat[$key1]['gyro_y'] = 
+                $this->seperateEachRepeat(  $rawTestData[$key1]['gyro_y'], 
+                                            $this->findMaxIndexOfAutocorrelation(
+                                                $this->autocorrelation($rawTestData[$key1]['gyro_y']), $t1, $t2
+                                            )
+                );
+            $rawTestData_eachRepeat[$key1]['gyro_z'] = 
+                $this->seperateEachRepeat(  $rawTestData[$key1]['gyro_z'], 
+                                            $this->findMaxIndexOfAutocorrelation(
+                                                $this->autocorrelation($rawTestData[$key1]['gyro_z']), $t1, $t2
+                                            )
+                );
+            $rawTestData_eachRepeat[$key1]['roll'] = 
+                $this->seperateEachRepeat(  $rawTestData[$key1]['roll'], 
+                                            $this->findMaxIndexOfAutocorrelation(
+                                                $this->autocorrelation($rawTestData[$key1]['roll']), $t1, $t2
+                                            )
+                );
+            $rawTestData_eachRepeat[$key1]['yaw'] = 
+                $this->seperateEachRepeat(  $rawTestData[$key1]['yaw'], 
+                                            $this->findMaxIndexOfAutocorrelation(
+                                                $this->autocorrelation($rawTestData[$key1]['yaw']), $t1, $t2
+                                            )
+                );
+            $rawTestData_eachRepeat[$key1]['pitch'] = 
+                $this->seperateEachRepeat(  $rawTestData[$key1]['pitch'], 
+                                            $this->findMaxIndexOfAutocorrelation(
+                                                $this->autocorrelation($rawTestData[$key1]['pitch']), $t1, $t2
+                                            )
+                );
+            $rawTestData_eachRepeat[$key1]['roll_madgwick'] = 
+                $this->seperateEachRepeat(  $rawTestData[$key1]['roll_madgwick'], 
+                                            $this->findMaxIndexOfAutocorrelation(
+                                                $this->autocorrelation($rawTestData[$key1]['roll_madgwick']), $t1, $t2
+                                            )
+                );
+            $rawTestData_eachRepeat[$key1]['yaw_madgwick'] = 
+                $this->seperateEachRepeat(  $rawTestData[$key1]['yaw_madgwick'], 
+                                            $this->findMaxIndexOfAutocorrelation(
+                                                $this->autocorrelation($rawTestData[$key1]['yaw_madgwick']), $t1, $t2
+                                            )
+                );
+            $rawTestData_eachRepeat[$key1]['pitch_madgwick'] = 
+                $this->seperateEachRepeat(  $rawTestData[$key1]['pitch_madgwick'], 
+                                            $this->findMaxIndexOfAutocorrelation(
+                                                $this->autocorrelation($rawTestData[$key1]['pitch_madgwick']), $t1, $t2
+                                            )
+                );
+            $rawTestData_autoCorrelation[$key1]['acc_x'] = $this->autocorrelation($rawTestData[$key1]['acc_x']);
+            $rawTestData_autoCorrelation[$key1]['acc_y'] = $this->autocorrelation($rawTestData[$key1]['acc_y']);
+            $rawTestData_autoCorrelation[$key1]['acc_z'] = $this->autocorrelation($rawTestData[$key1]['acc_z']);
+            $rawTestData_autoCorrelation[$key1]['roll'] = $this->autocorrelation($rawTestData[$key1]['roll']);
+            $rawTestData_autoCorrelation[$key1]['yaw'] = $this->autocorrelation($rawTestData[$key1]['yaw']);
+            $rawTestData_autoCorrelation[$key1]['pitch'] = $this->autocorrelation($rawTestData[$key1]['pitch']);
         }
         return [
             "each_repeat" => $testData_eachRepeat,
-            "auto_correlation" => $testData_autoCorrelation
+            "auto_correlation" => $testData_autoCorrelation,
+            "each_repeat_raw" => $rawTestData_eachRepeat,
+            "auto_correlation_raw" => $rawTestData_autoCorrelation,
         ];
     }
 
@@ -450,7 +449,9 @@ abstract class AI
     protected function parseTemplateData($template)
     {
         $templateData = [];
+        $rawTemplateData = [];
         foreach ($template as $key1 => $repeat) {
+            $repeat_madgwick = Madgwick($repeat);
             foreach ($repeat as $key2 => $sample) {
 
                 $ACC = calibrateByGravity(
@@ -461,63 +462,86 @@ abstract class AI
                 $templateData['acc_x'][$key1][$key2] = round($ACC[0], 5);
                 $templateData['acc_y'][$key1][$key2] = round($ACC[1], 5);
                 $templateData['acc_z'][$key1][$key2]= round($ACC[2], 5);
-
                 $templateData['acc'][$key1][$key2] = round(floatval(sqrt($sample[0]**2 + $sample[1]**2 + $sample[2]**2)),5);
 
-                // 會差正負號
-                // $GYRO = calibrateByGravity(
-                //     [floatval($sample[6]),floatval($sample[7]),floatval($sample[8])],
-                //     [1,0,0],
-                //     [floatval($sample[3]),floatval($sample[4]),floatval($sample[5])]
-                // );
-                // $templateData['roll'][$key1][$key2] = round($GYRO[0], 5);
-                // $templateData['yaw'][$key1][$key2] = round($GYRO[1], 5);
-                // $templateData['pitch'][$key1][$key2] = round($GYRO[2], 5);
+                $templateData['gyro_x'][$key1][$key2] = round($sample[3], 5);
+                $templateData['gyro_y'][$key1][$key2] = round($sample[4], 5);
+                $templateData['gyro_z'][$key1][$key2]= round($sample[5], 5);
+                $templateData['gyro'][$key1][$key2] = round(floatval(sqrt($sample[3]**2 + $sample[4]**2 + $sample[5]**2)),5);
+
+                $templateData['roll_madgwick'][$key1][$key2] = round(floatval($repeat_madgwick[$key2][0]),5);
+                $templateData['yaw_madgwick'][$key1][$key2] = round(floatval($repeat_madgwick[$key2][1]),5);
+                $templateData['pitch_madgwick'][$key1][$key2] = round(floatval($repeat_madgwick[$key2][2]),5);
 
                 // 絕對值版本
-                if(abs(floatval($sample[3])) > 2.6){
-                    $templateData['roll'][$key1][$key2] = round(abs(floatval($sample[3])), 5);
+                if(abs(floatval($sample[6])) > 2.6){
+                    $templateData['roll'][$key1][$key2] = round(abs(floatval($sample[6])), 5);
                 }
                 else{
-                    $templateData['roll'][$key1][$key2] = round(floatval($sample[3]), 5);
+                    $templateData['roll'][$key1][$key2] = round(floatval($sample[6]), 5);
                 }
-                if(abs(floatval($sample[4])) > 2.6){
-                    $templateData['yaw'][$key1][$key2] = round(abs(floatval($sample[4])), 5);
-                }
-                else{
-                    $templateData['yaw'][$key1][$key2] = round(floatval($sample[4]), 5);
-                }
-                if(abs(floatval($sample[5])) > 2.6){
-                    $templateData['pitch'][$key1][$key2] = round(abs(floatval($sample[5])), 5);
+                if(abs(floatval($sample[7])) > 2.6){
+                    $templateData['yaw'][$key1][$key2] = round(abs(floatval($sample[7])), 5);
                 }
                 else{
-                    $templateData['pitch'][$key1][$key2] = round(floatval($sample[5]), 5);
+                    $templateData['yaw'][$key1][$key2] = round(floatval($sample[7]), 5);
                 }
-                //
+                if(abs(floatval($sample[8])) > 2.6){
+                    $templateData['pitch'][$key1][$key2] = round(abs(floatval($sample[8])), 5);
+                }
+                else{
+                    $templateData['pitch'][$key1][$key2] = round(floatval($sample[8]), 5);
+                }
+                //絕對值版本end
 
-                $templateData['gyro'][$key1][$key2] = round(floatval(sqrt($sample[3]**2 + $sample[4]**2 + $sample[5]**2)),5);
                 
                 $rawTemplateData['acc_x'][$key1][$key2] = round(floatval($sample[0]),5);
                 $rawTemplateData['acc_y'][$key1][$key2] = round(floatval($sample[1]),5);
                 $rawTemplateData['acc_z'][$key1][$key2] = round(floatval($sample[2]),5);
-                $rawTemplateData['roll'][$key1][$key2] = round(floatval($sample[3]),5);
-                $rawTemplateData['yaw'][$key1][$key2] = round(floatval($sample[4]),5);
-                $rawTemplateData['pitch'][$key1][$key2] = round(floatval($sample[5]),5);
-                $rawTemplateData['rot_x'][$key1][$key2] = round(floatval($sample[6]),5);
-                $rawTemplateData['rot_y'][$key1][$key2] = round(floatval($sample[7]),5);
-                $rawTemplateData['rot_z'][$key1][$key2] = round(floatval($sample[8]),5);
+                $rawTemplateData['gyro_x'][$key1][$key2] = round(floatval($sample[3]),5);
+                $rawTemplateData['gyro_y'][$key1][$key2] = round(floatval($sample[4]),5);
+                $rawTemplateData['gyro_z'][$key1][$key2] = round(floatval($sample[5]),5);
+                $rawTemplateData['roll'][$key1][$key2] = round(floatval($sample[6]),5);
+                $rawTemplateData['yaw'][$key1][$key2] = round(floatval($sample[7]),5);
+                $rawTemplateData['pitch'][$key1][$key2] = round(floatval($sample[8]),5);
+                $rawTemplateData['roll_madgwick'][$key1][$key2] = round(floatval($repeat_madgwick[$key2][0]),5);
+                $rawTemplateData['yaw_madgwick'][$key1][$key2] = round(floatval($repeat_madgwick[$key2][1]),5);
+                $rawTemplateData['pitch_madgwick'][$key1][$key2] = round(floatval($repeat_madgwick[$key2][2]),5);
+                
             }
             $templateData['acc_x'][$key1] = $this->cutOffArr($templateData['acc_x'][$key1],-0.1,0.1,false);
             $templateData['acc_y'][$key1] = $this->cutOffArr($templateData['acc_y'][$key1],-0.1,0.1,false);
             $templateData['acc_z'][$key1] = $this->cutOffArr($templateData['acc_z'][$key1],-0.1,0.1,false);
             $templateData['acc'][$key1] = $this->cutOffArr($templateData['acc'][$key1],-0.1,0.1,false);
+            $templateData['gyro_x'][$key1] = $this->cutOffArr($templateData['gyro_x'][$key1],-0.1,0.1,false);
+            $templateData['gyro_y'][$key1] = $this->cutOffArr($templateData['gyro_y'][$key1],-0.1,0.1,false);
+            $templateData['gyro_z'][$key1] = $this->cutOffArr($templateData['gyro_z'][$key1],-0.1,0.1,false);
+            $templateData['gyro'][$key1] = $this->cutOffArr($templateData['gyro'][$key1],-0.1,0.1,false);
             $templateData['roll'][$key1] = $this->cutOffArr($templateData['roll'][$key1],-0.1,0.1,false);
             $templateData['yaw'][$key1] = $this->cutOffArr($templateData['yaw'][$key1],-0.1,0.1,false);
             $templateData['pitch'][$key1] = $this->cutOffArr($templateData['pitch'][$key1],-0.1,0.1,false);
-            $templateData['gyro'][$key1] = $this->cutOffArr($templateData['gyro'][$key1],-0.1,0.1,false);
+            $templateData['roll_madgwick'][$key1] = $this->cutOffArr($templateData['roll_madgwick'][$key1],-0.1,0.1,false);
+            $templateData['yaw_madgwick'][$key1] = $this->cutOffArr($templateData['yaw_madgwick'][$key1],-0.1,0.1,false);
+            $templateData['pitch_madgwick'][$key1] = $this->cutOffArr($templateData['pitch_madgwick'][$key1],-0.1,0.1,false);
+            
+            $rawTemplateData['acc_x'][$key1] = $this->cutOffArr($rawTemplateData['acc_x'][$key1],-0.1,0.1,false);
+            $rawTemplateData['acc_y'][$key1] = $this->cutOffArr($rawTemplateData['acc_y'][$key1],-0.1,0.1,false);
+            $rawTemplateData['acc_z'][$key1] = $this->cutOffArr($rawTemplateData['acc_z'][$key1],-0.1,0.1,false);
+            $rawTemplateData['gyro_x'][$key1] = $this->cutOffArr($rawTemplateData['gyro_x'][$key1],-0.1,0.1,false);
+            $rawTemplateData['gyro_y'][$key1] = $this->cutOffArr($rawTemplateData['gyro_y'][$key1],-0.1,0.1,false);
+            $rawTemplateData['gyro_z'][$key1] = $this->cutOffArr($rawTemplateData['gyro_z'][$key1],-0.1,0.1,false);
+            $rawTemplateData['roll'][$key1] = $this->cutOffArr($rawTemplateData['roll'][$key1],-0.1,0.1,false);
+            $rawTemplateData['yaw'][$key1] = $this->cutOffArr($rawTemplateData['yaw'][$key1],-0.1,0.1,false);
+            $rawTemplateData['pitch'][$key1] = $this->cutOffArr($rawTemplateData['pitch'][$key1],-0.1,0.1,false);
+            $rawTemplateData['roll_madgwick'][$key1] = $this->cutOffArr($rawTemplateData['roll_madgwick'][$key1],-0.1,0.1,false);
+            $rawTemplateData['yaw_madgwick'][$key1] = $this->cutOffArr($rawTemplateData['yaw_madgwick'][$key1],-0.1,0.1,false);
+            $rawTemplateData['pitch_madgwick'][$key1] = $this->cutOffArr($rawTemplateData['pitch_madgwick'][$key1],-0.1,0.1,false);
         }
 
-        return $templateData;
+        return [
+                "template"=>$templateData,
+                "template_raw"=>$rawTemplateData
+        ];
     }
 
     protected function parseRawTemplateData($template)

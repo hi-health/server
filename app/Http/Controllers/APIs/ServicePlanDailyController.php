@@ -305,19 +305,19 @@ class ServicePlanDailyController extends Controller
         ];
 
         Log::debug('AI optimization: '.strval($servicePlanVideo_id));
-        try {
+        // try {
             $ai = new RepeatMultiDirectionAIv1($template, $test, $param);
             //$ai = new RepeatMultiDirectionAIv1($template, $test, $param, $hyperparams);
-        } catch (Exception $e) {
-            $tmp = [
-                'score' => array_fill(0, $service_plan_video->session, 0),
-                'reason' => array_fill(0, $service_plan_video->session, [$e->getMessage(),$e->getMessage()]),
-                'score_detail' => null,
-                'good_move' => null,
-                'good_speed' => null
-            ];
-            return $tmp;
-        }
+        // } catch (Exception $e) {
+            // $tmp = [
+                // 'score' => array_fill(0, $service_plan_video->session, 0),
+                // 'reason' => array_fill(0, $service_plan_video->session, [$e->getMessage(),$e->getMessage()]),
+                // 'score_detail' => null,
+                // 'good_move' => null,
+                // 'good_speed' => null
+            // ];
+            // return $tmp;
+        // }
         
         $tmp = $ai->calScore();
         return $tmp;
@@ -379,18 +379,7 @@ class ServicePlanDailyController extends Controller
             'point_threshold' => 5
         ];
 
-        try {
-            $ai = new RepeatMultiDirectionAIv1($template, $test, $param);
-        } catch (Exception $e) {
-            $tmp = [
-                'score' => array_fill(0, $service_plan_video->session, 0),
-                'reason' => array_fill(0, $service_plan_video->session, [$e,$e]),
-                'score_detail' => null,
-                'good_move' => null,
-                'good_speed' => null
-            ];
-            return response()->json(['error'=>$e->getMessage()]);
-        }
+        $ai = new RepeatMultiDirectionAIv1($template, $test, $param);
         $feature = $ai->printFeature();
 
         return response()->json($feature);

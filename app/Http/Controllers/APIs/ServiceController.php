@@ -114,10 +114,13 @@ class ServiceController extends Controller
             return response()->json(null, 404);
         }
         $email = $service->member->email;
-        Mail::to($email)->send(
-            new InvoiceExportedByPayment(json_decode((json_decode($new_service->invoice)->Result)))
-        );
-        $this->slackNotify('發票資訊輸出信件已寄出給:'.$email);
+        try {
+            Mail::to($email)->send(
+                new InvoiceExportedByPayment(json_decode((json_decode($new_service->invoice)->Result)))
+            );
+            $this->slackNotify('發票資訊輸出信件已寄出給:'.$email);
+        } catch (Exception $exception) {
+        }
 
         return response()->json($pay2go_invoice_response);
     }
@@ -125,6 +128,8 @@ class ServiceController extends Controller
     private function updateOrCreateInvoice_private($service_id)
     {
         $pay2go_invoice_response = (new Pay2GoInvoice)->sendInvoiceRequest($service_id);
+        Log::debug($pay2go_invoice_response);
+        
         $service = Service::with('member', 'doctor')
             ->where('id', $service_id)
             ->first();
@@ -135,7 +140,7 @@ class ServiceController extends Controller
             $service->invoice = $pay2go_invoice_response['web_info'];
             $service->save();
         }
-
+        
         //send email
         $new_service = Service::with('member', 'doctor')->where('id', $service_id)->where('payment_status',3)->first();
         if (!$new_service) {

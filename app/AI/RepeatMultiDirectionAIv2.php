@@ -3,7 +3,7 @@ namespace App\AI;
 use Exception;
 use Log;
 
-class RepeatMultiDirectionAIv1 extends AI{
+class RepeatMultiDirectionAIv2 extends AI{
 
 
 
@@ -208,13 +208,15 @@ class RepeatMultiDirectionAIv1 extends AI{
                 //test用for
                 for ($j=0; $j < $this->test_repeat_time; $j++) { 
 
-                    $score_1session['acc_x'] += max( 20/3 * $isGoodSpeed[$i][$j]['acc_x'][0] / $this->test_repeat_time, 0 );
-                    $score_1session['acc_y'] += max( 20/3 * $isGoodSpeed[$i][$j]['acc_y'][0] / $this->test_repeat_time, 0 );
-                    $score_1session['acc_z'] += max( 20/3 * $isGoodSpeed[$i][$j]['acc_z'][0] / $this->test_repeat_time, 0 );
+                    $acc_partition = 20;
+                    $att_partition = 80;
+                    $score_1session['acc_x'] += max( $acc_partition/3 * $isGoodSpeed[$i][$j]['acc_x'][0] / $this->test_repeat_time, 0 );
+                    $score_1session['acc_y'] += max( $acc_partition/3 * $isGoodSpeed[$i][$j]['acc_y'][0] / $this->test_repeat_time, 0 );
+                    $score_1session['acc_z'] += max( $acc_partition/3 * $isGoodSpeed[$i][$j]['acc_z'][0] / $this->test_repeat_time, 0 );
 
-                    $score_1session['goodMove_roll'] += 80 * $isGoodMove[$i][$j]['roll_madgwick'][0]/count($isGoodMove[$i][$j])/$this->test_repeat_time;
-                    $score_1session['goodMove_yaw'] += 80 * $isGoodMove[$i][$j]['yaw_madgwick'][0]/count($isGoodMove[$i][$j])/$this->test_repeat_time;
-                    $score_1session['goodMove_pitch'] += 80 * $isGoodMove[$i][$j]['pitch_madgwick'][0]/count($isGoodMove[$i][$j])/$this->test_repeat_time;
+                    $score_1session['goodMove_roll'] += $att_partition * $isGoodMove[$i][$j]['roll_madgwick'][0]/count($isGoodMove[$i][$j])/$this->test_repeat_time;
+                    $score_1session['goodMove_yaw'] += $att_partition * $isGoodMove[$i][$j]['yaw_madgwick'][0]/count($isGoodMove[$i][$j])/$this->test_repeat_time;
+                    $score_1session['goodMove_pitch'] += $att_partition * $isGoodMove[$i][$j]['pitch_madgwick'][0]/count($isGoodMove[$i][$j])/$this->test_repeat_time;
 
                     $acc_x_var_ratio += $isGoodSpeed[$i][$j]['acc_x'][0];
                     $acc_y_var_ratio += $isGoodSpeed[$i][$j]['acc_y'][0];

@@ -28,7 +28,10 @@ class ServicePlanController extends Controller
                 $tmp1 = $item->videos->map(function ($item1, $key1) {
                     //Log::info(collect($item1)->forget("movement_template_data")->keys());
                     //$tmp2 = collect($item1)->forget("movement_template_data")->toArray();
-                    $item1->movement_template_data = null;
+
+                    //0530 commented out
+                    //$item1->movement_template_data = null;
+                    
                     $item1->score->map(function($item2, $key2){
                         $item2->movement_test_data = null;
                         return $item2;

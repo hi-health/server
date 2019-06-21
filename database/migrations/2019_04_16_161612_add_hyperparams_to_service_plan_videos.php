@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatPointconsumesTable extends Migration
+class AddHyperparamsToServicePlanVideos extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,8 @@ class CreatPointconsumesTable extends Migration
      */
     public function up()
     {
-        Schema::create('pointconsume', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('point');
-            $table->integer('users_id');
-            $table->timestamps();
+        Schema::table('service_plan_videos', function($table) {
+            $table->json('hyperparams')->after('movement_template_data')->nullable();
         });
     }
 
@@ -28,6 +25,8 @@ class CreatPointconsumesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pointconsume');
+        Schema::table('service_plan_videos', function($table) {
+            $table->dropColumn('hyperparams');
+        });
     }
 }

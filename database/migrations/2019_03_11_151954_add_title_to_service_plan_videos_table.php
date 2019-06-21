@@ -14,8 +14,8 @@ class AddTitleToServicePlanVideosTable extends Migration
     public function up()
     {
         Schema::table('service_plan_videos',function($table){
-		    $table->string('title')->after('thumbnail')->nullable();
-	    });
+		$table->string('title')->after('thumbnail')->nullable();
+	});
     }
 
     /**

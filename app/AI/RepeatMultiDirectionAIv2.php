@@ -172,137 +172,130 @@ class RepeatMultiDirectionAIv2 extends AI{
         for ($i=0; $i < $this->session; $i++) { 
             $noMajorLevel = true;
 
-            //workout time too short
-            if($this->testTime[$i]/$this->test_repeat_time < $this->templateTime/5/3){
-                $score[] = 0;
-                $reason[] = ["您的動作做得太快，請將每次動作確實做好"];
+            $score_1session = [
+                'acc_x' => 0,
+                'acc_y' => 0,
+                'acc_z' => 0,
+                'goodMove_roll' => 0,
+                'goodMove_yaw' => 0,
+                'goodMove_pitch' => 0,
+            ];
+    
+            //for reason
+            $acc_x_var_ratio = 0;
+            $acc_y_var_ratio = 0;
+            $acc_z_var_ratio = 0;
+
+            $roll_amp_ratio = 0;
+            $yaw_amp_ratio = 0;
+            $pitch_amp_ratio = 0;
+            
+            $acc_x_var_sign = 0;
+            $acc_y_var_sign = 0;
+            $acc_z_var_sign = 0;
+
+            $roll_amp_sign = 0;
+            $yaw_amp_sign = 0;
+            $pitch_amp_sign = 0;
+
+            //template的max,min用平均
+            //test用for
+            for ($j=0; $j < $this->test_repeat_time; $j++) { 
+
+                $acc_partition = 20;
+                $att_partition = 80;
+                $score_1session['acc_x'] += max( $acc_partition/3 * $isGoodSpeed[$i][$j]['acc_x'][0] / $this->test_repeat_time, 0 );
+                $score_1session['acc_y'] += max( $acc_partition/3 * $isGoodSpeed[$i][$j]['acc_y'][0] / $this->test_repeat_time, 0 );
+                $score_1session['acc_z'] += max( $acc_partition/3 * $isGoodSpeed[$i][$j]['acc_z'][0] / $this->test_repeat_time, 0 );
+
+                $score_1session['goodMove_roll'] += $att_partition * $isGoodMove[$i][$j]['roll_madgwick'][0]/count($isGoodMove[$i][$j])/$this->test_repeat_time;
+                $score_1session['goodMove_yaw'] += $att_partition * $isGoodMove[$i][$j]['yaw_madgwick'][0]/count($isGoodMove[$i][$j])/$this->test_repeat_time;
+                $score_1session['goodMove_pitch'] += $att_partition * $isGoodMove[$i][$j]['pitch_madgwick'][0]/count($isGoodMove[$i][$j])/$this->test_repeat_time;
+
+                $acc_x_var_ratio += $isGoodSpeed[$i][$j]['acc_x'][0];
+                $acc_y_var_ratio += $isGoodSpeed[$i][$j]['acc_y'][0];
+                $acc_z_var_ratio += $isGoodSpeed[$i][$j]['acc_z'][0];
+
+                $roll_amp_ratio += $isGoodMove[$i][$j]["roll_madgwick"][0];
+                $yaw_amp_ratio += $isGoodMove[$i][$j]["yaw_madgwick"][0];
+                $pitch_amp_ratio += $isGoodMove[$i][$j]["pitch_madgwick"][0];
+
+                $acc_x_var_sign += $isGoodSpeed[$i][$j]['acc_x'][1];
+                $acc_y_var_sign += $isGoodSpeed[$i][$j]['acc_y'][1];
+                $acc_z_var_sign += $isGoodSpeed[$i][$j]['acc_z'][1];
+
+                $roll_amp_sign += $isGoodMove[$i][$j]["roll_madgwick"][1];
+                $yaw_amp_sign += $isGoodMove[$i][$j]["yaw_madgwick"][1];
+                $pitch_amp_sign += $isGoodMove[$i][$j]["pitch_madgwick"][1];
+            }
+
+            $arr_acce = [   array_sum($feature["test"][$i]['acc_x']['var']),
+                            array_sum($feature["test"][$i]['acc_y']['var']),
+                            array_sum($feature["test"][$i]['acc_z']['var'])
+                        ];
+            $arr_gyro = [   array_sum($feature["test"][$i]['roll_madgwick']['amp']),
+                            array_sum($feature["test"][$i]['yaw_madgwick']['amp']),
+                            array_sum($feature["test"][$i]['pitch_madgwick']['amp'])
+                        ];
+            Log::debug('reason max: '.strval(array_keys($arr_acce,max($arr_acce))[0]));
+            switch(array_keys($arr_acce,max($arr_acce))[0]){
+                case 0:
+                    $diff_acce = 100-($acc_x_var_ratio)/$this->test_repeat_time*100;
+                    $sign_acce = ($acc_x_var_sign > 0);
+                    break;
+                case 1:
+                    $diff_acce = 100-($acc_y_var_ratio)/$this->test_repeat_time*100;
+                    $sign_acce = ($acc_y_var_sign > 0);
+                    break;
+                case 2:
+                    $diff_acce = 100-($acc_z_var_ratio)/$this->test_repeat_time*100;
+                    $sign_acce = ($acc_z_var_sign > 0);
+                    break;
+            }
+            Log::debug('reason max: '.strval(array_keys($arr_gyro,max($arr_gyro))[0]));
+            switch(array_keys($arr_gyro,max($arr_gyro))[0]){
+                case 0:
+                    $diff_gyro = 100-($roll_amp_ratio)/$this->test_repeat_time*100;
+                    $sign_gyro = ($roll_amp_sign > 0);
+                    break;
+                case 1:
+                    $diff_gyro = 100-($yaw_amp_ratio)/$this->test_repeat_time*100;
+                    $sign_gyro = ($yaw_amp_sign > 0);
+                    break;
+                case 2:
+                    $diff_gyro = 100-($pitch_amp_ratio)/$this->test_repeat_time*100;
+                    $sign_gyro = ($pitch_amp_sign > 0);
+                    break;
+            }
+            $diff_acce = round($diff_acce, 1);
+            $diff_gyro = round($diff_gyro, 1);
+            if($sign_acce){
+                $s0 = "快";
             }
             else{
-                $score_1session = [
-                    'acc_x' => 0,
-                    'acc_y' => 0,
-                    'acc_z' => 0,
-                    'goodMove_roll' => 0,
-                    'goodMove_yaw' => 0,
-                    'goodMove_pitch' => 0,
-                ];
-        
-                //for reason
-                $acc_x_var_ratio = 0;
-                $acc_y_var_ratio = 0;
-                $acc_z_var_ratio = 0;
+                $s0 = "慢";
+            }
+            if($sign_gyro){
+                $s1 = "大";
+            }
+            else{
+                $s1 = "小";
+            }
+            $reason_1session = [sprintf("您的速度比標準%s了",$s0).strval($diff_acce)."%",sprintf("您的角度比標準%s了",$s1).strval($diff_gyro)."%"];
+            
 
-                $roll_amp_ratio = 0;
-                $yaw_amp_ratio = 0;
-                $pitch_amp_ratio = 0;
-                
-                $acc_x_var_sign = 0;
-                $acc_y_var_sign = 0;
-                $acc_z_var_sign = 0;
+            Log::debug('AI session: '.strval($i).'  $score_1session[\'acc_x\']: '.strval(round($score_1session['acc_x'])));
+            Log::debug('AI session: '.strval($i).'  $score_1session[\'acc_y\']: '.strval(round($score_1session['acc_y'])));
+            Log::debug('AI session: '.strval($i).'  $score_1session[\'acc_z\']: '.strval(round($score_1session['acc_z'])));
+            
+            Log::debug('AI session: '.strval($i).'  $score_1session[\'goodMove_roll\']: '.strval(round($score_1session['goodMove_roll'])));
+            Log::debug('AI session: '.strval($i).'  $score_1session[\'goodMove_yaw\']: '.strval(round($score_1session['goodMove_yaw'])));
+            Log::debug('AI session: '.strval($i).'  $score_1session[\'goodMove_pitch\']: '.strval(round($score_1session['goodMove_pitch'])));
 
-                $roll_amp_sign = 0;
-                $yaw_amp_sign = 0;
-                $pitch_amp_sign = 0;
-
-                //template的max,min用平均
-                //test用for
-                for ($j=0; $j < $this->test_repeat_time; $j++) { 
-
-                    $acc_partition = 20;
-                    $att_partition = 80;
-                    $score_1session['acc_x'] += max( $acc_partition/3 * $isGoodSpeed[$i][$j]['acc_x'][0] / $this->test_repeat_time, 0 );
-                    $score_1session['acc_y'] += max( $acc_partition/3 * $isGoodSpeed[$i][$j]['acc_y'][0] / $this->test_repeat_time, 0 );
-                    $score_1session['acc_z'] += max( $acc_partition/3 * $isGoodSpeed[$i][$j]['acc_z'][0] / $this->test_repeat_time, 0 );
-
-                    $score_1session['goodMove_roll'] += $att_partition * $isGoodMove[$i][$j]['roll_madgwick'][0]/count($isGoodMove[$i][$j])/$this->test_repeat_time;
-                    $score_1session['goodMove_yaw'] += $att_partition * $isGoodMove[$i][$j]['yaw_madgwick'][0]/count($isGoodMove[$i][$j])/$this->test_repeat_time;
-                    $score_1session['goodMove_pitch'] += $att_partition * $isGoodMove[$i][$j]['pitch_madgwick'][0]/count($isGoodMove[$i][$j])/$this->test_repeat_time;
-
-                    $acc_x_var_ratio += $isGoodSpeed[$i][$j]['acc_x'][0];
-                    $acc_y_var_ratio += $isGoodSpeed[$i][$j]['acc_y'][0];
-                    $acc_z_var_ratio += $isGoodSpeed[$i][$j]['acc_z'][0];
-
-                    $roll_amp_ratio += $isGoodMove[$i][$j]["roll_madgwick"][0];
-                    $yaw_amp_ratio += $isGoodMove[$i][$j]["yaw_madgwick"][0];
-                    $pitch_amp_ratio += $isGoodMove[$i][$j]["pitch_madgwick"][0];
-
-                    $acc_x_var_sign += $isGoodSpeed[$i][$j]['acc_x'][1];
-                    $acc_y_var_sign += $isGoodSpeed[$i][$j]['acc_y'][1];
-                    $acc_z_var_sign += $isGoodSpeed[$i][$j]['acc_z'][1];
-
-                    $roll_amp_sign += $isGoodMove[$i][$j]["roll_madgwick"][1];
-                    $yaw_amp_sign += $isGoodMove[$i][$j]["yaw_madgwick"][1];
-                    $pitch_amp_sign += $isGoodMove[$i][$j]["pitch_madgwick"][1];
-                }
-
-                $arr_acce = [   array_sum($feature["test"][$i]['acc_x']['var']),
-                                array_sum($feature["test"][$i]['acc_y']['var']),
-                                array_sum($feature["test"][$i]['acc_z']['var'])
-                            ];
-                $arr_gyro = [   array_sum($feature["test"][$i]['roll_madgwick']['amp']),
-                                array_sum($feature["test"][$i]['yaw_madgwick']['amp']),
-                                array_sum($feature["test"][$i]['pitch_madgwick']['amp'])
-                            ];
-                Log::debug('reason max: '.strval(array_keys($arr_acce,max($arr_acce))[0]));
-                switch(array_keys($arr_acce,max($arr_acce))[0]){
-                    case 0:
-                        $diff_acce = 100-($acc_x_var_ratio)/$this->test_repeat_time*100;
-                        $sign_acce = ($acc_x_var_sign > 0);
-                        break;
-                    case 1:
-                        $diff_acce = 100-($acc_y_var_ratio)/$this->test_repeat_time*100;
-                        $sign_acce = ($acc_y_var_sign > 0);
-                        break;
-                    case 2:
-                        $diff_acce = 100-($acc_z_var_ratio)/$this->test_repeat_time*100;
-                        $sign_acce = ($acc_z_var_sign > 0);
-                        break;
-                }
-                Log::debug('reason max: '.strval(array_keys($arr_gyro,max($arr_gyro))[0]));
-                switch(array_keys($arr_gyro,max($arr_gyro))[0]){
-                    case 0:
-                        $diff_gyro = 100-($roll_amp_ratio)/$this->test_repeat_time*100;
-                        $sign_gyro = ($roll_amp_sign > 0);
-                        break;
-                    case 1:
-                        $diff_gyro = 100-($yaw_amp_ratio)/$this->test_repeat_time*100;
-                        $sign_gyro = ($yaw_amp_sign > 0);
-                        break;
-                    case 2:
-                        $diff_gyro = 100-($pitch_amp_ratio)/$this->test_repeat_time*100;
-                        $sign_gyro = ($pitch_amp_sign > 0);
-                        break;
-                }
-                $diff_acce = round($diff_acce, 1);
-                $diff_gyro = round($diff_gyro, 1);
-                if($sign_acce){
-                    $s0 = "快";
-                }
-                else{
-                    $s0 = "慢";
-                }
-                if($sign_gyro){
-                    $s1 = "大";
-                }
-                else{
-                    $s1 = "小";
-                }
-                $reason_1session = [sprintf("您的速度比標準%s了",$s0).strval($diff_acce)."%",sprintf("您的角度比標準%s了",$s1).strval($diff_gyro)."%"];
-                
-
-                Log::debug('AI session: '.strval($i).'  $score_1session[\'acc_x\']: '.strval(round($score_1session['acc_x'])));
-                Log::debug('AI session: '.strval($i).'  $score_1session[\'acc_y\']: '.strval(round($score_1session['acc_y'])));
-                Log::debug('AI session: '.strval($i).'  $score_1session[\'acc_z\']: '.strval(round($score_1session['acc_z'])));
-                
-                Log::debug('AI session: '.strval($i).'  $score_1session[\'goodMove_roll\']: '.strval(round($score_1session['goodMove_roll'])));
-                Log::debug('AI session: '.strval($i).'  $score_1session[\'goodMove_yaw\']: '.strval(round($score_1session['goodMove_yaw'])));
-                Log::debug('AI session: '.strval($i).'  $score_1session[\'goodMove_pitch\']: '.strval(round($score_1session['goodMove_pitch'])));
-
-                Log::debug('AI session: '.strval($i).'  $score_1session: '.strval(round(array_sum($score_1session))));
-                $score[] = round(array_sum($score_1session));
-                $score_detail[] = $score_1session;
-                $reason[] = $reason_1session;
-            }       
+            Log::debug('AI session: '.strval($i).'  $score_1session: '.strval(round(array_sum($score_1session))));
+            $score[] = round(array_sum($score_1session));
+            $score_detail[] = $score_1session;
+            $reason[] = $reason_1session;
         
         }
         return [
@@ -321,8 +314,8 @@ class RepeatMultiDirectionAIv2 extends AI{
                 'template'=>$this->templateData,
                 'rawTest'=> $this->rawTestData,
                 'rawTemplate'=>$this->rawTemplateData,
-                'testAC'=>$this->testDataAC,
-                'rawTestAC'=>$this->rawTestDataAC,
+                //'testAC'=>$this->testDataAC,
+                //'rawTestAC'=>$this->rawTestDataAC,
                 'score' => $score['score'],
                 'reason' => $score['reason'],
                 'score_detail' => $score['score_detail'],

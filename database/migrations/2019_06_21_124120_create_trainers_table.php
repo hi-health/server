@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatPointconsumesTable extends Migration
+class CreateTrainersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,16 @@ class CreatPointconsumesTable extends Migration
      */
     public function up()
     {
-        Schema::create('pointconsume', function (Blueprint $table) {
+        Schema::create('trainers', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('point');
             $table->integer('users_id');
+            $table->string('name');
+            $table->string('title', 32)->nullable();
+            $table->string('experience')->nullable();
+            $table->string('paragraph')->nullable();
+            $table->date('due_at')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -28,6 +33,6 @@ class CreatPointconsumesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pointconsume');
+        Schema::dropIfExists('trainers');
     }
 }

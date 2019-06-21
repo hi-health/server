@@ -13,9 +13,9 @@ class ChangePointconsumePointColumnType extends Migration
      */
     public function up()
     {
-        Schema::table('pointconsume', function ($table) {
-            $table->float('point')->change();
-        });
+        Schema::table('pointconsume',function($table){
+		$table->float('point')->change();
+	});
     }
 
     /**
@@ -25,8 +25,8 @@ class ChangePointconsumePointColumnType extends Migration
      */
     public function down()
     {
-        Schema::table('pointconsume', function ($table) {
-            $table->integer('point')->change();
+        Schema::table('pointconsume',function($table){
+                $table->integer('point')->change();
         });
     }
 }

@@ -197,3 +197,10 @@ Route::group([
     $router->post('{demo_plan_video_id}/createTemplate', 'DemoController@addMovementTemplateData');
 });
 
+// ------------------------------------- 訂閱 api -------------------------------------//
+Route::group([
+    'prefix' => '{user_id}/subscription',
+], function ($router) {
+    $router->post('service_and_plan', 'ServiceController@getServiceAndPlanByID');
+});
+

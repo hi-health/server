@@ -17,7 +17,7 @@ class CreateSubscriptionTable extends Migration
             $table->increments('id');
             $table->integer('service');
             $table->integer('plan');
-            $table->date('due_date');
+            $table->date('due date');
             $table->timestamps();
             $table->softDeletes();
         });

@@ -199,8 +199,8 @@ Route::group([
 
 // ------------------------------------- 訂閱 api -------------------------------------//
 Route::group([
-    'prefix' => '{user_id}/subscription',
+    'prefix' => 'subscription',
 ], function ($router) {
-    $router->post('service_and_plan', 'ServiceController@getServiceAndPlanByID');
+    $router->post('{user_id}', 'ServiceController@getServiceAndPlanByID');
 });
 

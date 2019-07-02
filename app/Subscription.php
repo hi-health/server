@@ -14,9 +14,9 @@ class Subscription extends Model
     public $table = 'subscription';
 
     protected $fillable = [
-        'user_id',
+        'users_id',
         'services_id',
-        'services_plan_id',
+        'service_plans_id',
     ];
 
     protected $date = [

@@ -15,7 +15,7 @@ class RenameSubscriptionTable extends Migration
     {
         Schema::table('subscription', function ($table) {
             $table->dropColumn('due date');
-            $table->date('due_date');
+            $table->date('due_date')->nullable();
         });
     }
 

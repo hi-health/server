@@ -15,10 +15,10 @@ class CreateSubscriptionTable extends Migration
     {
         Schema::create('subscription', function($table){
             $table->increments('id');
-            $table->integer('user_id');
+            $table->integer('users_id');
             $table->integer('services_id');
-            $table->integer('services_plan_id');
-            $table->date('due date')->nullable();
+            $table->integer('service_plans_id');
+            $table->date('due date');
             $table->timestamps();
             $table->softDeletes();
         });

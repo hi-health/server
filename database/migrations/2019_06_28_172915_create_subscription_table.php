@@ -13,11 +13,11 @@ class CreateSubscriptionTable extends Migration
      */
     public function up()
     {
-        Schema::create('subscription_table', function($table){
+        Schema::create('subscription', function($table){
             $table->increments('id');
             $table->integer('service');
             $table->integer('plan');
-            $table->date('due date');
+            $table->date('due_date');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -30,6 +30,6 @@ class CreateSubscriptionTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('subscription_table');
+        Schema::dropIfExists('subscription');
     }
 }

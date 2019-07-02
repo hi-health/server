@@ -19,7 +19,7 @@ class ServiceController extends Controller
 {
     use SlackNotify, SettingUtility;
 
-    public function getServiceAndPlanByID(Request $request, $user_id){
+    public function getSubscriptionByUserID(Request $request, $user_id){
         $serviceAndPlan = Subscription
         ::with('services_id','service_plans_id')
         ->where('users_id', $user_id);

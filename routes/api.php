@@ -201,6 +201,6 @@ Route::group([
 Route::group([
     'prefix' => 'subscription',
 ], function ($router) {
-    $router->post('{user_id}', 'ServiceController@getServiceAndPlanByID');
+    $router->post('{user_id}', 'SubscriptionController@getSubscriptionByUserID');
 });
 

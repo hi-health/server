@@ -21,8 +21,8 @@ class ServiceController extends Controller
 
     public function getServiceAndPlanByID(Request $request, $user_id){
         $serviceAndPlan = Subscription
-        ::with('service','plan')
-        ->where('id', $user_id);
+        ::with('services_id','services_plan_id')
+        ->where('user_id', $user_id);
 
         if (!$subscription) {
             return response()->json(null,404);

@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Subscription extends Model
 {
     use SoftDeletes,
-        HihealthDate;
+        HiHealthDate;
 
     public $table = 'subscription';
 

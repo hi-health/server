@@ -201,6 +201,7 @@ Route::group([
 Route::group([
     'prefix' => 'subscription',
 ], function ($router) {
-    $router->post('{user_id}', 'SubscriptionController@getSubscriptionByUserID');
+    $router->get('{user_id}', 'SubscriptionController@getSubscriptionByUserID');
+    $router->post('{user_id}/update', 'SubscriptionController@updateOrCreateSubscription');
 });
 

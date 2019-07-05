@@ -9,27 +9,47 @@ use App\Traits\SettingUtility;
 use App\Traits\SlackNotify;
 use Carbon\Carbon;
 use Exception;
-use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Log;
 
-class ServiceController extends Controller
+
+class SubscriptionController extends Controller
 {
     use SlackNotify, SettingUtility;
 
     public function getSubscriptionByUserID(Request $request, $user_id){
-        $serviceAndPlan = Subscription
-        ::with('services_id','service_plans_id')
-        ->where('users_id', $user_id);
+        $subscription = Subscription
+            ::where('users_id', $user_id)
+            ->first();
 
         if (!$subscription) {
             return response()->json(null,404);
         } 
-
-        return response()->json($serviceAndPlan);
+        
+        return response()->json($subscription);
     }
 
+    public function updateOrCreateSubscription(Request $request, $user_id){
+        $this->validate($request, [
+            'services_id' => ['required','integer','min:1'],
+            'service_plans_id' => ['required','integer','min:1'],
+            'due_date' => ['nullable','date','date_format:Y-m-d']
+        ]);
+        $services_id = $request->input('services_id');
+        $service_plans_id = $request->input('service_plans_id');
+        $due_date = $request->input('due_date');
 
+        
+        $subscription = Subscription
+            ::updateOrCreate([
+                'users_id' => $user_id,
+                'services_id' => $services_id,
+                'service_plans_id' => $service_plans_id,
+                'due_date' => $due_date,
+            ]);
+        return response()->json($subscription);
+    }
 }

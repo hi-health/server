@@ -52,4 +52,28 @@ class SubscriptionController extends Controller
             ]);
         return response()->json($subscription);
     }
+
+    public function deleteSubscription(Request $request){
+        $this->validate($request, [
+            'users_id' => ['required', 'integer', 'min:1'],
+            'services_id' => ['required', 'integer', 'min:1'],
+            'service_plans_id' => ['required', 'integer', 'min:1']
+        ]);
+        $user_id = $request->input('users_id');
+        $services_id = $request->input('services_id');
+        $service_plans_id = $request->input('service_plans_id');
+
+        $subscription = Subscription
+            ::where('users_id', $user_id)
+            ->where('services_id', $services_id)
+            ->where('service_plans_id', $service_plans_id);
+
+        if (!$subscription) {
+            return response()->json(null,404);
+        } 
+        
+        $subscription->delete();
+
+        return response()->json($subscription);
+    }
 }

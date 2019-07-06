@@ -203,5 +203,6 @@ Route::group([
 ], function ($router) {
     $router->get('{user_id}', 'SubscriptionController@getSubscriptionByUserID');
     $router->post('{user_id}/update', 'SubscriptionController@updateOrCreateSubscription');
+    $router->post('/delete', 'SubscriptionController@deleteSubscription');
 });
 
